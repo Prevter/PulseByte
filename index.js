@@ -1,13 +1,21 @@
-const { 
-	Client, 
-	Events, 
-	GatewayIntentBits, 
-	SlashCommandBuilder, 
-	REST, 
-	Routes, 
+const {
+	Client,
+	Events,
+	GatewayIntentBits,
+	SlashCommandBuilder,
+	REST,
+	Routes,
 	PermissionsBitField,
-	PermissionFlagsBits
+	PermissionFlagsBits,
+	ActivityType
 } = require('discord.js');
+
+const { DisTube } = require('distube')
+const { SpotifyPlugin } = require('@distube/spotify')
+const { SoundCloudPlugin } = require('@distube/soundcloud')
+const { YtDlpPlugin } = require('@distube/yt-dlp')
+const { Player } = require("discord-player")
+
 const { token, prefix, case_sensitive } = require('./config.json');
 const db = require('better-sqlite3')('storage.db');
 
@@ -23,17 +31,37 @@ const commandsPath = require("path").join(__dirname, "commands");
 let commands = new Array();
 let slashCommands = new Array();
 
-require("fs").readdirSync(commandsPath).forEach(function(file) {
+require("fs").readdirSync(commandsPath).forEach(function (file) {
 	commands.push(require("./commands/" + file));
 });
 
-const client = new Client({ intents: [
-	GatewayIntentBits.DirectMessages,
-	GatewayIntentBits.Guilds,
-	GatewayIntentBits.GuildBans,
-	GatewayIntentBits.GuildMessages,
-	GatewayIntentBits.MessageContent,
-] });
+const client = new Client({
+	intents: [
+		GatewayIntentBits.DirectMessages,
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildBans,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildVoiceStates,
+	]
+});
+
+const player = new Player(client);
+client.player = player;
+client.distube = new DisTube(client, {
+	leaveOnStop: false,
+	leaveOnFinish: true,
+	emitNewSongOnly: true,
+	emitAddSongWhenCreatingQueue: false,
+	emitAddListWhenCreatingQueue: false,
+	plugins: [
+		new SpotifyPlugin({
+			emitEventsAfterFetching: true
+		}),
+		new SoundCloudPlugin(),
+		new YtDlpPlugin()
+	]
+});
 
 const getServerLocale = (guild) => {
 	const sql = `SELECT * FROM locales WHERE id = ?`
@@ -43,38 +71,72 @@ const getServerLocale = (guild) => {
 
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.id}`);
-	
+
+	// change activity
+	client.user.setActivity({
+		name: `${client.guilds.cache.size} servers`,
+		type: ActivityType.Watching
+	});
+
 	for (const cmd of commands) {
 		let descTranslations = {};
 		for (const [lang, translations] of Object.entries(cmd.translations)) {
 			if (lang === "en") continue;
 			descTranslations[lang] = translations.desc;
 		}
-		
+
 		let builder = new SlashCommandBuilder()
 			.setName(cmd.name)
 			.setDescription(cmd.translations.en.desc)
 			.setDescriptionLocalizations(descTranslations);
-		
+
 		for (const arg of cmd.arguments) {
 			let argTranslations = {};
 			for (const [lang, translations] of Object.entries(cmd.translations)) {
 				if (lang === "en") continue;
 				argTranslations[lang] = translations.args[arg.name];
 			}
+
 			
+
 			switch (arg.type) {
-			case 'string':
-			case 'number':
-				builder.addStringOption(option => 
-					option.setName(arg.name)
+				case 'number':
+					builder.addNumberOption(option => 
+						option.setName(arg.name)
 						.setDescription(cmd.translations.en.args[arg.name])
 						.setDescriptionLocalizations(argTranslations)
 						.setRequired(arg.isRequired ?? false));
-				break;
+					break;
+				case 'string':
+					builder.addStringOption(option => {
+						option.setName(arg.name)
+							.setDescription(cmd.translations.en.args[arg.name])
+							.setDescriptionLocalizations(argTranslations)
+							.setRequired(arg.isRequired ?? false);
+						
+						
+						if (arg.choices) {
+							for (const choice of arg.choices) {
+								option.addChoices({ name: choice, value: choice })
+							}
+						}
+
+						return option
+					});
+					break;
+				case 'user':
+					builder.addUserOption(option =>
+						option.setName(arg.name)
+							.setDescription(cmd.translations.en.args[arg.name])
+							.setDescriptionLocalizations(argTranslations)
+							.setRequired(arg.isRequired ?? false));
+					break;
 			}
+
+
+
 		}
-		
+
 		if (cmd.permissions) {
 			let flags = null;
 			for (const perm of cmd.permissions) {
@@ -84,21 +146,21 @@ client.once(Events.ClientReady, c => {
 			if (flags)
 				builder.setDefaultMemberPermissions(flags);
 		}
-		
+
 		if (cmd.guildOnly)
 			builder.setDMPermission(!cmd.guildOnly)
-		
+
 		slashCommands.push({
 			data: builder,
 			module: cmd
 		});
 	}
-	
+
 	const cmds = [];
 	for (const cmd of slashCommands) {
 		cmds.push(cmd.data.toJSON());
 	}
-	
+
 	const rest = new REST({ version: '10' }).setToken(token);
 	(async () => {
 		try {
@@ -138,9 +200,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			}
 		}
 	}
-	
+
 	if (command.guildOnly && !interaction.guild) {
-		return; 
+		return;
 	}
 
 	try {
@@ -149,55 +211,83 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		let args = {};
 		for (const arg of command.arguments) {
 			args[arg.name] = arg.defaultValue ?? undefined;
-			
+
 			switch (arg.type) {
-			case 'string':
-				args[arg.name] = interaction.options.getString(arg.name);
-				break;
-			case 'number':
-				const value = interaction.options.getString(arg.name);
-				if (!value) break;
-				let parsed = parseInt(value);
-				if (isNaN(parsed)) parsed = undefined;
-				args[arg.name] = parsed;
-				break;
+				case 'string':
+					const strValue = interaction.options.getString(arg.name);
+					if (!strValue) break;
+					args[arg.name] = strValue;
+					break;
+				case 'number':
+					const numValue = interaction.options.getInteger(arg.name);
+					if (!numValue) break;
+					args[arg.name] = numValue;
+					break;
+				case 'user':
+					args[arg.name] = interaction.options.getUser(arg.name);
+					break;
 			}
 		}
-		
+
 		const meta = {
 			type: 'slash',
-			interaction: interaction,
+			message: interaction,
 			guild: interaction.guild,
 			author: interaction.user,
 			channel: interaction.channel,
-			member: interaction.member
+			member: interaction.member,
+			client: client
 		}
-		
-		command.run(args, db, interaction.locale, result => {
-			switch (result.type) {
-			case 'null':
-				interaction.editReply({ content: 'You don\'t have permissions for this command', ephemeral: true});
-				break;
-			case 'text':
-				interaction.editReply(result.content);
-				break;
-			case 'embed':
-				interaction.editReply({ embeds: [result.content] });
-				break;
-			}
-		}, meta);
+
+		try {
+			command.run(args, db, interaction.locale, result => {
+				switch (result.type) {
+					case 'null':
+						interaction.editReply({ content: 'You don\'t have permissions for this command', ephemeral: true });
+						break;
+					case 'text':
+						interaction.editReply(result.content);
+						break;
+					case 'embed':
+						interaction.editReply({ embeds: [result.content] });
+						break;
+					case 'react':
+						interaction.editReply({ content: result.content });
+						break;
+				}
+			}, meta);
+		} catch (error) {
+			console.error(error);
+		}
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
 
+async function getUserFromMention(guild, mention) {
+	return new Promise((resolve, reject) => {
+		if (!mention) return;
+
+		if (mention.startsWith('<@') && mention.endsWith('>')) {
+			mention = mention.slice(2, -1);
+			if (mention.startsWith('!')) {
+				mention = mention.slice(1);
+			}
+		}
+
+		guild.members.fetch(mention)
+			.then(resolve)
+			.catch(console.error);
+	});
+}
+
 client.on("messageCreate", async (message) => {
 	// return if used without prefix, or send by bot
 	if (message.author.bot) return;
 	if (!case_sensitive && !message.content.toLowerCase().startsWith(prefix)) return;
 	if (case_sensitive && !message.content.startsWith(prefix)) return;
-	
+
 	const args = message.content.slice(prefix.length).split(/\s+/);
 	let command = null;
 	commands.every(cmd => {
@@ -213,7 +303,7 @@ client.on("messageCreate", async (message) => {
 		}
 		return true;
 	});
-	
+
 	if (command) {
 		if (command.permissions && message.member) {
 			for (const perm of command.permissions) {
@@ -222,56 +312,92 @@ client.on("messageCreate", async (message) => {
 				}
 			}
 		}
-	
+
 		if (command.guildOnly && !message.guild) {
-			return; 
+			return;
 		}
-		
+
 		//parse all arguments
 		let parsedArgs = {};
 		var index = 1;
 		for (const arg of command.arguments) {
 			parsedArgs[arg.name] = arg.defaultValue ?? undefined;
-			
+
 			if (args[index]) {
 				switch (arg.type) {
-				case 'string':
-					parsedArgs[arg.name] = args[index];
-					break;
-				case 'number':
-					let parsed = parseInt(args[index]);
-					if (isNaN(parsed)) parsed = undefined;
-					parsedArgs[arg.name] = parsed;
-					break;
+					case 'string':
+						if (arg.longString && arg.useQuotes && args[index].startsWith('"')) {
+							parsedArgs[arg.name] = args[index].slice(1);
+							index++;
+							while (index < args.length) {
+								if (args[index].endsWith('"')) {
+									parsedArgs[arg.name] += ' ' + args[index].slice(0, -1);
+									break;
+								}
+								parsedArgs[arg.name] += ' ' + args[index];
+								index++;
+							}
+						}
+						else if (arg.longString && !arg.useQuotes) {
+							parsedArgs[arg.name] = args[index];
+							index++;
+							while (index < args.length) {
+								parsedArgs[arg.name] += ' ' + args[index];
+								index++;
+							}
+						}
+						else {
+							parsedArgs[arg.name] = args[index];
+						}
+						break;
+					case 'number':
+						let parsed = parseInt(args[index]);
+						if (isNaN(parsed)) parsed = undefined;
+						parsedArgs[arg.name] = parsed;
+						break;
+					case 'user':
+						const member = await getUserFromMention(message.guild, args[index]);
+						parsedArgs[arg.name] = member;
+						break;
 				}
 			}
-			
+
 			index++;
 		}
-		
+
 		const locale = getServerLocale(message.guildId);
-		
+
 		const meta = {
 			type: 'prefix',
 			message: message,
 			guild: message.guild,
 			author: message.author,
 			channel: message.channel,
-			member: message.member
+			member: message.member,
+			client: client,
 		};
-		
-		command.run(parsedArgs, db, locale, result => {
-			switch (result.type) {
-			case 'null':
-				break;
-			case 'text':
-				message.reply(result.content);
-				break;
-			case 'embed':
-				message.reply({ embeds: [result.content] });
-				break;
-			}
-		}, meta);
+
+		try {
+			command.run(parsedArgs, db, locale, result => {
+				switch (result.type) {
+					case 'null':
+						break;
+					case 'text':
+						message.reply(result.content);
+						break;
+					case 'embed':
+						message.reply({ embeds: [result.content] });
+						break;
+					case 'react':
+						message.react(result.content);
+						break;
+				}
+			}, meta);
+		}
+		catch (err) {
+			console.error(err);
+		}
+
 	}
 });
 

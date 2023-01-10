@@ -2,18 +2,18 @@ const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 const https = require("https");
 
 const emojis = {
-	personnel: "<:stats_personnel:1061443781569810513>",
-	planes: "",
-	tanks: "",
-	armoredVehicles: "",
-	MLRS: "",
-	UAV: "",
-	helicopters: "",
-	antiAir: "",
-	cars: "",
-	missiles: "",
-	cannons: "",
-	ships: ""
+	personnel: "<:stats_personnel:1061978201376690276>",
+	planes: "<:stats_planes:1061978202618200126>",
+	tanks: "<:stats_tanks:1061978206313402378>",
+	armoredVehicles: "<:stats_armored:1061978190521827348>",
+	MLRS: "<:stats_MLRS:1061978199854161920>",
+	UAV: "<:stats_UAV:1061978300278382662>",
+	helicopters: "<:stats_helicopters:1061978195789877268>",
+	antiAir: "<:stats_antiAir:1061978187665526914>",
+	cars: "<:stats_cars:1061978193193611334>",
+	missiles: "<:stats_missiles:1061978197417271316>",
+	cannons: "<:stats_cannons:1061978191947890799>",
+	ships: "<:stats_ships:1061978204677615710>"
 };
 
 
@@ -62,43 +62,42 @@ module.exports = {
 	arguments: [],
 	translations: translations,
 	run: async (args, db, locale, callback, meta) => {
-		if(!translations.hasOwnProperty(locale)) 
+		if (!translations.hasOwnProperty(locale))
 			locale = "en";
-			
+
 		let embed = new EmbedBuilder()
 			.setColor(0x0099FF)
 			.setTitle(translations[locale].embedTitle)
 			.setDescription(translations[locale].embedDesc);
-		
+
 		const url = "https://prevter.ml/api/misc/warStats";
-		https.get(url, function(res){
+		https.get(url, function (res) {
 			var body = '';
-			
-			res.on('data', function(chunk) {
+
+			res.on('data', function (chunk) {
 				body += chunk;
 			});
 
-			res.on('end', function() {
+			res.on('end', function () {
 				var response = JSON.parse(body);
 				embed.setFooter({ text: response.date });
-				
-				for (const [type, emoji] of Object.entries(emojis)){
-					var valueStr = response[type].toLocaleString('en-US').replace(',',' ');
-					
+
+				for (const [type, emoji] of Object.entries(emojis)) {
+					var valueStr = response[type].toLocaleString('en-US').replace(',', ' ');
+
 					const delta = response.delta[type];
-					if (delta) valueStr += ` (+${delta})`;
-					
+					if (delta) valueStr += ` \`(+${delta})\``;
+
 					embed.addFields({
 						name: `${emoji} ${translations[locale][type]}`,
 						value: valueStr,
 						inline: true
 					});
 				}
-				
-				console.log(response);
+
 				callback({ type: 'embed', content: embed });
 			});
-		}).on('error', function(e){
+		}).on('error', function (e) {
 			console.log("Got an error: ", e);
 		});
 	}

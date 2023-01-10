@@ -9,13 +9,23 @@ This is primarily my framework for creating bots, which supports:
 - Command aliases
 
 Added commands:
+- Music: 
+  - play: Starts playing music
+  - stop: Stops the queue
+  - join: Join to user's voice channel
+  - leave: Leaves current voice channel
+  - nowplaying: Shows information about current song
+  - queue: Show all songs in queue
+  - repeat: Change repeating mode
+  - skip: Skip current song
+  - volume: Change volume
 - help: Can show info about all commands, or detailed about one selected
 - lang: Changing language on current server
+- ban: Ban specified user
 - war: Get latest statistics about russian losses in war 💙💛
 
 Features planned:
-- Voice channel commands (music, sounds)
-- Admin commands (ban, kick, mute)
+- Admin commands (kick, mute)
 
 ## Running
 Install all requirements using npm:

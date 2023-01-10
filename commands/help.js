@@ -55,15 +55,15 @@ module.exports = {
 	],
 	translations: translations,
 	run: async (args, db, locale, callback) => {
-		if(!translations.hasOwnProperty(locale)) 
+		if (!translations.hasOwnProperty(locale))
 			locale = "en";
-		
+
 		let footer = translations[locale].embedFooter;
 		footer = footer.replace("{0}", prefix);
-		
+
 		let embed = new EmbedBuilder()
 			.setColor(0x0099FF);
-		
+
 		if (args.command) {
 			// check if this command exists
 			let command = null;
@@ -80,24 +80,24 @@ module.exports = {
 				}
 				return true;
 			});
-			
+
 			if (!command) {
-				callback({ 
-					type: "text", 
+				callback({
+					type: "text",
 					content: translations[locale].notFound.replace("{0}", args.command)
 				});
 				return;
 			}
-			
+
 			embed.setTitle(translations[locale].infoAbout.replace("{0}", command.name));
 			embed.setDescription(command.translations[locale].desc);
-			
+
 			const aliasesStr = command.aliases.join(", ");
 			embed.addFields({
 				name: translations[locale].aliases,
 				value: aliasesStr
 			});
-			
+
 			for (const arg of command.arguments) {
 				embed.addFields({
 					name: `${arg.name}${arg.isRequired ? '*' : ''} (${translations[locale].types[arg.type]})`,
@@ -110,7 +110,7 @@ module.exports = {
 			embed.setTitle(translations[locale].embedTitle)
 				.setDescription(translations[locale].embedDesc)
 				.setFooter({ text: footer });
-				
+
 			for (const cmd of commands) {
 				embed.addFields({
 					name: cmd.name,
@@ -119,7 +119,7 @@ module.exports = {
 				});
 			}
 		}
-		
+
 		callback({
 			type: "embed",
 			content: embed
@@ -128,6 +128,6 @@ module.exports = {
 }
 
 const commandsPath = require("path").join(__dirname, "");
-require("fs").readdirSync(commandsPath).forEach(function(file) {
+require("fs").readdirSync(commandsPath).forEach(function (file) {
 	commands.push(require("./" + file));
 });

@@ -31,22 +31,22 @@ module.exports = {
 			isRequired: true
 		}
 	],
-	permissions: [ 'ManageGuild' ],
+	permissions: ['ManageGuild'],
 	guildOnly: true,
 	translations: translations,
 	run: (args, db, locale, callback, meta) => {
-		if(!translations.hasOwnProperty(locale)) 
+		if (!translations.hasOwnProperty(locale))
 			locale = "en";
-		
+
 		let languages = [];
 		for (const [lang, data] of Object.entries(translations)) {
 			languages.push({ code: lang, name: data.lang });
 		}
-		
+
 		let embed = new EmbedBuilder()
 			.setColor(0x0099FF)
 			.setTitle(translations[locale].embedTitle);
-		
+
 		for (const lang of languages) {
 			embed.addFields({
 				name: lang.code,
@@ -54,12 +54,12 @@ module.exports = {
 				inline: true
 			});
 		}
-		
+
 		if (!args.language) {
 			callback({ type: 'embed', content: embed });
 			return;
 		}
-		
+
 		var exists = false;
 		for (const lang of languages) {
 			if (lang.code === args.language) {
@@ -67,12 +67,12 @@ module.exports = {
 				break;
 			}
 		}
-		
+
 		if (!exists) {
 			callback({ type: 'embed', content: embed });
 			return;
 		}
-		
+
 		var sql = `SELECT * FROM locales WHERE id = ?`;
 		var row = db.prepare(sql).get(meta.guild.id);
 		if (!row) {
