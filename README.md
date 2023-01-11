@@ -19,6 +19,10 @@ Added commands:
   - repeat: Change repeating mode
   - skip: Skip current song
   - volume: Change volume
+  - pause: Pause the music
+  - resume: Resume the music
+  - bass: Add bassboost
+  - autoplay: Enable autoplay to get recommended songs
 - help: Can show info about all commands, or detailed about one selected
 - lang: Changing language on current server
 - ban: Ban specified user

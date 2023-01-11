@@ -59,7 +59,7 @@ module.exports = {
             }
         }
 
-        if (!mode)
+        if (mode != null)
             return callback({ type: 'text', content: translations[locale].specifyRepeat });
 
         const queue = meta.client.distube.getQueue(meta.message)
