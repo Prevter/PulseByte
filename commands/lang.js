@@ -23,6 +23,7 @@ const translations = {
 
 module.exports = {
 	name: "lang",
+	category: "general",
 	aliases: ["language", "ланг", "мова", "язык"],
 	arguments: [
 		{

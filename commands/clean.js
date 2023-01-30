@@ -19,6 +19,7 @@ const translations = {
 
 module.exports = {
     name: "clean",
+    category: "mod",
     aliases: ["cls", "clear", "клін", "клеар", "клс", "клеан", "очистити", "очистка", "прибрати"],
     arguments: [
         {

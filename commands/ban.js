@@ -34,6 +34,7 @@ const translations = {
 
 module.exports = {
     name: "ban",
+    category: "mod",
     aliases: ["бан", "забань", "заблокуй"],
     arguments: [
         {

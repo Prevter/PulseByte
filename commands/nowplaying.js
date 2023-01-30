@@ -18,6 +18,7 @@ const translations = {
 
 module.exports = {
     name: "nowplaying",
+    category: "music",
     aliases: ["np", "нп", "музон"],
     arguments: [],
     translations: translations,

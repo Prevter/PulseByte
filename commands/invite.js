@@ -11,6 +11,7 @@ const translations = {
 
 module.exports = {
     name: "invite",
+    category: "general",
     aliases: ["link", "лінк", "інвайт", "приєднати", "посилання", "запросити"],
     arguments: [],
     translations: translations,

@@ -22,6 +22,7 @@ const translations = {
 
 module.exports = {
     name: "play",
+    category: "music",
     aliases: ["p", "п", "плей", "запусти", "грай"],
     arguments: [
         {

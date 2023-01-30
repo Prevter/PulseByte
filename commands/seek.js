@@ -21,6 +21,7 @@ const translations = {
 
 module.exports = {
     name: "seek",
+    category: "music",
     aliases: ["сік", "перемотка", "перемотати"],
     arguments: [
         {

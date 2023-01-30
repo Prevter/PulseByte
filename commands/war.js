@@ -59,6 +59,7 @@ const translations = {
 
 module.exports = {
 	name: "war",
+	category: "utils",
 	aliases: ["втрати", "русня", "кіллфід", "війна", "шопорусні?"],
 	arguments: [],
 	translations: translations,

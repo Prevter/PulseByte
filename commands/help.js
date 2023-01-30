@@ -8,7 +8,7 @@ const translations = {
 	en: {
 		desc: "List all available commands",
 		args: {
-			command: "Command name (or page number) to get more information"
+			command: "Command name, page number or category"
 		},
 		embedTitle: "All available commands",
 		embedDesc: "For detailed information about command, add it's name as an argument. Use help <page> to see more commands",
@@ -23,11 +23,19 @@ const translations = {
 			user: "User",
 			channel: "Channel"
 		},
+		categories: {
+			utils: "Utils",
+			mod: "Moderation",
+			fun: "Fun",
+			music: "Music",
+			general: "General",
+			experience: "Experience",
+		}
 	},
 	uk: {
 		desc: "Вивести список усіх доступних команд",
 		args: {
-			command: "Назва команди (або номер сторінки) щоб отримати більше інформації"
+			command: "Назва команди, номер сторінки або категорія"
 		},
 		embedTitle: "Усі доступні команди",
 		embedDesc: "Для детальної інформації про команду, додайте її назву у якості аргументу. Використовуйте help <сторінка> щоб побачити більше команд",
@@ -42,11 +50,20 @@ const translations = {
 			user: "Користувач",
 			channel: "Канал"
 		},
+		categories: {
+			utils: "Утиліти",
+			mod: "Модерація",
+			fun: "Розваги",
+			music: "Музика",
+			general: "Загальне",
+			experience: "Досвід",
+		}
 	},
 };
 
 module.exports = {
 	name: "help",
+	category: "general",
 	aliases: ["h", "хелп", "помоги", "хелпани", "допоможи"],
 	arguments: [
 		{
@@ -128,45 +145,93 @@ module.exports = {
 				showHelpPage(page);
 			}
 			else {
-				// check if this command exists
-				let command = null;
-				commands.every(cmd => {
-					if (cmd.name === args.command) {
-						command = cmd;
-						return false;
+				// check if it's a category name
+				let category = null;
+				for (const trans of Object.values(translations)) {
+					for (const [key, name] of Object.entries(trans.categories)) {
+						if (name.toLowerCase() === args.command.toLowerCase()) {
+							category = key;
+							break;
+						}
+						if (key === args.command.toLowerCase()) {
+							category = key;
+							break;
+						}
 					}
-					for (var i = 0; i < cmd.aliases.length; i++) {
-						if (cmd.aliases[i] === args.command) {
+				}
+
+				if (category) {
+					// show all commands from this category
+					embed.setTitle(translate('embedTitle'))
+						.setDescription(translate('embedDesc'))
+						.setFooter({ text: footer });
+					
+					for (const cmd of commands) {
+						if (cmd.category === category) {
+							// check if user has permissions to use this command
+							if (cmd.permissions && meta.member) {
+								let hasPermissions = true;
+								for (const perm of cmd.permissions) {
+									if (!meta.member.permissions.has(PermissionsBitField.Flags[perm])) {
+										hasPermissions = false;
+										break;
+									}
+								}
+								if (!hasPermissions) continue;
+							}
+
+							// check if guild only
+							if (cmd.guildOnly && !meta.guild) continue;
+
+							embed.addFields({
+								name: cmd.name,
+								value: cmd.translations[locale].desc,
+								inline: true
+							});
+						}
+					}
+				}
+				else {
+					// check if this command exists
+					let command = null;
+					commands.every(cmd => {
+						if (cmd.name === args.command) {
 							command = cmd;
 							return false;
 						}
+						for (var i = 0; i < cmd.aliases.length; i++) {
+							if (cmd.aliases[i] === args.command) {
+								command = cmd;
+								return false;
+							}
+						}
+						return true;
+					});
+
+					if (!command) {
+						callback({
+							type: "text",
+							content: translate('notFound', args.command)
+						});
+						return;
 					}
-					return true;
-				});
 
-				if (!command) {
-					callback({
-						type: "text",
-						content: translate('notFound', args.command)
-					});
-					return;
-				}
+					embed.setTitle(translate('infoAbout', command.name));
+					embed.setDescription(command.translations[locale].desc);
 
-				embed.setTitle(translate('infoAbout', command.name));
-				embed.setDescription(command.translations[locale].desc);
-
-				const aliasesStr = command.aliases.join(", ");
-				embed.addFields({
-					name: translations[locale].aliases,
-					value: aliasesStr
-				});
-
-				for (const arg of command.arguments) {
+					const aliasesStr = command.aliases.join(", ");
 					embed.addFields({
-						name: `${arg.name}${arg.isRequired ? '*' : ''} (${translations[locale].types[arg.type]})`,
-						value: command.translations[locale].args[arg.name],
-						inline: true
+						name: translations[locale].aliases,
+						value: aliasesStr
 					});
+
+					for (const arg of command.arguments) {
+						embed.addFields({
+							name: `${arg.name}${arg.isRequired ? '*' : ''} (${translations[locale].types[arg.type]})`,
+							value: command.translations[locale].args[arg.name],
+							inline: true
+						});
+					}
 				}
 			}
 		}

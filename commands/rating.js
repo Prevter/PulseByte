@@ -26,6 +26,7 @@ const translations = {
 
 module.exports = {
     name: "rating",
+    category: "experience",
     aliases: ["рейтинг", "leaderboard", "lb", "топ", "top", "лб", "лідерборд", "лідери"],
     arguments: [
         {

@@ -21,6 +21,7 @@ const translations = {
 
 module.exports = {
     name: "queue",
+    category: "music",
     aliases: ["кью", "черга"],
     arguments: [
         { name: 'page', type: 'number' }

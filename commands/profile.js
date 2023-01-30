@@ -42,6 +42,7 @@ const dateToString = (date) => {
 
 module.exports = {
     name: "profile",
+    category: "utils",
     aliases: ["профайл", "профіль", "юзер", "user"],
     arguments: [
         {

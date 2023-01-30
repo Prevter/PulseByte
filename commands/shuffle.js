@@ -15,6 +15,7 @@ const translations = {
 
 module.exports = {
     name: "shuffle",
+    category: "music",
     aliases: ["шафл", "перемішати", "рандом", "random"],
     arguments: [],
     translations: translations,

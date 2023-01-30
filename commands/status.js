@@ -57,6 +57,7 @@ const timeString = (timePassed, translate) => {
 
 module.exports = {
     name: "status",
+    category: "general",
     aliases: ["stat", "статус", "стат", "vol", "info", "інфо"],
     arguments: [],
     translations: translations,

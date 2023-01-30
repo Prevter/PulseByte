@@ -19,6 +19,7 @@ const translations = {
 
 module.exports = {
     name: "autoplay",
+    category: "music",
     aliases: ["auto", "авто", "автоплей"],
     arguments: [],
     translations: translations,

@@ -27,6 +27,7 @@ const translations = {
 
 module.exports = {
     name: "repeat",
+    category: "music",
     aliases: ["r", "репіт", "повтор"],
     arguments: [
         {

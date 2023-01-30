@@ -52,6 +52,7 @@ function nFormatter(num, digits) {
 
 module.exports = {
     name: "xp",
+    category: "experience",
     aliases: ["хп", "хр", "experience", "досвід"],
     arguments: [
         {

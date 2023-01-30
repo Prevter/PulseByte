@@ -15,6 +15,7 @@ const translations = {
 
 module.exports = {
     name: "stop",
+    category: "music",
     aliases: ["стоп", "зупинись"],
     arguments: [],
     translations: translations,

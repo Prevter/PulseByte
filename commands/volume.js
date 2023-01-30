@@ -21,6 +21,7 @@ const translations = {
 
 module.exports = {
     name: "volume",
+    category: "music",
     aliases: ["v", "г", "гучність", "vol", "гуч", "волюм"],
     arguments: [
         {
