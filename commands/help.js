@@ -1,5 +1,6 @@
 const { prefixes } = require("../config.json");
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
+const { Translator } = require('../common/utils');
 
 let commands = new Array();
 
@@ -7,10 +8,10 @@ const translations = {
 	en: {
 		desc: "List all available commands",
 		args: {
-			command: "Command name to get more information"
+			command: "Command name (or page number) to get more information"
 		},
 		embedTitle: "All available commands",
-		embedDesc: "For detailed information about command, add it's name as an argument",
+		embedDesc: "For detailed information about command, add it's name as an argument. Use help <page> to see more commands",
 		embedFooter: "Prefixes: {0}",
 		notFound: "'{0}' not found!",
 		infoAbout: "Information about '{0}'",
@@ -26,10 +27,10 @@ const translations = {
 	uk: {
 		desc: "Вивести список усіх доступних команд",
 		args: {
-			command: "Назва команди щоб отримати більше інформації"
+			command: "Назва команди (або номер сторінки) щоб отримати більше інформації"
 		},
 		embedTitle: "Усі доступні команди",
-		embedDesc: "Для детальної інформації про команду, додайте її назву у якості аргументу",
+		embedDesc: "Для детальної інформації про команду, додайте її назву у якості аргументу. Використовуйте help <сторінка> щоб побачити більше команд",
 		embedFooter: "Префікси: {0}",
 		notFound: "'{0}' не знайдено!",
 		infoAbout: "Інформація про '{0}'",
@@ -55,10 +56,9 @@ module.exports = {
 	],
 	translations: translations,
 	run: async (args, db, locale, callback, meta) => {
-		if (!translations.hasOwnProperty(locale))
-			locale = "en";
+		let translate = new Translator(translations, locale);
 
-		let footer = translations[locale].embedFooter;
+		let footer = translate('embedFooter');
 		let prefixesStr = "";
 		for (const prefix of prefixes) {
 			prefixesStr += `'${prefix}', `;
@@ -70,54 +70,27 @@ module.exports = {
 		let embed = new EmbedBuilder()
 			.setColor(0x0099FF);
 
-		if (args.command) {
-			// check if this command exists
-			let command = null;
-			commands.every(cmd => {
-				if (cmd.name === args.command) {
-					command = cmd;
-					return false;
-				}
-				for (var i = 0; i < cmd.aliases.length; i++) {
-					if (cmd.aliases[i] === args.command) {
-						command = cmd;
-						return false;
-					}
-				}
-				return true;
-			});
-
-			if (!command) {
-				callback({
-					type: "text",
-					content: translations[locale].notFound.replace("{0}", args.command)
-				});
-				return;
-			}
-
-			embed.setTitle(translations[locale].infoAbout.replace("{0}", command.name));
-			embed.setDescription(command.translations[locale].desc);
-
-			const aliasesStr = command.aliases.join(", ");
-			embed.addFields({
-				name: translations[locale].aliases,
-				value: aliasesStr
-			});
-
-			for (const arg of command.arguments) {
-				embed.addFields({
-					name: `${arg.name}${arg.isRequired ? '*' : ''} (${translations[locale].types[arg.type]})`,
-					value: command.translations[locale].args[arg.name],
-					inline: true
-				});
-			}
-		}
-		else {
-			embed.setTitle(translations[locale].embedTitle)
-				.setDescription(translations[locale].embedDesc)
+		const showHelpPage = (page) => {
+			embed.setTitle(translate('embedTitle'))
+				.setDescription(translate('embedDesc'))
 				.setFooter({ text: footer });
 
-			for (const cmd of commands) {
+			const onePage = 9;
+
+			let start = (page - 1) * onePage;
+			let end = start + onePage;
+			if (end > commands.length) end = commands.length;
+
+			// check if there are any commands
+			if (start >= commands.length) {
+				// make it page 1
+				start = 0;
+				end = onePage;
+				if (end > commands.length) end = commands.length;
+			}
+
+			for (let i = start; i < end; i++) {
+				let cmd = commands[i];
 				// check if user has permissions to use this command
 				if (cmd.permissions && meta.member) {
 					let hasPermissions = true;
@@ -139,6 +112,66 @@ module.exports = {
 					inline: true
 				});
 			}
+		}
+
+		if (args.command) {
+			// if it's a number, then it's a page number
+			if (!isNaN(args.command)) {
+				let page = parseInt(args.command);
+				if (page < 1) {
+					callback({
+						type: "text",
+						content: translate('notFound', args.command)
+					});
+					return;
+				}
+				showHelpPage(page);
+			}
+			else {
+				// check if this command exists
+				let command = null;
+				commands.every(cmd => {
+					if (cmd.name === args.command) {
+						command = cmd;
+						return false;
+					}
+					for (var i = 0; i < cmd.aliases.length; i++) {
+						if (cmd.aliases[i] === args.command) {
+							command = cmd;
+							return false;
+						}
+					}
+					return true;
+				});
+
+				if (!command) {
+					callback({
+						type: "text",
+						content: translate('notFound', args.command)
+					});
+					return;
+				}
+
+				embed.setTitle(translate('infoAbout', command.name));
+				embed.setDescription(command.translations[locale].desc);
+
+				const aliasesStr = command.aliases.join(", ");
+				embed.addFields({
+					name: translations[locale].aliases,
+					value: aliasesStr
+				});
+
+				for (const arg of command.arguments) {
+					embed.addFields({
+						name: `${arg.name}${arg.isRequired ? '*' : ''} (${translations[locale].types[arg.type]})`,
+						value: command.translations[locale].args[arg.name],
+						inline: true
+					});
+				}
+			}
+		}
+		else {
+			showHelpPage(1);
 		}
 
 		callback({

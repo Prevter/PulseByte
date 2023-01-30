@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
+const { Translator } = require('../common/utils');
 
 const translations = {
     en: {
@@ -30,11 +31,10 @@ module.exports = {
     ],
     translations: translations,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
+        let translate = new Translator(translations, locale);
 
         if (!args.json) {
-            callback({ type: 'text', content: translations[locale].noEmbed })
+            callback({ type: 'text', content: translate('noEmbed') })
             return;
         }
 

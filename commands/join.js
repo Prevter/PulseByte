@@ -1,4 +1,4 @@
-const { joinVoiceChannel } = require('@discordjs/voice');
+const { Translator } = require('../common/utils');
 
 const translations = {
     en: {
@@ -20,15 +20,14 @@ module.exports = {
     translations: translations,
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
+        let translate = new Translator(translations, locale);
 
         const voiceChannel = meta.message.member?.voice?.channel;
         if (voiceChannel) {
             meta.client.distube.voices.join(voiceChannel)
         }
         else {
-            callback({ type: 'text', content: translations[locale].mustBeInChannel });
+            callback({ type: 'text', content: translate('mustBeInChannel') });
         }
 
     }

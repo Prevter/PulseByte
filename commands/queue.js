@@ -1,3 +1,5 @@
+const { Translator } = require('../common/utils');
+
 const translations = {
     en: {
         desc: "Get current music queue",
@@ -26,16 +28,15 @@ module.exports = {
     translations: translations,
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
+        let translate = new Translator(translations, locale);
 
         const queue = meta.client.distube.getQueue(meta.message);
-        if (!queue) return callback({ type: 'text', content: translations[locale].nothingPlaying });
+        if (!queue) return callback({ type: 'text', content: translate('nothingPlaying') });
         
         const page = args.page || 1;
         if (page <= 0 || page > Math.round(queue.songs.length / 10)) return;
 
-        let content = `${translations[locale].serverQueue}\n\`\`\``;
+        let content = `${translate('serverQueue')}\n\`\`\``;
 
         const startIndex = (page - 1) * 10 + 1;
         const endIndex = startIndex + 10;
@@ -47,14 +48,6 @@ module.exports = {
         }
 
         content += `\`\`\``;
-
-        // const q = queue.songs.map((song, i) => {
-        //     if (i === 0) return '';
-
-        //     if ()
-
-        //     return `${i}. ${song.name} - \`${song.formattedDuration}\``;
-        // }).join('\n');
 
         callback({ type: 'text', content });
     }

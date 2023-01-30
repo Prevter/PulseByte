@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
+const { Translator } = require('../common/utils');
 
 const translations = {
     en: {
@@ -52,27 +53,25 @@ module.exports = {
     permissions: ['BanMembers'],
     translations: translations,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
-
+        let translate = new Translator(translations, locale);
         if (!args.person) {
-            callback({ type: 'text', content: translations[locale].noTarget })
+            callback({ type: 'text', content: translate('noTarget') })
             return;
         }
 
         if (!args.reason) {
-            callback({ type: 'text', content: translations[locale].noReason })
+            callback({ type: 'text', content: translate('noReason') })
             return;
         }
 
         if (args.person.id === meta.author.id)
-            return callback({ type: 'text', content: translations[locale].banYourself })
+            return callback({ type: 'text', content: translate('banYourself') })
 
         if (meta.member.roles.highest.position < args.person.roles.highest.position)
-            return callback({ type: 'text', content: translations[locale].higherRole })
+            return callback({ type: 'text', content: translate('higherRole') })
 
         if (!args.person.bannable)
-            return callback({ type: 'text', content: translations[locale].unbannable })
+            return callback({ type: 'text', content: translate('unbannable') })
 
         await args.person.ban({
             reason: args.reason
@@ -80,8 +79,8 @@ module.exports = {
 
         let embed = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(translations[locale].embedTitle.replace('{0}', `${args.person.user.username}#${args.person.user.discriminator}`))
-            .setDescription(translations[locale].embedDesc.replace('{0}', args.reason))
+            .setTitle(translate('embedTitle', args.person.user.tag))
+            .setDescription(translate('embedDesc', args.reason))
             .setAuthor({ name: meta.author.username, iconURL: meta.author.avatarURL() })
             .setTimestamp()
             .setFooter({ text: `ID: ${args.person.id}` })

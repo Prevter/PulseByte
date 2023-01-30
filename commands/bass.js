@@ -1,3 +1,5 @@
+const { Translator } = require('../common/utils');
+
 const translations = {
     en: {
         desc: "Add bassboost to the song",
@@ -18,11 +20,9 @@ module.exports = {
     translations: translations,
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
-
+        let translate = new Translator(translations, locale);
         const queue = meta.client.distube.getQueue(meta.message)
-        if (!queue) return callback({ type: 'text', content: translations[locale].nothingPlaying });
+        if (!queue) return callback({ type: 'text', content: translate('nothingPlaying') });
 
         if (queue.filters.has("bassboost")) {
             queue.filters.remove("bassboost");

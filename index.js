@@ -15,7 +15,7 @@ const { SpotifyPlugin } = require('@distube/spotify')
 const { SoundCloudPlugin } = require('@distube/soundcloud')
 const { YtDlpPlugin } = require('@distube/yt-dlp')
 const { Player } = require("discord-player")
-
+const xpTools = require('./common/xpFunctions.js');
 const { token, prefixes, case_sensitive, xp } = require('./config.json');
 const db = require('better-sqlite3')('storage.db');
 
@@ -295,8 +295,8 @@ client.on("messageCreate", async (message) => {
 
 	// XP system
 	if (xp.enabled && message.guild) {
-		// random xp between 1 and 10
-		const experience = Math.floor(Math.random() * 10) + 1;
+		// random xp between 15 and 25
+		let experience = xpTools.getRandomXp();
 
 		// get current xp
 		let sql = `SELECT * FROM experience WHERE user_id = '${message.author.id}' AND guild_id = '${message.guild.id}'`;
@@ -309,8 +309,10 @@ client.on("messageCreate", async (message) => {
 				// add xp
 				sql = `UPDATE experience SET xp = ${row.xp + experience}, last_message = ${current_time} WHERE user_id = '${message.author.id}' AND guild_id = '${message.guild.id}'`;
 				db.prepare(sql).run();
-				let level = Math.floor(xp.level_rate * Math.sqrt(row.xp));
-				let new_level = Math.floor(xp.level_rate * Math.sqrt(row.xp + experience));
+				
+				let level = xpTools.getLevel(row.xp);
+				let new_level = xpTools.getLevel(row.xp + experience);
+
 				if (new_level > level) {
 					const locale = getServerLocale(message.guildId);
 					message.reply(xp.level_up_message[locale].replace('{0}', new_level));

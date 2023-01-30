@@ -1,5 +1,6 @@
-const { PermissionsBitField, EmbedBuilder } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const https = require("https");
+const { Translator } = require('../common/utils');
 
 const emojis = {
 	personnel: "<:stats_personnel:1061978201376690276>",
@@ -62,13 +63,12 @@ module.exports = {
 	arguments: [],
 	translations: translations,
 	run: async (args, db, locale, callback, meta) => {
-		if (!translations.hasOwnProperty(locale))
-			locale = "en";
+		let translate = new Translator(translations, locale);
 
 		let embed = new EmbedBuilder()
 			.setColor(0x0099FF)
-			.setTitle(translations[locale].embedTitle)
-			.setDescription(translations[locale].embedDesc);
+			.setTitle(translate('embedTitle'))
+			.setDescription(translate('embedDesc'));
 
 		const url = "https://prevter.ml/api/misc/warStats";
 		https.get(url, function (res) {
@@ -89,7 +89,7 @@ module.exports = {
 					if (delta) valueStr += ` \`(+${delta})\``;
 
 					embed.addFields({
-						name: `${emoji} ${translations[locale][type]}`,
+						name: `${emoji} ${translate(type)}`,
 						value: valueStr,
 						inline: true
 					});

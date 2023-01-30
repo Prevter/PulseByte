@@ -1,5 +1,7 @@
 const { EmbedBuilder } = require('discord.js');
 const { xp } = require('../config.json');
+const { getLevel } = require('../common/xpFunctions.js');
+const { Translator } = require('../common/utils');
 
 const translations = {
     en: {
@@ -22,10 +24,6 @@ const translations = {
     },
 };
 
-const getLevel = (experience) => {
-    return Math.floor(xp.level_rate * Math.sqrt(experience));
-};
-
 module.exports = {
     name: "rating",
     aliases: ["рейтинг", "leaderboard", "lb", "топ", "top", "лб", "лідерборд", "лідери"],
@@ -38,11 +36,10 @@ module.exports = {
     translations: translations,
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
+        let translate = new Translator(translations, locale);
         
         if (xp.enabled === false) {
-            callback({ type: 'text', content: translations[locale].notEnabled });
+            callback({ type: 'text', content: translate('notEnabled') });
             return;
         }
 
@@ -50,31 +47,27 @@ module.exports = {
         if (args.page)
             page = args.page - 1;
 
-        let sql = `SELECT * FROM experience WHERE guild_id = '${meta.message.guild.id}' ORDER BY xp DESC LIMIT ${page}, 10`;
+        let sql = `SELECT * FROM experience WHERE guild_id = '${meta.message.guild.id}' ORDER BY xp DESC LIMIT ${page * 5}, 5`;
         let rows = db.prepare(sql).all();
-
-        if (rows.length === 0)
-            return callback({ type: 'text', content: "❌ No users found" });
 
         let embed = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(translations[locale].embedTitle);
+            .setTitle(translate('embedTitle'));
         
-        let i = 1;
+        let i = page * 5 + 1;
         for (let row of rows) {
             let user_id = row.user_id;
-            let user = await meta.guild.members.fetch(user_id);
+            let user = await meta.guild.members.fetch(user_id, { force: true });
 
-            if (!user)
-                user = `${user_id}`;
-            else
+            if (!user || !user.nickname)
+                user = `<@${user_id}>`;
+            else 
                 user = user.nickname;
-
 
             let xp = row.xp;
             let level = getLevel(xp);
             
-            embed.addFields({ name: `${i}. ${user}`, value: `XP: ${xp}\n${translations[locale].level}: ${level}` });
+            embed.addFields({ name: `${i}. ${user}`, value: `XP: ${xp}\n${translate('level')}: ${level}` });
             i++;
         }
         

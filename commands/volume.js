@@ -1,3 +1,5 @@
+const { Translator } = require('../common/utils');
+
 const translations = {
     en: {
         desc: "Set music volume",
@@ -29,15 +31,14 @@ module.exports = {
     translations: translations,
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
+        let translate = new Translator(translations, locale);
 
         const queue = meta.client.distube.getQueue(meta.message)
         if (!queue)
-            return callback({ type: 'text', content: translations[locale].nothingPlaying });
+            return callback({ type: 'text', content: translate('nothingPlaying') });
 
         if (!args.volume || args.volume < 0 || args.volume > 500)
-            return callback({ type: 'text', content: translations[locale].specifyVolume.replace("{0}", queue.volume) });
+            return callback({ type: 'text', content: translate('specifyVolume', queue.volume) });
 
         queue.setVolume(args.volume);
         callback({ type: 'react', content: '✅' });

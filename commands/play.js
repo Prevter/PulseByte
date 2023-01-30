@@ -1,5 +1,5 @@
-const { EmbedBuilder } = require('discord.js');
 const createEmbed = require('../common/playingEmbed')
+const { Translator } = require('../common/utils');
 
 const translations = {
     en: {
@@ -8,6 +8,7 @@ const translations = {
             query: "Query to search or URL"
         },
         mustBeInChannel: "You must be in a voice channel",
+        noQuery: "You didn't specify query to search or URL"
     },
     uk: {
         desc: "Почати відтворення музики",
@@ -15,6 +16,7 @@ const translations = {
             query: "Запит для пошуку або URL"
         },
         mustBeInChannel: "Ви повинні бути в голосовому каналі",
+        noQuery: "Ви не вказали запит для пошуку або URL"
     },
 };
 
@@ -33,11 +35,10 @@ module.exports = {
     translations: translations,
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
+        let translate = new Translator(translations, locale);
 
         if (!args.query) {
-            callback({ type: 'text', content: translations[locale].args.query });
+            callback({ type: 'text', content: translate('noQuery') });
             return;
         }
 
@@ -71,7 +72,7 @@ module.exports = {
             }
         }
         else {
-            callback({ type: 'text', content: translations[locale].mustBeInChannel });
+            callback({ type: 'text', content: translate('mustBeInChannel') });
         }
 
     }

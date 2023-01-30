@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
+const { Translator } = require('../common/utils');
 
 const translations = {
     en: {
@@ -14,6 +15,8 @@ const translations = {
 }
 
 module.exports = (track, locale, queue) => {
+    let translate = new Translator(translations, locale);
+
     if (!track) return;
     var embed = new EmbedBuilder().setColor(0x0099FF);
 
@@ -24,13 +27,13 @@ module.exports = (track, locale, queue) => {
         embed.setAuthor({ name: track.author ?? track.uploader.name });
 
     if (track.formattedDuration || track.duration)
-        embed.addFields({ name: translations[locale].duration, value: `${track.formattedDuration ?? track.duration}`, inline: true });
+        embed.addFields({ name: translate('duration'), value: `${track.formattedDuration ?? track.duration}`, inline: true });
 
     if (track.views)
-        embed.addFields({ name: translations[locale].views, value: `${track.views}`, inline: true });
+        embed.addFields({ name: translate('views'), value: `${track.views}`, inline: true });
 
     if (track.user)
-        embed.addFields({ name: translations[locale].requestedBy, value: `${track.user.username}` });
+        embed.addFields({ name: translate('requestedBy'), value: `${track.user.username}` });
 
     if (queue?.formattedCurrentTime && track.duration) {
         let progress = queue.currentTime / track.duration;
@@ -53,6 +56,24 @@ module.exports = (track, locale, queue) => {
         switch (track.source) {
             case 'youtube':
                 embed.setFooter({ text: 'YouTube' });
+                break;
+            case 'soundcloud':
+                embed.setFooter({ text: 'SoundCloud' });
+                break;
+            case 'twitch':
+                embed.setFooter({ text: 'Twitch' });
+                break;
+            case 'vimeo':
+                embed.setFooter({ text: 'Vimeo' });
+                break;
+            case 'mixer':
+                embed.setFooter({ text: 'Mixer' });
+                break;
+            case 'bandcamp':
+                embed.setFooter({ text: 'Bandcamp' });
+                break;
+            case 'http':
+                embed.setFooter({ text: 'HTTP' });
                 break;
         }
     }

@@ -1,3 +1,5 @@
+const { Translator } = require('../common/utils');
+
 const translations = {
     en: {
         desc: "Skip current song in queue",
@@ -18,11 +20,10 @@ module.exports = {
     translations: translations,
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
+        let translate = new Translator(translations, locale);
 
         const queue = meta.client.distube.getQueue(meta.message)
-        if (!queue) return callback({ type: 'text', content: translations[locale].nothingPlaying });
+        if (!queue) return callback({ type: 'text', content: translate('nothingPlaying') });
         try {
             await queue.skip();
             callback({ type: 'react', content: '✅' });

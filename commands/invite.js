@@ -15,9 +15,6 @@ module.exports = {
     arguments: [],
     translations: translations,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
-        
         let invite = `https://discord.com/oauth2/authorize?client_id=${meta.client.user.id}&scope=bot&permissions=8`;
         callback({ type: 'text', content: invite });
     }

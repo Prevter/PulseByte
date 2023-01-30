@@ -1,24 +1,25 @@
 const { EmbedBuilder } = require('discord.js');
+const { Translator } = require('../common/utils');
 
 const translations = {
     en: {
         desc: "Get bot status",
         args: {},
         embedTitle: "Bot status",
-        embedDesc: "I am active on %0 servers",
+        embedDesc: "I am active on {0} servers",
         ping: "🏓 Ping",
         milliseconds: "ms",
         memoryUsage: "📈 Memory usage",
         megabytes: "MB",
         uptime: "🕒 Uptime",
         dayParser: (days) => days === 1 ? "day" : "days",
-        nodeVersion: "Node.js version: %0",
+        nodeVersion: "Node.js version: {0}",
     },
     uk: {
         desc: "Отримати статус бота",
         args: {},
         embedTitle: "Статус бота",
-        embedDesc: "Я активний на %0 серверах",
+        embedDesc: "Я активний на {0} серверах",
         ping: "🏓 Пінг",
         milliseconds: "мс",
         memoryUsage: "📈 Використання пам'яті",
@@ -32,18 +33,18 @@ const translations = {
             else
                 return 'днів';
         },
-        nodeVersion: "Версія Node.js: %0",
+        nodeVersion: "Версія Node.js: {0}",
     },
 };
 
-const timeString = (timePassed, locale) => {
+const timeString = (timePassed, translate) => {
     let seconds = Math.floor(timePassed % 60);
     let minutes = Math.floor(timePassed / 60) % 60;
     let hours = Math.floor(timePassed / 3600) % 24;
     let days = Math.floor(timePassed / 86400);
     let result = '';
     if (days > 0)
-        result += `${days} ${translations[locale].dayParser(days)} `;
+        result += `${days} ${translate('dayParser', days)} `;
     if (hours > 0 || result.length > 0)
         result += `${hours}:`;
     if (minutes > 0 || result.length > 0)
@@ -60,8 +61,7 @@ module.exports = {
     arguments: [],
     translations: translations,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
+        let translate = new Translator(translations, locale);
 
         const serverCount = meta.client.guilds.cache.size;
         const ping = meta.client.ws.ping;
@@ -71,22 +71,22 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(translations[locale].embedTitle)
-            .setDescription(translations[locale].embedDesc.replace("%0", serverCount))
+            .setTitle(translate('embedTitle'))
+            .setDescription(translate('embedDesc', serverCount))
             .addFields({
-                name: translations[locale].ping,
-                value: ping + translations[locale].milliseconds,
+                name: translate('ping'),
+                value: ping + translate('milliseconds'),
                 inline: true
             }, {
-                name: translations[locale].uptime,
-                value: timeString(uptime / 1000, locale),
+                name: translate('uptime'),
+                value: timeString(uptime / 1000, translate),
                 inline: true
             }, {
-                name: translations[locale].memoryUsage,
-                value: memoryUsage.toFixed(2) + translations[locale].megabytes,
+                name: translate('memoryUsage'),
+                value: memoryUsage.toFixed(2) + translate('megabytes'),
                 inline: true
             })
-            .setFooter({ text: translations[locale].nodeVersion.replace("%0", nodeVersion) })
+            .setFooter({ text: translate('nodeVersion', nodeVersion) })
         
         callback({ type: 'embed', content: embed });
     }

@@ -1,3 +1,5 @@
+const { Translator } = require('../common/utils');
+
 const translations = {
     en: {
         desc: "Delete messages in channel",
@@ -30,16 +32,14 @@ module.exports = {
     guildOnly: true,
     permissions: ['ManageMessages'],
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
-
+        let translate = new Translator(translations, locale);
         if (!args.amount || isNaN(args.amount)) {
-            callback({ type: 'text', content: translations[locale].provideAmount });
+            callback({ type: 'text', content: translate('provideAmount') });
             return;
         }
 
         if (args.amount > 99) {
-            callback({ type: 'text', content: translations[locale].provideAmount });
+            callback({ type: 'text', content: translate('provideAmount') });
             return;
         }
 

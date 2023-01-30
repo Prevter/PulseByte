@@ -1,5 +1,5 @@
-const { EmbedBuilder } = require('discord.js');
 const createEmbed = require('../common/playingEmbed')
+const { Translator } = require('../common/utils');
 
 const translations = {
     en: {
@@ -23,13 +23,12 @@ module.exports = {
     translations: translations,
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
+        let translate = new Translator(translations, locale);
 
         const queue = meta.client.distube.getQueue(meta.message)
 
         if (!queue) {
-            callback({ type: 'text', content: `❌ | ${translations[locale].nothingPlaying}` });
+            callback({ type: 'text', content: `❌ | ${translate('nothingPlaying')}` });
             return;
         }
 

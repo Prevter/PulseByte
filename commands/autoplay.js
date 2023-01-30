@@ -1,3 +1,5 @@
+const { Translator } = require('../common/utils');
+
 const translations = {
     en: {
         desc: "Automatically launch next recommended song",
@@ -22,13 +24,10 @@ module.exports = {
     translations: translations,
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
-        if (!translations.hasOwnProperty(locale))
-            locale = "en";
-
+        let translate = new Translator(translations, locale);
         const queue = meta.client.distube.getQueue(meta.message)
-        if (!queue) return callback({ type: 'text', content: translations[locale].nothingPlaying });
-
+        if (!queue) return callback({ type: 'text', content: translate('nothingPlaying') });
         const autoplay = queue.toggleAutoplay()
-        callback({ type: 'text', content: autoplay ? translations[locale].turnedOn : translations[locale].turnedOff });
+        callback({ type: 'text', content: translate(autoplay ? 'turnedOn' : 'turnedOff') });
     }
 }
