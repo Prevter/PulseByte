@@ -32,7 +32,7 @@ module.exports = (track, locale, queue) => {
     if (track.user)
         embed.addFields({ name: translations[locale].requestedBy, value: `${track.user.username}` });
 
-    if (queue?.formattedCurrentTime) {
+    if (queue?.formattedCurrentTime && track.duration) {
         let progress = queue.currentTime / track.duration;
         progress = Math.round(progress * 10);
         let bar = '';

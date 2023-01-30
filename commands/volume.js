@@ -2,18 +2,18 @@ const translations = {
     en: {
         desc: "Set music volume",
         args: {
-            volume: "Volume (from 0 to 100)"
+            volume: "Volume (from 0 to 500)"
         },
         nothingPlaying: "❌ Queue is empty",
-        specifyVolume: "Please specify volume from 0 to 100\nCurrent volume: {0}"
+        specifyVolume: "Please specify volume from 0 to 500\nCurrent volume: {0}"
     },
     uk: {
         desc: "Встановити гучність музики",
         args: {
-            volume: "Гучність (від 0 до 100)"
+            volume: "Гучність (від 0 до 500)"
         },
         nothingPlaying: "❌ Черга порожня",
-        specifyVolume: "Будь-ласка вкажіть гучність від 0 до 100\nПоточна гучність: {0}"
+        specifyVolume: "Будь-ласка вкажіть гучність від 0 до 500\nПоточна гучність: {0}"
     },
 };
 
@@ -36,7 +36,7 @@ module.exports = {
         if (!queue)
             return callback({ type: 'text', content: translations[locale].nothingPlaying });
 
-        if (!args.volume || args.volume < 0 || args.volume > 100)
+        if (!args.volume || args.volume < 0 || args.volume > 500)
             return callback({ type: 'text', content: translations[locale].specifyVolume.replace("{0}", queue.volume) });
 
         queue.setVolume(args.volume);

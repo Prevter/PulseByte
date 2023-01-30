@@ -1,5 +1,5 @@
-const { prefix } = require("../config.json");
-const { EmbedBuilder } = require('discord.js');
+const { prefixes } = require("../config.json");
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 let commands = new Array();
 
@@ -11,7 +11,7 @@ const translations = {
 		},
 		embedTitle: "All available commands",
 		embedDesc: "For detailed information about command, add it's name as an argument",
-		embedFooter: "Current prefix: '{0}'",
+		embedFooter: "Prefixes: {0}",
 		notFound: "'{0}' not found!",
 		infoAbout: "Information about '{0}'",
 		aliases: "Aliases:",
@@ -30,7 +30,7 @@ const translations = {
 		},
 		embedTitle: "Усі доступні команди",
 		embedDesc: "Для детальної інформації про команду, додайте її назву у якості аргументу",
-		embedFooter: "Поточний префікс: '{0}'",
+		embedFooter: "Префікси: {0}",
 		notFound: "'{0}' не знайдено!",
 		infoAbout: "Інформація про '{0}'",
 		aliases: "Псевдоніми:",
@@ -54,12 +54,18 @@ module.exports = {
 		}
 	],
 	translations: translations,
-	run: async (args, db, locale, callback) => {
+	run: async (args, db, locale, callback, meta) => {
 		if (!translations.hasOwnProperty(locale))
 			locale = "en";
 
 		let footer = translations[locale].embedFooter;
-		footer = footer.replace("{0}", prefix);
+		let prefixesStr = "";
+		for (const prefix of prefixes) {
+			prefixesStr += `'${prefix}', `;
+		}
+		prefixesStr = prefixesStr.substring(0, prefixesStr.length - 2);
+
+		footer = footer.replace("{0}", prefixesStr);
 
 		let embed = new EmbedBuilder()
 			.setColor(0x0099FF);
@@ -112,6 +118,18 @@ module.exports = {
 				.setFooter({ text: footer });
 
 			for (const cmd of commands) {
+				// check if user has permissions to use this command
+				if (cmd.permissions && meta.member) {
+					let hasPermissions = true;
+					for (const perm of cmd.permissions) {
+						if (!meta.member.permissions.has(PermissionsBitField.Flags[perm])) {
+							hasPermissions = false;
+							break;
+						}
+					}
+					if (!hasPermissions) continue;
+				}
+
 				embed.addFields({
 					name: cmd.name,
 					value: cmd.translations[locale].desc,

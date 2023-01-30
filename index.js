@@ -16,7 +16,7 @@ const { SoundCloudPlugin } = require('@distube/soundcloud')
 const { YtDlpPlugin } = require('@distube/yt-dlp')
 const { Player } = require("discord-player")
 
-const { token, prefix, case_sensitive } = require('./config.json');
+const { token, prefixes, case_sensitive, xp } = require('./config.json');
 const db = require('better-sqlite3')('storage.db');
 
 // Initialize database
@@ -24,6 +24,13 @@ const initSQL = `
 CREATE TABLE IF NOT EXISTS locales (
 	id INTEGER PRIMARY KEY NOT NULL,
 	locale TEXT NOT NULL DEFAULT en
+);
+CREATE TABLE IF NOT EXISTS experience (
+	user_id INTEGER NOT NULL,
+	guild_id INTEGER NOT NULL,
+	xp INTEGER NOT NULL,
+	last_message INTEGER NOT NULL,
+	PRIMARY KEY (user_id, guild_id)
 );`;
 db.exec(initSQL);
 
@@ -50,7 +57,7 @@ const player = new Player(client);
 client.player = player;
 client.distube = new DisTube(client, {
 	leaveOnStop: false,
-	leaveOnFinish: true,
+	leaveOnFinish: false,
 	emitNewSongOnly: true,
 	emitAddSongWhenCreatingQueue: false,
 	emitAddListWhenCreatingQueue: false,
@@ -59,7 +66,7 @@ client.distube = new DisTube(client, {
 			emitEventsAfterFetching: true
 		}),
 		new SoundCloudPlugin(),
-		new YtDlpPlugin()
+		new YtDlpPlugin({ update: false })
 	]
 });
 
@@ -219,7 +226,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 					args[arg.name] = strValue;
 					break;
 				case 'number':
-					const numValue = interaction.options.getInteger(arg.name);
+					const numValue = interaction.options.getNumber(arg.name);
 					if (!numValue) break;
 					args[arg.name] = numValue;
 					break;
@@ -285,10 +292,55 @@ async function getUserFromMention(guild, mention) {
 client.on("messageCreate", async (message) => {
 	// return if used without prefix, or send by bot
 	if (message.author.bot) return;
-	if (!case_sensitive && !message.content.toLowerCase().startsWith(prefix)) return;
-	if (case_sensitive && !message.content.startsWith(prefix)) return;
 
-	const args = message.content.slice(prefix.length).split(/\s+/);
+	// XP system
+	if (xp.enabled && message.guild) {
+		// random xp between 1 and 10
+		const experience = Math.floor(Math.random() * 10) + 1;
+
+		// get current xp
+		let sql = `SELECT * FROM experience WHERE user_id = '${message.author.id}' AND guild_id = '${message.guild.id}'`;
+		
+		const row = db.prepare(sql).get();
+		let current_time = Date.now();
+		if (row) {
+			// check if last message was sent more than 1 minute ago
+			if (current_time - row.last_message > xp.cooldown * 1000) {
+				// add xp
+				sql = `UPDATE experience SET xp = ${row.xp + experience}, last_message = ${current_time} WHERE user_id = '${message.author.id}' AND guild_id = '${message.guild.id}'`;
+				db.prepare(sql).run();
+				let level = Math.floor(xp.level_rate * Math.sqrt(row.xp));
+				let new_level = Math.floor(xp.level_rate * Math.sqrt(row.xp + experience));
+				if (new_level > level) {
+					const locale = getServerLocale(message.guildId);
+					message.reply(xp.level_up_message[locale].replace('{0}', new_level));
+				}
+			}
+		} else {
+			// add user to database
+			sql = `INSERT INTO experience (user_id, guild_id, xp, last_message) VALUES ('${message.author.id}', '${message.guild.id}', ${experience}, ${current_time})`;
+			db.prepare(sql).run();
+		}
+	}
+
+
+	var content = message.content;
+	if (!case_sensitive) {
+		content = message.content.toLowerCase();
+	}
+
+	// "prefix" is an array of strings
+	for (var i = 0; i < prefixes.length; i++) {
+		if (content.startsWith(prefixes[i])) {
+			content = content.slice(prefixes[i].length);
+			break;
+		}
+	}
+
+	// return if used without prefix
+	if (content === message.content) return;
+	
+	const args = content.split(/\s+/);
 	let command = null;
 	commands.every(cmd => {
 		if (cmd.name === args[0]) {

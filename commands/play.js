@@ -50,17 +50,25 @@ module.exports = {
 
             if (meta.type === 'prefix') options.message = meta.message;
             else options.interaction = meta.message;
-            callback({ type: 'react', content: '✅' });
+            
+            try {
+                await meta.client.distube.play(voiceChannel, args.query, options);
 
-            await meta.client.distube.play(voiceChannel, args.query, options);
+                const track = await meta.client.player.search(args.query, {
+                    requestedBy: meta.member
+                }).then(x => x.tracks[0]);
+                
+                callback({ type: 'react', content: '✅' });
 
-            const track = await meta.client.player.search(args.query, {
-                requestedBy: meta.member
-            }).then(x => x.tracks[0]);
-
-            let embed = createEmbed(track, locale);
-
-            callback({ type: 'embed', content: embed })
+                let embed = createEmbed(track, locale);
+    
+                if (embed)
+                    callback({ type: 'embed', content: embed })
+            } catch (err) { 
+                console.error(err); 
+                callback({ type: 'react', content: '❌' }); 
+                callback({ type: 'text', content: '```' + err.message + '```' });
+            }
         }
         else {
             callback({ type: 'text', content: translations[locale].mustBeInChannel });
