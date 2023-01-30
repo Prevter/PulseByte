@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS locales (
 	locale TEXT NOT NULL DEFAULT en
 );
 CREATE TABLE IF NOT EXISTS experience (
-	user_id INTEGER NOT NULL,
+	user_id TEXT NOT NULL,
 	guild_id INTEGER NOT NULL,
 	xp INTEGER NOT NULL,
 	last_message INTEGER NOT NULL,
@@ -332,7 +332,7 @@ client.on("messageCreate", async (message) => {
 	// "prefix" is an array of strings
 	for (var i = 0; i < prefixes.length; i++) {
 		if (content.startsWith(prefixes[i])) {
-			content = content.slice(prefixes[i].length);
+			content = message.content.slice(prefixes[i].length);
 			break;
 		}
 	}
@@ -435,14 +435,25 @@ client.on("messageCreate", async (message) => {
 					case 'null':
 						break;
 					case 'text':
-						message.reply(result.content);
+						if (result.reply === false)
+							message.channel.send(result.content);
+						else
+							message.reply(result.content);
 						break;
 					case 'embed':
-						message.reply({ embeds: [result.content] });
+						if (result.reply === false)
+							message.channel.send({ embeds: [result.content] });
+						else
+							message.reply({ embeds: [result.content] });
 						break;
 					case 'react':
 						message.react(result.content);
 						break;
+					case 'attachment':
+						if (result.reply === false)
+							message.channel.send({ files: [result.content] });
+						else
+							message.reply({ files: [result.content] });
 				}
 			}, meta);
 		}

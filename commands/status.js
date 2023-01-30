@@ -6,12 +6,11 @@ const translations = {
         args: {},
         embedTitle: "Bot status",
         embedDesc: "I am active on %0 servers",
-        ping: "Ping",
+        ping: "🏓 Ping",
         milliseconds: "ms",
-        memoryUsage: "Memory usage",
+        memoryUsage: "📈 Memory usage",
         megabytes: "MB",
-        cpuUsage: "CPU usage",
-        uptime: "Uptime",
+        uptime: "🕒 Uptime",
         dayParser: (days) => days === 1 ? "day" : "days",
         nodeVersion: "Node.js version: %0",
     },
@@ -20,12 +19,11 @@ const translations = {
         args: {},
         embedTitle: "Статус бота",
         embedDesc: "Я активний на %0 серверах",
-        ping: "Пінг",
+        ping: "🏓 Пінг",
         milliseconds: "мс",
-        memoryUsage: "Використання пам'яті",
+        memoryUsage: "📈 Використання пам'яті",
         megabytes: "МБ",
-        cpuUsage: "Використання CPU",
-        uptime: "Час роботи",
+        uptime: "🕒 Час роботи",
         dayParser: (days) => {
             if (days % 10 === 1 && days % 100 !== 11)
                 return 'день';
@@ -69,35 +67,27 @@ module.exports = {
         const ping = meta.client.ws.ping;
         const uptime = meta.client.uptime;
         const memoryUsage = process.memoryUsage().heapUsed / 1024 / 1024;
-        const cpuUsage = process.cpuUsage().user / 1000 / 1000;
         const nodeVersion = process.version;
 
         const embed = new EmbedBuilder()
             .setColor(0x0099FF)
             .setTitle(translations[locale].embedTitle)
-            .setDescription(
-                translations[locale]
-                    .embedDesc.replace("%0", serverCount))
-            .addFields({ 
-                name: translations[locale].ping, 
+            .setDescription(translations[locale].embedDesc.replace("%0", serverCount))
+            .addFields({
+                name: translations[locale].ping,
                 value: ping + translations[locale].milliseconds,
-            },{
+                inline: true
+            }, {
                 name: translations[locale].uptime,
                 value: timeString(uptime / 1000, locale),
                 inline: true
-            },{
+            }, {
                 name: translations[locale].memoryUsage,
                 value: memoryUsage.toFixed(2) + translations[locale].megabytes,
                 inline: true
-            },{
-                name: translations[locale].cpuUsage,
-                value: (cpuUsage * 100).toFixed(2) + '%',
-                inline: true
             })
-            
             .setFooter({ text: translations[locale].nodeVersion.replace("%0", nodeVersion) })
-
-
+        
         callback({ type: 'embed', content: embed });
     }
 }

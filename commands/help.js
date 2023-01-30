@@ -130,6 +130,9 @@ module.exports = {
 					if (!hasPermissions) continue;
 				}
 
+				// check if guild only
+				if (cmd.guildOnly && !meta.guild) continue;
+
 				embed.addFields({
 					name: cmd.name,
 					value: cmd.translations[locale].desc,
