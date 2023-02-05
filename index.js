@@ -15,8 +15,7 @@ const { SpotifyPlugin } = require('@distube/spotify')
 const { SoundCloudPlugin } = require('@distube/soundcloud')
 const { YtDlpPlugin } = require('@distube/yt-dlp')
 const { Player } = require("discord-player")
-const xpTools = require('./common/xpFunctions.js');
-const { token, prefixes, case_sensitive, xp } = require('./config.json');
+const { token, prefixes, case_sensitive, activity_name, activity_type } = require('./config.json');
 const db = require('better-sqlite3')('storage.db');
 
 // Initialize database
@@ -31,15 +30,27 @@ CREATE TABLE IF NOT EXISTS experience (
 	xp INTEGER NOT NULL,
 	last_message INTEGER NOT NULL,
 	PRIMARY KEY (user_id, guild_id)
+);
+CREATE TABLE IF NOT EXISTS settings (
+	guild_id TEXT PRIMARY KEY NOT NULL,
+	xp_enabled INTEGER NOT NULL DEFAULT 1
 );`;
 db.exec(initSQL);
 
-const commandsPath = require("path").join(__dirname, "commands");
+const path = require('path');
+const { config } = require('process');
+
+const commandsPath = path.join(__dirname, "commands");
 let commands = new Array();
 let slashCommands = new Array();
-
 require("fs").readdirSync(commandsPath).forEach(function (file) {
 	commands.push(require("./commands/" + file));
+});
+
+const modulesPath = path.join(__dirname, "modules");
+let modules = new Array();
+require("fs").readdirSync(modulesPath).forEach(function (file) {
+	modules.push(require("./modules/" + file));
 });
 
 const client = new Client({
@@ -81,8 +92,8 @@ client.once(Events.ClientReady, c => {
 
 	// change activity
 	client.user.setActivity({
-		name: `${client.guilds.cache.size} servers`,
-		type: ActivityType.Watching
+		name: activity_name,
+		type: ActivityType[activity_type]
 	});
 
 	for (const cmd of commands) {
@@ -293,38 +304,12 @@ client.on("messageCreate", async (message) => {
 	// return if used without prefix, or send by bot
 	if (message.author.bot) return;
 
-	// XP system
-	if (xp.enabled && message.guild) {
-		// random xp between 15 and 25
-		let experience = xpTools.getRandomXp();
-
-		// get current xp
-		let sql = `SELECT * FROM experience WHERE user_id = '${message.author.id}' AND guild_id = '${message.guild.id}'`;
-		
-		const row = db.prepare(sql).get();
-		let current_time = Date.now();
-		if (row) {
-			// check if last message was sent more than 1 minute ago
-			if (current_time - row.last_message > xp.cooldown * 1000) {
-				// add xp
-				sql = `UPDATE experience SET xp = ${row.xp + experience}, last_message = ${current_time} WHERE user_id = '${message.author.id}' AND guild_id = '${message.guild.id}'`;
-				db.prepare(sql).run();
-				
-				let level = xpTools.getLevel(row.xp);
-				let new_level = xpTools.getLevel(row.xp + experience);
-
-				if (new_level > level) {
-					const locale = getServerLocale(message.guildId);
-					message.reply(xp.level_up_message[locale].replace('{0}', new_level));
-				}
-			}
-		} else {
-			// add user to database
-			sql = `INSERT INTO experience (user_id, guild_id, xp, last_message) VALUES ('${message.author.id}', '${message.guild.id}', ${experience}, ${current_time})`;
-			db.prepare(sql).run();
+	// check all modules
+	for (const module of modules) {
+		if (module.onMessage) {
+			module.onMessage(message, db, client);
 		}
 	}
-
 
 	var content = message.content;
 	if (!case_sensitive) {

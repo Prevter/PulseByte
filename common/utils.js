@@ -22,7 +22,7 @@ function Translator(translations, locale) {
         if (typeof translation === 'function')
             return translation(...args);
 
-        return '';
+        return translation;
     };
 }
 

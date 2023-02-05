@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const { xp } = require('../config.json');
-const { getLevel } = require('../common/xpFunctions.js');
+const { getLevel, isEnabledOnServer } = require('../common/xpFunctions.js');
 const { Translator } = require('../common/utils');
 
 const translations = {
@@ -39,7 +39,7 @@ module.exports = {
     run: async (args, db, locale, callback, meta) => {
         let translate = new Translator(translations, locale);
         
-        if (xp.enabled === false) {
+        if (!isEnabledOnServer(db, meta.guild.id)) {
             callback({ type: 'text', content: translate('notEnabled') });
             return;
         }

@@ -16,4 +16,14 @@ const getLevel = (total_xp) => {
     return level - 1;
 }
 
-module.exports = { getRandomXp, getLevelXp, getLevel }
+const isEnabledOnServer = (db, guild_id) => {
+    let sql = `SELECT xp_enabled FROM settings WHERE guild_id = '${guild_id}'`;
+    const row = db.prepare(sql).get();
+    let enabled = xp.enabled;
+    if (row) {
+        enabled = row.xp_enabled;
+    }
+    return enabled;
+}
+
+module.exports = { getRandomXp, getLevelXp, getLevel, isEnabledOnServer }

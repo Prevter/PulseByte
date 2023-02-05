@@ -1,4 +1,5 @@
 const { Translator } = require('../common/utils');
+const createEmbed = require('../common/playingEmbed');
 
 const translations = {
     en: {
@@ -28,6 +29,17 @@ module.exports = {
         try {
             await queue.skip();
             callback({ type: 'react', content: '✅' });
+
+            // wait 1 second to get the next song
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // check if there is a song in queue
+            if (queue.songs.length === 0) return;
+
+            // get the next song
+            const track = queue.songs[0];
+            let embed = createEmbed(track, locale, queue);
+            callback({ type: 'embed', content: embed });
         } catch (e) {
             console.log(e);
             callback({ type: 'react', content: '❌' });
