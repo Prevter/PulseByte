@@ -34,8 +34,8 @@ module.exports = {
         }
 
         const track = queue.songs[0]
-        let embed = createEmbed(track, locale, queue);
-        
+        let embed = createEmbed(track, locale, queue, true);
+
         if (embed)
             callback({ type: 'embed', content: embed });
     }

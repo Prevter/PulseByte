@@ -17,6 +17,7 @@ const { YtDlpPlugin } = require('@distube/yt-dlp')
 const { Player } = require("discord-player")
 const { token, prefixes, case_sensitive, activity_name, activity_type } = require('./config.json');
 const db = require('better-sqlite3')('storage.db');
+const createEmbed = require('./common/playingEmbed')
 
 // Initialize database
 const initSQL = `
@@ -61,6 +62,10 @@ const client = new Client({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.MessageContent,
 		GatewayIntentBits.GuildVoiceStates,
+		GatewayIntentBits.GuildMessageReactions,
+		GatewayIntentBits.GuildMessageTyping,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildPresences,
 	]
 });
 
@@ -79,6 +84,19 @@ client.distube = new DisTube(client, {
 		new SoundCloudPlugin(),
 		new YtDlpPlugin({ update: false })
 	]
+});
+
+client.distube.on("playSong", async (queue, song) => {
+	const locale = getServerLocale(queue.textChannel.guild.id);
+	const embed = createEmbed(song, locale, queue, false);
+	queue.message = await queue.textChannel.send({ embeds: [embed] });
+});
+
+client.distube.on("finishSong", async (queue, song) => {
+	if (queue.message) {
+		await queue.message.delete();
+		queue.message = null;
+	}
 });
 
 const getServerLocale = (guild) => {
@@ -115,15 +133,15 @@ client.once(Events.ClientReady, c => {
 				argTranslations[lang] = translations.args[arg.name];
 			}
 
-			
+
 
 			switch (arg.type) {
 				case 'number':
-					builder.addNumberOption(option => 
+					builder.addNumberOption(option =>
 						option.setName(arg.name)
-						.setDescription(cmd.translations.en.args[arg.name])
-						.setDescriptionLocalizations(argTranslations)
-						.setRequired(arg.isRequired ?? false));
+							.setDescription(cmd.translations.en.args[arg.name])
+							.setDescriptionLocalizations(argTranslations)
+							.setRequired(arg.isRequired ?? false));
 					break;
 				case 'string':
 					builder.addStringOption(option => {
@@ -131,8 +149,8 @@ client.once(Events.ClientReady, c => {
 							.setDescription(cmd.translations.en.args[arg.name])
 							.setDescriptionLocalizations(argTranslations)
 							.setRequired(arg.isRequired ?? false);
-						
-						
+
+
 						if (arg.choices) {
 							for (const choice of arg.choices) {
 								option.addChoices({ name: choice, value: choice })
@@ -326,7 +344,7 @@ client.on("messageCreate", async (message) => {
 
 	// return if used without prefix
 	if (content === message.content) return;
-	
+
 	const args = content.split(/\s+/);
 	let command = null;
 	commands.every(cmd => {

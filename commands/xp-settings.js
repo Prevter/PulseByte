@@ -40,8 +40,8 @@ module.exports = {
         }
     ],
     permissions: ['ManageGuild'],
-	guildOnly: true,
-	translations: translations,
+    guildOnly: true,
+    translations: translations,
     run: async (args, db, locale, callback, meta) => {
         const translate = new Translator(translations, locale);
 

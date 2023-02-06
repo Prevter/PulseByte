@@ -1,5 +1,6 @@
 const xpTools = require('../common/xpFunctions.js');
 const { xp } = require('../config.json');
+const { getServerLocale } = require('../common/utils.js');
 
 module.exports = {
     name: "Experience",
@@ -34,7 +35,7 @@ module.exports = {
                     let new_level = xpTools.getLevel(row.xp + experience);
     
                     if (new_level > level) {
-                        const locale = getServerLocale(message.guildId);
+                        const locale = getServerLocale(db, message.guildId);
                         message.reply(xp.level_up_message[locale].replace('{0}', new_level));
                     }
                 }

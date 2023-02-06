@@ -26,4 +26,10 @@ function Translator(translations, locale) {
     };
 }
 
-module.exports = { Translator }
+const getServerLocale = (db, guild) => {
+	const sql = `SELECT * FROM locales WHERE id = ?`
+	const row = db.prepare(sql).get(guild);
+	return row ? row.locale : 'en';
+};
+
+module.exports = { Translator, getServerLocale }

@@ -14,7 +14,7 @@ const translations = {
     }
 }
 
-module.exports = (track, locale, queue) => {
+module.exports = (track, locale, queue, showTime=false) => {
     let translate = new Translator(translations, locale);
 
     if (!track) return;
@@ -35,7 +35,7 @@ module.exports = (track, locale, queue) => {
     if (track.user)
         embed.addFields({ name: translate('requestedBy'), value: `${track.user.username}` });
 
-    if (queue?.formattedCurrentTime && track.duration) {
+    if (showTime && queue?.formattedCurrentTime && track.duration) {
         let progress = queue.currentTime / track.duration;
         progress = Math.round(progress * 10);
         let bar = '';

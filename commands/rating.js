@@ -38,7 +38,7 @@ module.exports = {
     guildOnly: true,
     run: async (args, db, locale, callback, meta) => {
         let translate = new Translator(translations, locale);
-        
+
         if (!isEnabledOnServer(db, meta.guild.id)) {
             callback({ type: 'text', content: translate('notEnabled') });
             return;
@@ -54,7 +54,7 @@ module.exports = {
         let embed = new EmbedBuilder()
             .setColor(0x0099FF)
             .setTitle(translate('embedTitle'));
-        
+
         let i = page * 5 + 1;
         for (let row of rows) {
             let user_id = row.user_id;
@@ -62,16 +62,16 @@ module.exports = {
 
             if (!user || !user.nickname)
                 user = `<@${user_id}>`;
-            else 
+            else
                 user = user.nickname;
 
             let xp = row.xp;
             let level = getLevel(xp);
-            
+
             embed.addFields({ name: `${i}. ${user}`, value: `XP: ${xp}\n${translate('level')}: ${level}` });
             i++;
         }
-        
+
         callback({ type: 'embed', content: embed });
     }
 }

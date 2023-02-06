@@ -63,31 +63,37 @@ module.exports = {
                 user = args.user;
         }
 
-        const member = meta.message.guild.members.cache.get(user.id);
+        try {
+            const member = meta.message.guild.members.cache.get(user.id);
 
-        // get user accent color
-        let accentColor = user.accentColor;
-        if (!accentColor) {
-            // fetch user data from discord
-            const userData = await user.fetch();
-            accentColor = userData.accentColor;
+            // get user accent color
+            let accentColor = user.accentColor;
+            if (!accentColor) {
+                // fetch user data from discord
+                const userData = await user.fetch();
+                accentColor = userData.accentColor;
+            }
+
+
+            let embed = new EmbedBuilder()
+                .setColor(accentColor || 0x0099FF)
+                .setTitle(user.tag)
+                .setDescription(translate('infoAbout', user.tag))
+                .setThumbnail(user.avatarURL())
+                .addFields({ name: translate('nickname'), value: member.nickname || "None" })
+                .addFields({ name: translate('createdAt'), value: dateToString(user.createdAt) || "Unknown", inline: true })
+                .addFields({ name: translate('joinedAt'), value: dateToString(member.joinedAt) || "Unknown", inline: true })
+                .addFields({ name: translate('roles'), value: member.roles.cache.map(role => role.name).join(", ") })
+                .addFields({ name: "ID", value: user.id })
+                .addFields({ name: translate('mention'), value: user.toString() })
+                .addFields({ name: translate('avatarURL'), value: user.avatarURL() })
+                .setFooter({ text: translate('requestedBy', meta.message.author.username), iconURL: meta.message.author.avatarURL() })
+
+            callback({ type: "embed", content: embed });
         }
-
-
-        let embed = new EmbedBuilder()
-            .setColor(accentColor || 0x0099FF)
-            .setTitle(user.tag)
-            .setDescription(translate(infoAbout, user.tag))
-            .setThumbnail(user.avatarURL())
-            .addFields({ name: translate('nickname'), value: member.nickname || "None" })
-            .addFields({ name: translate('created'), value: dateToString(user.createdAt), inline: true })
-            .addFields({ name: translate('joined'), value: dateToString(member.joinedAt), inline: true })
-            .addFields({ name: translate('roles'), value: member.roles.cache.map(role => role.name).join(", ") })
-            .addFields({ name: "ID", value: user.id })
-            .addFields({ name: translate('mention'), value: user.toString() })
-            .addFields({ name: translate('avatarURL'), value: user.avatarURL() })
-            .setFooter({ text: translate('requestedBy', meta.message.author.username), iconURL: meta.message.author.avatarURL() })
-
-        callback({ type: "embed", content: embed });
+        catch (e) {
+            callback({ type: "text", content: e.message });
+            console.error(e);
+        }
     }
 }

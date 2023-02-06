@@ -4,12 +4,16 @@ const translations = {
     en: {
         desc: "Add bassboost to the song",
         args: {},
-        nothingPlaying: "❌ Queue is empty"
+        nothingPlaying: "❌ Queue is empty",
+        turnedOn: "✅ Bassboost turned on",
+        turnedOff: "🟥 Bassboost turned off",
     },
     uk: {
         desc: "Додати бассбуст до пісні",
         args: {},
-        nothingPlaying: "❌ Черга порожня"
+        nothingPlaying: "❌ Черга порожня",
+        turnedOn: "✅ Бассбуст увімкнено",
+        turnedOff: "🟥 Бассбуст вимкнено",
     },
 };
 
@@ -27,9 +31,10 @@ module.exports = {
 
         if (queue.filters.has("bassboost")) {
             queue.filters.remove("bassboost");
+            callback({ type: 'text', content: translate('turnedOff') });
         } else {
             queue.filters.add("bassboost");
+            callback({ type: 'text', content: translate('turnedOn') });
         }
-        callback({ type: 'react', content: '✅' });
     }
 }

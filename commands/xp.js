@@ -83,7 +83,7 @@ module.exports = {
         let row = db.prepare(sql).get();
 
         let embed = new EmbedBuilder().setColor(0x0099FF)
-            
+
         if (!row) {
             embed.setDescription(translate('noXp', user.username));
             callback({ type: 'embed', content: embed });
@@ -132,7 +132,7 @@ module.exports = {
                 result = '0000' + result;
             else if (hex.length === 1)
                 result = '00000' + result;
-            
+
             context.fillStyle = `#${result}`;
         }
         console.log(context.fillStyle);

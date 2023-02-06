@@ -165,7 +165,7 @@ module.exports = {
 					embed.setTitle(translate('embedTitle'))
 						.setDescription(translate('embedDesc'))
 						.setFooter({ text: footer });
-					
+
 					for (const cmd of commands) {
 						if (cmd.category === category) {
 							// check if user has permissions to use this command

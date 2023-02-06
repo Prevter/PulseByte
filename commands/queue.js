@@ -6,23 +6,38 @@ const translations = {
         args: {
             page: "Page"
         },
-        serverQueue: "🎶 Current queue:",
-        nothingPlaying: "❌ Queue is empty"
+        serverQueue: "🎶 Current queue ({0}):",
+        nothingPlaying: "❌ Queue is empty",
+        page: "Page {0} of {1} ({2} songs)",
     },
     uk: {
         desc: "Дізнатись поточну чергу музики",
         args: {
             page: "Сторінка"
         },
-        serverQueue: "🎶 Поточна черга:",
-        nothingPlaying: "❌ Черга порожня"
+        serverQueue: "🎶 Поточна черга ({0}):",
+        nothingPlaying: "❌ Черга порожня",
+        page: "Сторінка {0} з {1} ({2} пісень)",
     },
+};
+
+const secondsToHms = (s) => {
+    var h = Math.floor(s / 3600);
+    var m = Math.floor(s % 3600 / 60);
+    var s = Math.floor(s % 3600 % 60);
+
+    // hours part is optional
+    var hDisplay = h > 0 ? h + ":" : "";
+    var mDisplay = m < 10 ? "0" + m + ":" : m + ":";
+    var sDisplay = s < 10 ? "0" + s : s;
+    
+    return hDisplay + mDisplay + sDisplay;
 };
 
 module.exports = {
     name: "queue",
     category: "music",
-    aliases: ["кью", "черга"],
+    aliases: ["q", "кью", "черга"],
     arguments: [
         { name: 'page', type: 'number' }
     ],
@@ -32,23 +47,34 @@ module.exports = {
         let translate = new Translator(translations, locale);
 
         const queue = meta.client.distube.getQueue(meta.message);
-        if (!queue) return callback({ type: 'text', content: translate('nothingPlaying') });
+        if (!queue) 
+            return callback({ type: 'text', content: translate('nothingPlaying') });
+
         
-        const page = args.page || 1;
-        if (page <= 0 || page > Math.round(queue.songs.length / 10)) return;
+        let totalDuration = 0;
+        for (var i = 0; i < queue.songs.length; i += 1) {
+            totalDuration += queue.songs[i].duration;
+        }
+        // convert seconds to H:MM:SS
+        totalDuration = secondsToHms(totalDuration);
 
-        let content = `${translate('serverQueue')}\n\`\`\``;
+        let page = args.page || 1;
+        const maxPages = Math.round(queue.songs.length / 10);
+        if (page <= 0 || page > maxPages) 
+            page = 1;
 
-        const startIndex = (page - 1) * 10 + 1;
+        let content = `${translate('serverQueue', totalDuration)}\n\`\`\``;
+
+        const startIndex = (page - 1) * 10;
         const endIndex = startIndex + 10;
-
+        
         for (var i = startIndex; i < endIndex; i += 1) {
-            if (i >= queue.songs.length ) break;
-
-            content += `${i}. ${queue.songs[i].name} - ${queue.songs[i].formattedDuration}\n`;
+            if (i >= queue.songs.length) break;
+            const index = i === 0 ? '▶️' : i + 1;
+            content += `${index}. ${queue.songs[i].name} - ${queue.songs[i].formattedDuration}\n`;
         }
 
-        content += `\`\`\``;
+        content += `\`\`\`${translate('page', page, maxPages, queue.songs.length)}`;
 
         callback({ type: 'text', content });
     }

@@ -20,7 +20,7 @@ const translations = {
 
 module.exports = {
     name: "embed",
-    category: "utils",    
+    category: "utils",
     aliases: ["ембед"],
     arguments: [
         {

@@ -3,7 +3,7 @@ const { Translator } = require('../common/utils');
 
 const translations = {
     en: {
-        desc: "Start playing music",
+        desc: "Add song to the top of the queue",
         args: {
             query: "Query to search or URL"
         },
@@ -12,7 +12,7 @@ const translations = {
         found: "Found `{0}` by `{1}` ({2})"
     },
     uk: {
-        desc: "Почати відтворення музики",
+        desc: "Додати пісню на початок черги",
         args: {
             query: "Запит для пошуку або URL"
         },
@@ -23,9 +23,9 @@ const translations = {
 };
 
 module.exports = {
-    name: "play",
+    name: "playnow",
     category: "music",
-    aliases: ["p", "п", "плей", "запусти", "грай"],
+    aliases: ["pn", "пн", "плейнау", "запустизараз", "гратизараз"],
     arguments: [
         {
             name: "query",
@@ -49,7 +49,8 @@ module.exports = {
         if (voiceChannel) {
             let options = {
                 textChannel: meta.channel,
-                member: meta.member
+                member: meta.member,
+                position: 1
             }
 
             if (meta.type === 'prefix') options.message = meta.message;

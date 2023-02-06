@@ -88,7 +88,7 @@ module.exports = {
                 inline: true
             })
             .setFooter({ text: translate('nodeVersion', nodeVersion) })
-        
+
         callback({ type: 'embed', content: embed });
     }
 }

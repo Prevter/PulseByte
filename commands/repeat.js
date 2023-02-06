@@ -65,7 +65,7 @@ module.exports = {
             return callback({ type: 'text', content: translate('specifyRepeat') });
 
         const queue = meta.client.distube.getQueue(meta.message)
-        if (!queue) 
+        if (!queue)
             return callback({ type: 'text', content: translate('nothingPlaying') });
 
         mode = queue.setRepeatMode(mode)

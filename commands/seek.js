@@ -39,9 +39,9 @@ module.exports = {
         if (!args.time)
             return callback({ type: 'text', content: translate('invalidTime') });
 
-        if (args.time.split(':').length > 3) 
+        if (args.time.split(':').length > 3)
             return callback({ type: 'text', content: translate('invalidTime') });
-        
+
         let time = args.time.split(':').reverse();
         let seconds = 0;
         for (let i = 0; i < time.length; i++) {
