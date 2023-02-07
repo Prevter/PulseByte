@@ -1,6 +1,6 @@
 const { AttachmentBuilder, EmbedBuilder } = require('discord.js');
 const { join } = require('path');
-const Canvas = require('@napi-rs/canvas');
+const { createCanvas, GlobalFonts } = require('@napi-rs/canvas')
 const { xp } = require('../config.json');
 const { request } = require('undici');
 const { getLevel, getLevelXp, isEnabledOnServer } = require('../common/xpFunctions.js');
@@ -49,6 +49,9 @@ function nFormatter(num, digits) {
     });
     return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
 }
+
+const fontFile = join(__dirname, '../assets/OpenSans.ttf');
+GlobalFonts.register(fontFile, 'Open Sans');
 
 module.exports = {
     name: "xp",
@@ -107,7 +110,7 @@ module.exports = {
             }
         }
 
-        const canvas = Canvas.createCanvas(700, 200);
+        const canvas = createCanvas(700, 200);
         const context = canvas.getContext('2d');
 
         const background = await Canvas.loadImage(join(__dirname, '../assets/background.png'));
@@ -146,7 +149,7 @@ module.exports = {
         // Show nickname
         const drawName = (user, x, y) => {
             context.save();
-            context.font = 'bold 32px sans-serif';
+            context.font = 'bold 32px Open Sans';
             context.fillStyle = '#ffffff';
             // add text-shadow
             context.shadowColor = '#000000';
@@ -157,7 +160,7 @@ module.exports = {
             // get text width
             const textWidth = context.measureText(user.username).width;
             // Add discriminator
-            context.font = 'bold 30px sans-serif';
+            context.font = 'bold 30px Open Sans';
             context.fillStyle = '#aaaaaa';
             context.fillText('#' + user.discriminator, x + textWidth + 5, y);
             context.restore();
@@ -167,7 +170,7 @@ module.exports = {
             // it will be aligned to the right
             context.save();
             context.textAlign = 'right';
-            context.font = '48px sans-serif';
+            context.font = '48px Open Sans';
             context.fillStyle = '#ffffff';
             // add text-shadow
             context.shadowColor = '#000000';
@@ -176,7 +179,7 @@ module.exports = {
             context.shadowOffsetY = 2;
             context.fillText(`${level}`, x, y);
             const textWidth = context.measureText(`${level}`).width;
-            context.font = 'bold 24px sans-serif';
+            context.font = 'bold 24px Open Sans';
             context.fillStyle = '#cccccc';
             context.fillText(translate('level'), x - textWidth - 8, y);
             // it should return it's width
@@ -188,7 +191,7 @@ module.exports = {
         const drawRank = (rank, x, y) => {
             context.save();
             context.textAlign = 'right';
-            context.font = '48px sans-serif';
+            context.font = '48px Open Sans';
             context.fillStyle = '#ffffff';
             // add text-shadow
             context.shadowColor = '#000000';
@@ -197,7 +200,7 @@ module.exports = {
             context.shadowOffsetY = 2;
             context.fillText(`#${rank}`, x, y);
             const textWidth = context.measureText(`#${rank}`).width;
-            context.font = 'bold 24px sans-serif';
+            context.font = 'bold 24px Open Sans';
             context.fillStyle = '#cccccc';
             context.fillText(translate('rank'), x - textWidth - 8, y);
             context.restore();
@@ -208,7 +211,7 @@ module.exports = {
             const first = nFormatter(xp, 2)
             const second = ` / ${nFormatter(next_level, 2)} XP`;
             context.textAlign = 'right';
-            context.font = 'bold 24px sans-serif';
+            context.font = 'bold 24px Open Sans';
             context.fillStyle = '#cccccc';
             // add text-shadow
             context.shadowColor = '#000000';
