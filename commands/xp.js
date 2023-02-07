@@ -50,8 +50,7 @@ function nFormatter(num, digits) {
     return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
 }
 
-const fontFile = join(__dirname, '../assets/OpenSans.ttf');
-GlobalFonts.register(fontFile, 'Open Sans');
+GlobalFonts.registerFromPath(join(__dirname, '../assets/OpenSans.ttf'), 'Open Sans');
 
 module.exports = {
     name: "xp",
