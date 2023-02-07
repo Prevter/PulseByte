@@ -92,3 +92,4 @@ npm run start
 ### Experience
 - `rating` - Shows server rating
 - `xp <user>` - Shows user XP
+- `xp-settings <enable/disable>` - Toggles XP system on the server

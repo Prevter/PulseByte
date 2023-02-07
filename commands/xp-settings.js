@@ -30,7 +30,7 @@ const translations = {
 
 module.exports = {
     name: 'xp-settings',
-    category: 'xp',
+    category: 'experience',
     aliases: ['xp-set', 'xp-s'],
     arguments: [
         {
