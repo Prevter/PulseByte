@@ -1,6 +1,6 @@
 const { AttachmentBuilder, EmbedBuilder } = require('discord.js');
 const { join } = require('path');
-const { createCanvas, GlobalFonts } = require('@napi-rs/canvas')
+const { createCanvas, GlobalFonts, loadImage } = require('@napi-rs/canvas')
 const { xp } = require('../config.json');
 const { request } = require('undici');
 const { getLevel, getLevelXp, isEnabledOnServer } = require('../common/xpFunctions.js');
@@ -112,7 +112,7 @@ module.exports = {
         const canvas = createCanvas(700, 200);
         const context = canvas.getContext('2d');
 
-        const background = await Canvas.loadImage(join(__dirname, '../assets/background.png'));
+        const background = await loadImage(join(__dirname, '../assets/background.png'));
         context.save();
         context.drawImage(background, 0, 0, canvas.width, canvas.height);
         context.globalCompositeOperation = 'color';
@@ -143,7 +143,7 @@ module.exports = {
 
         const avatarURL = user.displayAvatarURL({ extension: 'jpg' });
         const { body } = await request(avatarURL);
-        const avatar = await Canvas.loadImage(await body.arrayBuffer());
+        const avatar = await loadImage(await body.arrayBuffer());
 
         // Show nickname
         const drawName = (user, x, y) => {
