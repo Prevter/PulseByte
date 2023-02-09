@@ -43,7 +43,7 @@ module.exports = {
             if (number > 1) {
                 await queue.jump(number);
             } else {
-                if (queue.songs.length > 1)
+                if (queue.songs.length > 1 || queue.autoplay)
                     await queue.skip();
                 else {
                     await queue.stop();
