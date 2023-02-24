@@ -30,6 +30,7 @@ Create a new file `config.json` and fill it like this:
     "case_sensitive": false,
     "activity_type": "Playing",
     "activity_name": "<ANY STATUS>",
+    "owner_id": "<YOUR ID>",
     "xp": {
         "enabled": true,
         "cooldown": 60,

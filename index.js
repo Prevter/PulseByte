@@ -15,7 +15,7 @@ const { SpotifyPlugin } = require('@distube/spotify')
 const { SoundCloudPlugin } = require('@distube/soundcloud')
 const { YtDlpPlugin } = require('@distube/yt-dlp')
 const { Player } = require("discord-player")
-const { token, prefixes, case_sensitive, activity_name, activity_type } = require('./config.json');
+const { token, prefixes, case_sensitive, activity_name, activity_type, owner_id } = require('./config.json');
 const db = require('better-sqlite3')('storage.db');
 const createEmbed = require('./common/playingEmbed')
 
@@ -40,19 +40,6 @@ db.exec(initSQL);
 
 const path = require('path');
 const { config } = require('process');
-
-const commandsPath = path.join(__dirname, "commands");
-let commands = new Array();
-let slashCommands = new Array();
-require("fs").readdirSync(commandsPath).forEach(function (file) {
-	commands.push(require("./commands/" + file));
-});
-
-const modulesPath = path.join(__dirname, "modules");
-let modules = new Array();
-require("fs").readdirSync(modulesPath).forEach(function (file) {
-	modules.push(require("./modules/" + file));
-});
 
 const client = new Client({
 	intents: [
@@ -105,21 +92,43 @@ const getServerLocale = (guild) => {
 	return row ? row.locale : 'en';
 };
 
-client.once(Events.ClientReady, c => {
-	console.log(`Ready! Logged in as ${c.user.id}`);
+let commands = new Array();
+let slashCommands = new Array();
+let modules = new Array();
 
-	// change activity
-	client.user.setActivity({
-		name: activity_name,
-		type: ActivityType[activity_type]
+const reloadCommands = () => {
+	// clear commands
+	commands = new Array();
+	slashCommands = new Array();
+	modules = new Array();
+
+	const commandsPath = path.join(__dirname, "commands");
+	require("fs").readdirSync(commandsPath).forEach(function (file) {
+		if (require.cache[require.resolve("./commands/" + file)]) {
+			delete require.cache[require.resolve("./commands/" + file)];
+		}
+		commands.push(require("./commands/" + file));
+	});
+	
+	const modulesPath = path.join(__dirname, "modules");
+	require("fs").readdirSync(modulesPath).forEach(function (file) {
+		if (require.cache[require.resolve("./modules/" + file)]) {
+			delete require.cache[require.resolve("./modules/" + file)];
+		}
+		modules.push(require("./modules/" + file));
 	});
 
+	// register slash commands
 	for (const cmd of commands) {
 		let descTranslations = {};
+		if (cmd.ownerOnly) continue;
+		
 		for (const [lang, translations] of Object.entries(cmd.translations)) {
 			if (lang === "en") continue;
 			descTranslations[lang] = translations.desc;
 		}
+		
+		console.log(`Registering slash command ${cmd.name}`);
 
 		let builder = new SlashCommandBuilder()
 			.setName(cmd.name)
@@ -132,8 +141,6 @@ client.once(Events.ClientReady, c => {
 				if (lang === "en") continue;
 				argTranslations[lang] = translations.args[arg.name];
 			}
-
-
 
 			switch (arg.type) {
 				case 'number':
@@ -162,6 +169,13 @@ client.once(Events.ClientReady, c => {
 					break;
 				case 'user':
 					builder.addUserOption(option =>
+						option.setName(arg.name)
+							.setDescription(cmd.translations.en.args[arg.name])
+							.setDescriptionLocalizations(argTranslations)
+							.setRequired(arg.isRequired ?? false));
+					break;
+				case 'boolean':
+					builder.addBooleanOption(option =>
 						option.setName(arg.name)
 							.setDescription(cmd.translations.en.args[arg.name])
 							.setDescriptionLocalizations(argTranslations)
@@ -203,15 +217,30 @@ client.once(Events.ClientReady, c => {
 			console.log(`Started refreshing ${cmds.length} application (/) commands.`);
 			// await rest.put(Routes.applicationCommands(c.user.id), { body: [] });
 			const data = await rest.put(
-				Routes.applicationCommands(c.user.id),
+				Routes.applicationCommands(client.user.id),
 				{ body: cmds },
 			);
-			console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+			console.log(`Successfully reloaded ${data.length} application (/) commands.\n`);
 		} catch (error) {
 			// And of course, make sure you catch and log any errors!
 			console.error(error);
 		}
 	})();
+}
+
+client.reloadCommands = reloadCommands;
+
+client.once(Events.ClientReady, c => {
+	console.log(`Ready! Logged in as ${c.user.id}`);
+
+	// change activity
+	client.user.setActivity({
+		name: activity_name,
+		type: ActivityType[activity_type]
+	});
+
+	// load commands
+	reloadCommands();
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -262,6 +291,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 				case 'user':
 					args[arg.name] = interaction.options.getUser(arg.name);
 					break;
+				case 'boolean':
+					args[arg.name] = interaction.options.getBoolean(arg.name);
+					break;
 			}
 		}
 
@@ -281,6 +313,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 					case 'null':
 						interaction.editReply({ content: 'You don\'t have permissions for this command', ephemeral: true });
 						break;
+					case 'custom':
 					case 'text':
 						interaction.editReply(result.content);
 						break;
@@ -362,7 +395,13 @@ client.on("messageCreate", async (message) => {
 	});
 
 	if (command) {
-		if (command.permissions && message.member) {
+		const isOwner = message.author.id === owner_id;
+
+		if (command.ownerOnly && !isOwner) {
+			return;
+		}
+
+		if (command.permissions && message.member && !isOwner) {
 			for (const perm of command.permissions) {
 				if (!message.member.permissions.has(PermissionsBitField.Flags[perm])) {
 					return;
@@ -376,50 +415,67 @@ client.on("messageCreate", async (message) => {
 
 		//parse all arguments
 		let parsedArgs = {};
-		var index = 1;
-		for (const arg of command.arguments) {
-			parsedArgs[arg.name] = arg.defaultValue ?? undefined;
 
-			if (args[index]) {
-				switch (arg.type) {
-					case 'string':
-						if (arg.longString && arg.useQuotes && args[index].startsWith('"')) {
-							parsedArgs[arg.name] = args[index].slice(1);
-							index++;
-							while (index < args.length) {
-								if (args[index].endsWith('"')) {
-									parsedArgs[arg.name] += ' ' + args[index].slice(0, -1);
-									break;
+		if (command.customPrefixArgs) {
+			parsedArgs = args;
+		}
+		else {
+			var index = 1;
+			for (const arg of command.arguments) {
+				parsedArgs[arg.name] = arg.defaultValue ?? undefined;
+	
+				if (args[index]) {
+					switch (arg.type) {
+						case 'string':
+							if (arg.longString && arg.useQuotes && args[index].startsWith('"')) {
+								parsedArgs[arg.name] = args[index].slice(1);
+								index++;
+								while (index < args.length) {
+									if (args[index].endsWith('"')) {
+										parsedArgs[arg.name] += ' ' + args[index].slice(0, -1);
+										break;
+									}
+									parsedArgs[arg.name] += ' ' + args[index];
+									index++;
 								}
-								parsedArgs[arg.name] += ' ' + args[index];
-								index++;
 							}
-						}
-						else if (arg.longString && !arg.useQuotes) {
-							parsedArgs[arg.name] = args[index];
-							index++;
-							while (index < args.length) {
-								parsedArgs[arg.name] += ' ' + args[index];
+							else if (arg.longString && !arg.useQuotes) {
+								parsedArgs[arg.name] = args[index];
 								index++;
+								while (index < args.length) {
+									parsedArgs[arg.name] += ' ' + args[index];
+									index++;
+								}
 							}
-						}
-						else {
-							parsedArgs[arg.name] = args[index];
-						}
-						break;
-					case 'number':
-						let parsed = parseInt(args[index]);
-						if (isNaN(parsed)) parsed = undefined;
-						parsedArgs[arg.name] = parsed;
-						break;
-					case 'user':
-						const member = await getUserFromMention(message.guild, args[index]);
-						parsedArgs[arg.name] = member;
-						break;
+							else {
+								parsedArgs[arg.name] = args[index];
+							}
+							break;
+						case 'number':
+							let parsed = parseInt(args[index]);
+							if (isNaN(parsed)) parsed = undefined;
+							parsedArgs[arg.name] = parsed;
+							break;
+						case 'user':
+							const member = await getUserFromMention(message.guild, args[index]);
+							parsedArgs[arg.name] = member;
+							break;
+						case 'boolean':
+							if (args[index] === 'true') {
+								parsedArgs[arg.name] = true;
+							}
+							else if (args[index] === 'false') {
+								parsedArgs[arg.name] = false;
+							}
+							else {
+								parsedArgs[arg.name] = undefined;
+							}
+							break;
+					}
 				}
+	
+				index++;
 			}
-
-			index++;
 		}
 
 		const locale = getServerLocale(message.guildId);
@@ -475,3 +531,6 @@ process.on('exit', () => db.close());
 process.on('SIGHUP', () => process.exit(128 + 1));
 process.on('SIGINT', () => process.exit(128 + 2));
 process.on('SIGTERM', () => process.exit(128 + 15));
+process.on('uncaughtException', function(err) {
+	console.log('Exception:', err);
+});

@@ -1,4 +1,4 @@
-const { prefixes } = require("../config.json");
+const { prefixes, owner_id } = require("../config.json");
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { Translator } = require('../common/utils');
 
@@ -30,6 +30,7 @@ const translations = {
 			music: "Music",
 			general: "General",
 			experience: "Experience",
+			owner: "Owner"
 		}
 	},
 	uk: {
@@ -48,7 +49,7 @@ const translations = {
 			number: "Число",
 			bool: "Булеве значення",
 			user: "Користувач",
-			channel: "Канал"
+			channel: "Канал",
 		},
 		categories: {
 			utils: "Утиліти",
@@ -57,6 +58,7 @@ const translations = {
 			music: "Музика",
 			general: "Загальне",
 			experience: "Досвід",
+			owner: "Власник"
 		}
 	},
 };
@@ -74,6 +76,7 @@ module.exports = {
 	translations: translations,
 	run: async (args, db, locale, callback, meta) => {
 		let translate = new Translator(translations, locale);
+		const isOwner = meta.author.id === owner_id;
 
 		let footer = translate('embedFooter');
 		let prefixesStr = "";
@@ -108,8 +111,14 @@ module.exports = {
 
 			for (let i = start; i < end; i++) {
 				let cmd = commands[i];
+
+				if (cmd.hidden) continue;
+
+				// check if owner only
+				if (cmd.ownerOnly && !isOwner) continue;
+
 				// check if user has permissions to use this command
-				if (cmd.permissions && meta.member) {
+				if (cmd.permissions && meta.member && !isOwner) {
 					let hasPermissions = true;
 					for (const perm of cmd.permissions) {
 						if (!meta.member.permissions.has(PermissionsBitField.Flags[perm])) {
@@ -167,6 +176,9 @@ module.exports = {
 						.setFooter({ text: footer });
 
 					for (const cmd of commands) {
+					// check if owner only
+					if (cmd.ownerOnly && !isOwner) continue;
+
 						if (cmd.category === category) {
 							// check if user has permissions to use this command
 							if (cmd.permissions && meta.member) {
