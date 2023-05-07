@@ -14,7 +14,6 @@ const { DisTube } = require('distube')
 const { SpotifyPlugin } = require('@distube/spotify')
 const { SoundCloudPlugin } = require('@distube/soundcloud')
 const { YtDlpPlugin } = require('@distube/yt-dlp')
-const { Player } = require("discord-player")
 const { token, prefixes, case_sensitive, activity_name, activity_type, owner_id } = require('./config.json');
 const db = require('better-sqlite3')('storage.db');
 const createEmbed = require('./common/playingEmbed')
@@ -60,8 +59,6 @@ const client = new Client({
 	]
 });
 
-const player = new Player(client);
-client.player = player;
 client.distube = new DisTube(client, {
 	leaveOnStop: false,
 	leaveOnFinish: false,
