@@ -73,14 +73,13 @@ module.exports = {
             return;
         }
 
-        let user = meta.message.author;
+        let user = meta.member.user;
         if (args.user) {
             if (args.user.user)
                 user = args.user.user;
             else
                 user = args.user;
         }
-
         let sql = `SELECT * FROM experience WHERE user_id = '${user.id}' AND guild_id = '${meta.message.guild.id}'`;
         let row = db.prepare(sql).get();
 

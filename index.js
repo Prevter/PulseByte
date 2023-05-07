@@ -35,11 +35,15 @@ CREATE TABLE IF NOT EXISTS experience (
 CREATE TABLE IF NOT EXISTS settings (
 	guild_id TEXT PRIMARY KEY NOT NULL,
 	xp_enabled INTEGER NOT NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS trusted (
+	user_id TEXT PRIMARY KEY NOT NULL
 );`;
 db.exec(initSQL);
 
 const path = require('path');
 const { config } = require('process');
+const { isTrusted } = require('./common/utils');
 
 const client = new Client({
 	intents: [
@@ -69,7 +73,7 @@ client.distube = new DisTube(client, {
 			emitEventsAfterFetching: true
 		}),
 		new SoundCloudPlugin(),
-		new YtDlpPlugin({ update: false })
+		new YtDlpPlugin()
 	]
 });
 
@@ -109,7 +113,7 @@ const reloadCommands = () => {
 		}
 		commands.push(require("./commands/" + file));
 	});
-	
+
 	const modulesPath = path.join(__dirname, "modules");
 	require("fs").readdirSync(modulesPath).forEach(function (file) {
 		if (require.cache[require.resolve("./modules/" + file)]) {
@@ -122,12 +126,12 @@ const reloadCommands = () => {
 	for (const cmd of commands) {
 		let descTranslations = {};
 		if (cmd.ownerOnly) continue;
-		
+
 		for (const [lang, translations] of Object.entries(cmd.translations)) {
 			if (lang === "en") continue;
 			descTranslations[lang] = translations.desc;
 		}
-		
+
 		console.log(`Registering slash command ${cmd.name}`);
 
 		let builder = new SlashCommandBuilder()
@@ -323,6 +327,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 					case 'react':
 						interaction.editReply({ content: result.content });
 						break;
+					case 'attachment':
+						interaction.editReply({ files: [result.content] });
+						break;
 				}
 			}, meta);
 		} catch (error) {
@@ -395,13 +402,13 @@ client.on("messageCreate", async (message) => {
 	});
 
 	if (command) {
-		const isOwner = message.author.id === owner_id;
+		const trusted = isTrusted(db, message.author.id);
 
-		if (command.ownerOnly && !isOwner) {
+		if (command.ownerOnly && !trusted) {
 			return;
 		}
 
-		if (command.permissions && message.member && !isOwner) {
+		if (command.permissions && message.member && !trusted) {
 			for (const perm of command.permissions) {
 				if (!message.member.permissions.has(PermissionsBitField.Flags[perm])) {
 					return;
@@ -423,7 +430,7 @@ client.on("messageCreate", async (message) => {
 			var index = 1;
 			for (const arg of command.arguments) {
 				parsedArgs[arg.name] = arg.defaultValue ?? undefined;
-	
+
 				if (args[index]) {
 					switch (arg.type) {
 						case 'string':
@@ -473,7 +480,7 @@ client.on("messageCreate", async (message) => {
 							break;
 					}
 				}
-	
+
 				index++;
 			}
 		}
@@ -525,12 +532,13 @@ client.on("messageCreate", async (message) => {
 	}
 });
 
+
 client.login(token);
 
 process.on('exit', () => db.close());
 process.on('SIGHUP', () => process.exit(128 + 1));
 process.on('SIGINT', () => process.exit(128 + 2));
 process.on('SIGTERM', () => process.exit(128 + 15));
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', function (err) {
 	console.log('Exception:', err);
 });

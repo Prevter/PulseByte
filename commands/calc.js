@@ -42,7 +42,7 @@ module.exports = {
         }
 
         try {
-            const expression = args.expression.replace(/[^0-9+\-*/.()\[\]]/g, '');
+            const expression = args.expression.replace(/[^0-9+\-*/.()\[\]{}!]/g, '');
             const result = `${translate('result')} ${eval(expression)}`;
             callback({ type: 'text', content: result });
         } catch (e) {

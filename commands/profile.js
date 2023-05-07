@@ -55,7 +55,7 @@ module.exports = {
     run: async (args, db, locale, callback, meta) => {
         let translate = new Translator(translations, locale);
 
-        let user = meta.message.author;
+        let user = meta.author;
         if (args.user) {
             if (args.user.user)
                 user = args.user.user;
@@ -64,7 +64,7 @@ module.exports = {
         }
 
         try {
-            const member = meta.message.guild.members.cache.get(user.id);
+            const member = meta.guild.members.cache.get(user.id);
 
             // get user accent color
             let accentColor = user.accentColor;
@@ -87,7 +87,7 @@ module.exports = {
                 .addFields({ name: "ID", value: user.id })
                 .addFields({ name: translate('mention'), value: user.toString() })
                 .addFields({ name: translate('avatarURL'), value: user.avatarURL() })
-                .setFooter({ text: translate('requestedBy', meta.message.author.username), iconURL: meta.message.author.avatarURL() })
+                .setFooter({ text: translate('requestedBy', meta.author.username), iconURL: meta.author.avatarURL() })
 
             callback({ type: "embed", content: embed });
         }

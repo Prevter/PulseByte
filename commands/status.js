@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const { Translator } = require('../common/utils');
+var os = require('os');
 
 const translations = {
     en: {
@@ -10,8 +11,11 @@ const translations = {
         ping: "🏓 Ping",
         milliseconds: "ms",
         memoryUsage: "📈 Memory usage",
+        totalMemory: "💾 Total memory",
         megabytes: "MB",
+        gigabytes: "GB",
         uptime: "🕒 Uptime",
+        os: "🖥️ Operating system",
         dayParser: (days) => days === 1 ? "day" : "days",
         nodeVersion: "Node.js version: {0}",
     },
@@ -23,8 +27,11 @@ const translations = {
         ping: "🏓 Пінг",
         milliseconds: "мс",
         memoryUsage: "📈 Використання пам'яті",
+        totalMemory: "💾 Всього пам'яті",
         megabytes: "МБ",
+        gigabytes: "ГБ",
         uptime: "🕒 Час роботи",
+        os: "🖥️ Операційна система",
         dayParser: (days) => {
             if (days % 10 === 1 && days % 100 !== 11)
                 return 'день';
@@ -69,6 +76,10 @@ module.exports = {
         const uptime = meta.client.uptime;
         const memoryUsage = process.memoryUsage().heapUsed / 1024 / 1024;
         const nodeVersion = process.version;
+        const osName = os.platform();
+        const osVersion = os.release();
+        const totalMemory = os.totalmem() / 1024 / 1024 / 1024;
+        const freeMemory = os.freemem() / 1024 / 1024 / 1024;
 
         const embed = new EmbedBuilder()
             .setColor(0x0099FF)
@@ -85,6 +96,14 @@ module.exports = {
             }, {
                 name: translate('memoryUsage'),
                 value: memoryUsage.toFixed(2) + translate('megabytes'),
+                inline: true
+            }, {
+                name: translate('totalMemory'),
+                value: `${(totalMemory-freeMemory).toFixed(2)} / ${totalMemory.toFixed(2)} ${translate('gigabytes')}`,
+                inline: true
+            }, {
+                name: translate('os'),
+                value: `${osName} ${osVersion}`,
                 inline: true
             })
             .setFooter({ text: translate('nodeVersion', nodeVersion) })
