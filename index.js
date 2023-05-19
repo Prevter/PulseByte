@@ -465,10 +465,12 @@ client.on("messageCreate", async (message) => {
 							parsedArgs[arg.name] = member;
 							break;
 						case 'boolean':
-							if (args[index] === 'true') {
+							const trueValues = ['true', 'yes', 'y', '1', 'on', 'тру', 'так', 'т'];
+							const falseValues = ['false', 'no', 'n', '0', 'off', 'фолс', 'ні', 'н']
+							if (trueValues.contains(args[index])) {
 								parsedArgs[arg.name] = true;
 							}
-							else if (args[index] === 'false') {
+							else if (falseValues.contains(args[index])) {
 								parsedArgs[arg.name] = false;
 							}
 							else {
