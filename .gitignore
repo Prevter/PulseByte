@@ -11,4 +11,4 @@ package-lock.json
 
 # Config and database
 config.json
-storage.db
+database.db

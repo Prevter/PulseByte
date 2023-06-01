@@ -1,29 +1,28 @@
 {
-  "name": "sashkobot",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
-  },
+  "name": "saskko_bot",
+  "version": "3.0.0",
+  "description": "Multipurpose Discord bot. Supports multiple languages, has a lot of commands and features. Can work with prefix commands and slash commands. Has an XP system, economy, music, moderation, and much more.",
+  "main": "src/index.js",
+  "repository": "https://github.com/Prevter/SanyaBot",
   "author": "Prevter",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
   "dependencies": {
-    "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.16.0",
     "@distube/soundcloud": "^1.3.2",
     "@distube/spotify": "^1.5.1",
     "@distube/yt-dlp": "^1.1.3",
     "@napi-rs/canvas": "^0.1.41",
-    "better-sqlite3": "^8.4.0",
-    "discord-player": "^6.3.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "discord.js": "^14.11.0",
     "distube": "^4.0.4",
-    "libsodium-wrappers": "^0.7.11",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
     "nodemon": "^2.0.22",
-    "opusscript": "^0.1.0",
-    "request": "^2.88.2",
-    "undici": "^5.22.1"
+    "sqlite3": "^5.1.6"
   }
 }

@@ -1,0 +1,131 @@
+{
+    "anime": {
+        "_description": "Search for an anime on Kitsu.io",
+        "_args_desc": {
+            "query": "The anime to search for"
+        },
+        "_usage": "<query>",
+        "status": "⏳ Status",
+        "statuses": {
+            "finished": "Finished",
+            "current": "Current"
+        },
+        "type": "📺 Type",
+        "genres": "📚 Genres",
+        "aired": "📅 Aired",
+        "aired_format": "from **{0}** to **{1}**",
+        "total_episodes": "💿 Total episodes",
+        "duration": "⏱️ Duration",
+        "average_rating": "⭐ Average rating",
+        "age_rating": "🔞 Age restriction",
+        "rank": "🏆 Rank"
+    },
+    "manga": {
+        "_description": "Search for a manga on Kitsu.io",
+        "_args_desc": {
+            "query": "The manga to search for"
+        },
+        "_usage": "<query>",
+        "published": "📅 Published",
+        "chapters": "📖 Chapters",
+        "volumes": "📕 Volumes"
+    },
+    "imgur": {
+        "_description": "Search for an image on Imgur",
+        "_args_desc": {
+            "query": "The image to search for"
+        },
+        "_usage": "<query>"
+    },
+    "urban": {
+        "_description": "Search for a term on Urban Dictionary",
+        "_args_desc": {
+            "query": "The term to search for"
+        },
+        "_usage": "<query>",
+        "title": "Definition of {0}",
+        "example": "Example",
+        "author": "Sent by {0}"
+    },
+    "help": {
+        "_description": "Shows a list of categories or information about a specific command",
+        "_usage": "[command|category]",
+        "_args_desc": {
+            "category": "The category to show information about",
+            "command": "The command to show information about"
+        },
+        "not_found": "Command `{0}` not found!",
+        "categories": "Categories",
+        "category": "Category",
+        "command": "`{0}` command",
+        "usage": "Usage",
+        "aliases": "Aliases",
+        "admin": "Admin",
+        "admin_desc": "Commands that require administrator permissions",
+        "general": "General",
+        "general_desc": "General commands that everyone can use",
+        "utils": "Utils",
+        "utils_desc": "Utility commands",
+        "search": "Search",
+        "search_desc": "Commands that search for things"
+    },
+    "prefix": {
+        "_description": "Change the bot's prefix",
+        "_usage": "<new prefix>",
+        "_args_desc": {
+            "prefix": "The new prefix to use"
+        },
+        "current": "The current prefix is `{0}`",
+        "too_long": "The prefix must be 5 characters or less!",
+        "updated": "The prefix has been updated to `{0}`"
+    },
+    "language": {
+        "_description": "Change the bot's language",
+        "_usage": "<language code>",
+        "_args_desc": {
+            "language": "The language code to use"
+        },
+        "name": "🇺🇸 English",
+        "supported": "Supported languages",
+        "updated": "Language has been updated to 🇺🇸 English"
+    },
+    "invite": {
+        "_description": "Get bot's invite link",
+        "message": "Invite me to your server with this link: {0}"
+    },
+    "warstats": {
+        "_description": "Get latest stats of russian losses",
+        "title": "Enemy losses",
+        "description": "According to the General Staff of the AFU",
+        "th_day": "-th day",
+        "data_verifying": "The data is being verified. The calculation is complicated by the high intensity of hostilities",
+        "personnel_units": "Military personnel",
+        "planes": "Planes",
+        "tanks": "Tanks",
+        "armoured_fighting_vehicles": "Armored Vehicles",
+        "mlrs": "MLRS",
+        "uav_systems": "UAV",
+        "helicopters": "Helicopters",
+        "aa_warfare_systems": "Anti-aircraft",
+        "vehicles_fuel_tanks": "Cars",
+        "cruise_missiles": "Missiles",
+        "artillery_systems": "Artillery",
+        "warships_cutters": "Ships",
+        "special_military_equip": "Special equip.",
+        "atgm_srbm_systems": "ATGM/SRBM"
+    },
+    "xp": {
+        "level_up": "⬆️ You are now level {0}!"
+    },
+    "global": {
+        "owner_only": "This command is only available to the bot owner!",
+        "guild_only": "This command is only available in guilds!",
+        "admin_only": "This command is only available to server administrators!",
+        "slash_only": "This command is only available as a slash command!",
+        "missing_permissions": "You are missing the following permissions: {0}",
+        "none": "None",
+        "not_implemented": "⚠️ This command is not implemented yet",
+        "no_query": "⚠️ You must specify a search query!",
+        "not_found": "❌ No results found!"
+    }
+}
