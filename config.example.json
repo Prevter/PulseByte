@@ -18,7 +18,12 @@
             "enabled": true,
             "cooldown": 60,
             "min": 15,
-            "max": 25
+            "max": 25,
+            "card": {
+                "accent_color": "#ffbb5c",
+                "background": "#090a0b",
+                "background_opacity": 100
+            }
         }
     },
     "database": {

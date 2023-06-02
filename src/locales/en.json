@@ -67,7 +67,20 @@
         "utils": "Utils",
         "utils_desc": "Utility commands",
         "search": "Search",
-        "search_desc": "Commands that search for things"
+        "search_desc": "Commands that search for things",
+        "levels": "Levels",
+        "levels_desc": "Give your members XP and Levels when they send messages and rank them by activity in a leaderboard"
+    },
+    "rank": {
+        "_description": "Get your rank or another member's rank",
+        "_usage": "[member]",
+        "_args_desc": {
+            "member": "The member to get the rank of"
+        },
+        "xp_disabled": "❌ XP is disabled in this guild!",
+        "user_not_found": "❌ User not found or doesn't have any XP!",
+        "level": "LEVEL",
+        "rank": "RANK"
     },
     "prefix": {
         "_description": "Change the bot's prefix",
@@ -114,6 +127,10 @@
         "special_military_equip": "Special equip.",
         "atgm_srbm_systems": "ATGM/SRBM"
     },
+    "experience": {
+        "_description": "Toggle XP system in the current guild",
+        "current": "XP System is now {0} for this guild!"
+    },
     "xp": {
         "level_up": "⬆️ You are now level {0}!"
     },
@@ -126,6 +143,8 @@
         "none": "None",
         "not_implemented": "⚠️ This command is not implemented yet",
         "no_query": "⚠️ You must specify a search query!",
-        "not_found": "❌ No results found!"
+        "not_found": "❌ No results found!",
+        "enabled": "enabled",
+        "disabled": "disabled"
     }
 }

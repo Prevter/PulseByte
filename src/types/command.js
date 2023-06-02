@@ -158,7 +158,7 @@ module.exports = class Command {
      * @param {string[]} args Command arguments
     */
     async run(message, locale, args) {
-        message.reply(locale('global.not_implemented'));
+        message.reply({ embeds: [this.createErrorEmbed(locale('global.not_implemented'))] });
         throw new Error('Command not implemented.');
     }
 
@@ -223,9 +223,9 @@ module.exports = class Command {
     }
 
     /**
-     * Fetches data from an URL.
+     * Fetches data from an URL and converts to JSON.
      * @param {string} url URL to fetch
-     * @param {Object} options Fetch options
+     * @param {https.RequestOptions} options Fetch options
      * @returns {Promise<Object>} Result JSON
      */
     async fetch(url, options = {}) {
@@ -238,6 +238,29 @@ module.exports = class Command {
 
                 res.on('end', () => {
                     resolve(JSON.parse(data));
+                });
+            }).on('error', (err) => {
+                reject(err);
+            });
+        });
+    }
+
+    /**
+     * Fetches data from an URL and loads as binary object.
+     * @param {string} url URL to fetch
+     * @param {https.RequestOptions} options Fetch options
+     * @returns {Promise<Buffer>} Result buffer
+     */
+    async fetchBinary(url, options = {}) {
+        return new Promise((resolve, reject) => {
+            https.get(url, options, (res) => {
+                let data = [];
+                res.on('data', (chunk) => {
+                    data.push(chunk);
+                });
+
+                res.on('end', () => {
+                    resolve(Buffer.concat(data));
                 });
             }).on('error', (err) => {
                 reject(err);

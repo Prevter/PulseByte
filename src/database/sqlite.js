@@ -19,8 +19,16 @@ module.exports = class SqliteContext extends DatabaseContext {
                 id TEXT,
                 guild_id TEXT NOT NULL,
                 xp INTEGER NOT NULL,
+                message_count INTEGER NOT NULL,
                 last_message INTEGER NOT NULL,
                 PRIMARY KEY (id, guild_id)
+            )`);
+
+            this.db.run(`CREATE TABLE IF NOT EXISTS profiles (
+                id TEXT PRIMARY KEY,
+                card_color TEXT NOT NULL,
+                card_background TEXT NOT NULL,
+                card_opacity INTEGER NOT NULL
             )`);
         });
     }
@@ -91,7 +99,7 @@ module.exports = class SqliteContext extends DatabaseContext {
 
     getUsers(guild_id) {
         return new Promise((resolve, reject) => {
-            this.db.all('SELECT * FROM users WHERE guild_id = ?', [guild_id], (err, rows) => {
+            this.db.all('SELECT * FROM users WHERE guild_id = ? ORDER BY xp DESC', [guild_id], (err, rows) => {
                 if (err) {
                     this.logger.error(err);
                     reject(err);
@@ -115,7 +123,7 @@ module.exports = class SqliteContext extends DatabaseContext {
 
     createUser(user) {
         return new Promise((resolve, reject) => {
-            this.db.run('INSERT INTO users (id, guild_id, xp, last_message) VALUES (?, ?, ?, ?)', [user.id, user.guild_id, user.xp, user.last_message], (err) => {
+            this.db.run('INSERT INTO users (id, guild_id, xp, message_count, last_message) VALUES (?, ?, ?, ?, ?)', [user.id, user.guild_id, user.xp, user.message_count, user.last_message], (err) => {
                 if (err) {
                     this.logger.error(err);
                     reject(err);
@@ -127,7 +135,7 @@ module.exports = class SqliteContext extends DatabaseContext {
 
     updateUser(user) {
         return new Promise((resolve, reject) => {
-            this.db.run('UPDATE users SET xp = ?, last_message = ? WHERE id = ? AND guild_id = ?', [user.xp, user.last_message, user.id, user.guild_id], (err) => {
+            this.db.run('UPDATE users SET xp = ?, message_count = ?, last_message = ? WHERE id = ? AND guild_id = ?', [user.xp, user.message_count, user.last_message, user.id, user.guild_id], (err) => {
                 if (err) {
                     this.logger.error(err);
                     reject(err);
@@ -140,6 +148,66 @@ module.exports = class SqliteContext extends DatabaseContext {
     deleteUser(user_id, guild_id) {
         return new Promise((resolve, reject) => {
             this.db.run('DELETE FROM users WHERE id = ? AND guild_id = ?', [user_id, guild_id], (err) => {
+                if (err) {
+                    this.logger.error(err);
+                    reject(err);
+                }
+                resolve();
+            });
+        });
+    }
+
+    getProfiles() {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT * FROM profiles', (err, rows) => {
+                if (err) {
+                    this.logger.error(err);
+                    reject(err);
+                }
+                resolve(rows);
+            });
+        });
+    }
+
+    getProfile(user_id) {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT * FROM profiles WHERE id = ?', [user_id], (err, row) => {
+                if (err) {
+                    this.logger.error(err);
+                    reject(err);
+                }
+                resolve(row);
+            });
+        });
+    }
+
+    createProfile(profile) {
+        return new Promise((resolve, reject) => {
+            this.db.run('INSERT INTO profiles (id, card_color, card_background, card_opacity) VALUES (?, ?, ?, ?)', [profile.id, profile.card_color, profile.card_background, profile.card_opacity], (err) => {
+                if (err) {
+                    this.logger.error(err);
+                    reject(err);
+                }
+                resolve();
+            });
+        });
+    }
+
+    updateProfile(profile) {
+        return new Promise((resolve, reject) => {
+            this.db.run('UPDATE profiles SET card_color = ?, card_background = ?, card_opacity = ? WHERE id = ?', [profile.card_color, profile.card_background, profile.card_opacity, profile.id], (err) => {
+                if (err) {
+                    this.logger.error(err);
+                    reject(err);
+                }
+                resolve();
+            });
+        });
+    }
+
+    deleteProfile(user_id) {
+        return new Promise((resolve, reject) => {
+            this.db.run('DELETE FROM profiles WHERE id = ?', [user_id], (err) => {
                 if (err) {
                     this.logger.error(err);
                     reject(err);

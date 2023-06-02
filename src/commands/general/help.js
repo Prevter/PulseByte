@@ -12,7 +12,7 @@ module.exports = class extends Command {
         });
 
         const categories = _categories.map(value => ({
-            name: client.locale(`help.${value}`),
+            name: client.locale(`help.${value}`) ?? value,
             value
         }));
 
@@ -59,7 +59,7 @@ module.exports = class extends Command {
                 if (command.hidden) return;
 
                 fields.push({
-                    name: `\`/${command.name}\``,
+                    name: `</${command.name}:${command._id}>`,
                     value: locale(`${command.name}._description`)
                 });
             });
@@ -103,14 +103,15 @@ module.exports = class extends Command {
         let fields = [];
         for (const [category, categoryLocale] of Object.entries(categories)) {
             fields.push({
-                name: categoryLocale,
-                value: `\`/help ${category}\``,
+                name: categoryLocale ?? category,
+                value: `</help:${this._id}> \`${category}\``,
                 inline: true
             });
         }
 
         const embed = this.createEmbed({
             title: locale('help.categories'),
+            thumbnail: this.discord.user.displayAvatarURL(),
             fields
         });
 
@@ -124,6 +125,7 @@ module.exports = class extends Command {
 
         // if no args, show all categories
         const categories = this.getCategories(locale);
+        
 
         if (args.length === 0) {
             let fields = [];
@@ -137,6 +139,7 @@ module.exports = class extends Command {
 
             const embed = this.createEmbed({
                 title: locale('help.categories'),
+                thumbnail: this.discord.user.displayAvatarURL(),
                 fields
             });
 
@@ -184,7 +187,7 @@ module.exports = class extends Command {
             });
 
             const embed = this.createEmbed({
-                title: category,
+                title: category ?? arg,
                 description: locale(`help.${arg}_desc`),
                 fields
             });

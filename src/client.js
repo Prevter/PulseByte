@@ -105,6 +105,10 @@ module.exports = class DiscordClient {
                 discord.Routes.applicationCommands(this.client.user.id),
                 { body: cmds },
             );
+            for (const cmd of data) {
+                const command = this.commands.find(c => c.name === cmd.name);
+                command._id = cmd.id;
+            }
             this.logger.info(`✅ Successfully reloaded ${data.length} commands.`);
         } catch (error) {
             this.logger.error(error);

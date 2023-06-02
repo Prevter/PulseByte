@@ -32,4 +32,10 @@ module.exports = class DatabaseContext {
     async createUser(user) { notImplemented(); }
     async updateUser(user) { notImplemented(); }
     async deleteUser(user_id, guild_id) { notImplemented(); }
+
+    async getProfiles() { notImplemented(); }
+    async getProfile(user_id) { notImplemented(); }
+    async createProfile(profile) { notImplemented(); }
+    async updateProfile(profile) { notImplemented(); }
+    async deleteProfile(user_id) { notImplemented(); }
 }
