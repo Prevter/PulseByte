@@ -234,6 +234,7 @@
         "humidity": "💧 Humidity",
         "local_time": "🕒 Local time",
         "no_city": "❌ You must specify a city to get the weather for!",
+        "not_found": "❌ City not found!",
         "pressure": "📊 Pressure",
         "pressure_format": "**{0}** hPa",
         "sunrise": "🌅 Sunrise",

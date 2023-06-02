@@ -39,7 +39,7 @@ module.exports = class extends Command {
         const response = await this.fetch(url);
 
         if (response.cod === '404')
-            return this.createErrorEmbed('weather.not_found');
+            return this.createErrorEmbed(locale('weather.not_found'));
 
         const timezone_hours = response.timezone / 3600;
         const gmt_string = `GMT${timezone_hours > 0 ? '+' : ''}${timezone_hours}`
