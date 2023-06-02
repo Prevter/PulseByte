@@ -193,18 +193,35 @@ module.exports = class Command {
         let embed = new discord.EmbedBuilder();
         embed.setColor(config.bot.embed_color);
 
-        if (options.color) embed.setColor(options.color);
-        if (options.title) embed.setTitle(options.title);
-        if (options.url) embed.setURL(options.url);
-        if (options.description) embed.setDescription(options.description);
-        if (options.author) embed.setAuthor(options.author);
-        if (options.footer) embed.setFooter(options.footer);
-        if (options.thumbnail) embed.setThumbnail(options.thumbnail);
-        if (options.image) embed.setImage(options.image);
-        if (options.fields) {
-            for (let field of options.fields) {
-                embed.addFields(field);
+        let creationStep = 'color'; // For error handling.
+        try {
+            if (options.color) embed.setColor(options.color);
+            creationStep = 'title';
+            if (options.title) embed.setTitle(options.title);
+            creationStep = 'url';
+            if (options.url) embed.setURL(options.url);
+            creationStep = 'description';
+            if (options.description) embed.setDescription(options.description);
+            creationStep = 'author';
+            if (options.author) embed.setAuthor(options.author);
+            creationStep = 'footer';
+            if (options.footer) embed.setFooter(options.footer);
+            creationStep = 'timestamp';
+            if (options.timestamp) embed.setTimestamp();
+            creationStep = 'thumbnail';
+            if (options.thumbnail) embed.setThumbnail(options.thumbnail);
+            creationStep = 'image';
+            if (options.image) embed.setImage(options.image);
+            if (options.fields) {
+                let i = 0;
+                for (let field of options.fields) {
+                    creationStep = `fields[${i++}]`;
+                    embed.addFields(field);
+                }
             }
+        }
+        catch (e) {
+            this.client.logger.error(`Failed to create embed on step ${creationStep}. Full embed object: \n${JSON.stringify(options, null, 4)}`);
         }
 
         return embed;
@@ -266,5 +283,45 @@ module.exports = class Command {
                 reject(err);
             });
         });
+    }
+
+    /**
+     * Loads a member from a guild.
+     * @param {discord.Guild} guild Discord guild
+     * @param {string} member_id Member ID
+     * @returns {Promise<discord.GuildMember>} Discord guild member
+     */
+    async loadMember(guild, member_id) {
+        if (!member_id) return;
+
+        if (member_id.startsWith('<@') && member_id.endsWith('>')) {
+            member_id = member_id.slice(2, -1);
+            if (member_id.startsWith('!')) {
+                member_id = member_id.slice(1);
+            }
+        }
+
+        return await guild.members.fetch(member_id);
+    }
+
+    /**
+     * Formats a UTC timestamp to a string with the given format.
+     * @param {*} timestamp timestamp
+     * @param {*} formatString format string
+     * @returns {string} Formatted date
+     * @example
+     * formatDate(new Date(), 'HH:mm:ss'); // 12:34:56
+     * formatDate(new Date(), 'YYYY-MM-DD'); // 2021-01-01
+     * formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss'); // 2021-01-01 12:34:56
+     */
+    formatDate(timestamp, formatString) {
+        const date = new Date(timestamp);
+        const format = formatString.replace(/YYYY/g, date.getUTCFullYear())
+            .replace(/MM/g, ('0' + (date.getUTCMonth() + 1)).slice(-2))
+            .replace(/DD/g, ('0' + date.getUTCDate()).slice(-2))
+            .replace(/HH/g, ('0' + date.getUTCHours()).slice(-2))
+            .replace(/mm/g, ('0' + date.getUTCMinutes()).slice(-2))
+            .replace(/ss/g, ('0' + date.getUTCSeconds()).slice(-2));
+        return format;
     }
 };

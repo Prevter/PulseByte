@@ -41,5 +41,6 @@
             "file": true
         }
     },
-    "imgur_client_id": "<Imgur Client ID>"
+    "imgur_client_id": "<Imgur Client ID>",
+    "weather_api_key": "<OpenWeatherMap API Key>"
 }

@@ -172,19 +172,6 @@ module.exports = class extends Command {
         return user_data;
     }
 
-    async loadMember(guild, member_id) {
-        if (!member_id) return;
-
-        if (member_id.startsWith('<@') && member_id.endsWith('>')) {
-            member_id = member_id.slice(2, -1);
-            if (member_id.startsWith('!')) {
-                member_id = member_id.slice(1);
-            }
-        }
-
-        return await guild.members.fetch(member_id);
-    }
-
     async runAsSlash(interaction, locale, args) {
         if (!interaction.guild_data.xp_enabled)
             return await interaction.reply({ embeds: [this.createErrorEmbed(locale('rank.xp_disabled'))] });

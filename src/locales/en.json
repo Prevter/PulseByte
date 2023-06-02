@@ -1,150 +1,250 @@
 {
     "anime": {
-        "_description": "Search for an anime on Kitsu.io",
         "_args_desc": {
             "query": "The anime to search for"
         },
+        "_description": "Search for an anime on Kitsu.io",
         "_usage": "<query>",
-        "status": "⏳ Status",
-        "statuses": {
-            "finished": "Finished",
-            "current": "Current"
-        },
-        "type": "📺 Type",
-        "genres": "📚 Genres",
+        "age_rating": "🔞 Age restriction",
         "aired": "📅 Aired",
         "aired_format": "from **{0}** to **{1}**",
-        "total_episodes": "💿 Total episodes",
-        "duration": "⏱️ Duration",
         "average_rating": "⭐ Average rating",
-        "age_rating": "🔞 Age restriction",
-        "rank": "🏆 Rank"
-    },
-    "manga": {
-        "_description": "Search for a manga on Kitsu.io",
-        "_args_desc": {
-            "query": "The manga to search for"
+        "duration": "⏱️ Duration",
+        "genres": "📚 Genres",
+        "rank": "🏆 Rank",
+        "status": "⏳ Status",
+        "statuses": {
+            "current": "Current",
+            "finished": "Finished"
         },
-        "_usage": "<query>",
-        "published": "📅 Published",
-        "chapters": "📖 Chapters",
-        "volumes": "📕 Volumes"
+        "total_episodes": "💿 Total episodes",
+        "type": "📺 Type"
     },
-    "imgur": {
-        "_description": "Search for an image on Imgur",
+    "ban": {
         "_args_desc": {
-            "query": "The image to search for"
+            "member": "The member to ban",
+            "reason": "The reason for the ban"
         },
-        "_usage": "<query>"
-    },
-    "urban": {
-        "_description": "Search for a term on Urban Dictionary",
-        "_args_desc": {
-            "query": "The term to search for"
-        },
-        "_usage": "<query>",
-        "title": "Definition of {0}",
-        "example": "Example",
-        "author": "Sent by {0}"
-    },
-    "help": {
-        "_description": "Shows a list of categories or information about a specific command",
-        "_usage": "[command|category]",
-        "_args_desc": {
-            "category": "The category to show information about",
-            "command": "The command to show information about"
-        },
-        "not_found": "Command `{0}` not found!",
-        "categories": "Categories",
-        "category": "Category",
-        "command": "`{0}` command",
-        "usage": "Usage",
-        "aliases": "Aliases",
-        "admin": "Admin",
-        "admin_desc": "Commands that require administrator permissions",
-        "general": "General",
-        "general_desc": "General commands that everyone can use",
-        "utils": "Utils",
-        "utils_desc": "Utility commands",
-        "search": "Search",
-        "search_desc": "Commands that search for things",
-        "levels": "Levels",
-        "levels_desc": "Give your members XP and Levels when they send messages and rank them by activity in a leaderboard"
-    },
-    "rank": {
-        "_description": "Get your rank or another member's rank",
-        "_usage": "[member]",
-        "_args_desc": {
-            "member": "The member to get the rank of"
-        },
-        "xp_disabled": "❌ XP is disabled in this guild!",
-        "user_not_found": "❌ User not found or doesn't have any XP!",
-        "level": "LEVEL",
-        "rank": "RANK"
-    },
-    "prefix": {
-        "_description": "Change the bot's prefix",
-        "_usage": "<new prefix>",
-        "_args_desc": {
-            "prefix": "The new prefix to use"
-        },
-        "current": "The current prefix is `{0}`",
-        "too_long": "The prefix must be 5 characters or less!",
-        "updated": "The prefix has been updated to `{0}`"
-    },
-    "language": {
-        "_description": "Change the bot's language",
-        "_usage": "<language code>",
-        "_args_desc": {
-            "language": "The language code to use"
-        },
-        "name": "🇺🇸 English",
-        "supported": "Supported languages",
-        "updated": "Language has been updated to 🇺🇸 English"
-    },
-    "invite": {
-        "_description": "Get bot's invite link",
-        "message": "Invite me to your server with this link: {0}"
-    },
-    "warstats": {
-        "_description": "Get latest stats of russian losses",
-        "title": "Enemy losses",
-        "description": "According to the General Staff of the AFU",
-        "th_day": "-th day",
-        "data_verifying": "The data is being verified. The calculation is complicated by the high intensity of hostilities",
-        "personnel_units": "Military personnel",
-        "planes": "Planes",
-        "tanks": "Tanks",
-        "armoured_fighting_vehicles": "Armored Vehicles",
-        "mlrs": "MLRS",
-        "uav_systems": "UAV",
-        "helicopters": "Helicopters",
-        "aa_warfare_systems": "Anti-aircraft",
-        "vehicles_fuel_tanks": "Cars",
-        "cruise_missiles": "Missiles",
-        "artillery_systems": "Artillery",
-        "warships_cutters": "Ships",
-        "special_military_equip": "Special equip.",
-        "atgm_srbm_systems": "ATGM/SRBM"
+        "_description": "Ban a member from the current guild",
+        "_usage": "<member> [reason]",
+        "description": "Reason: {0}",
+        "failed": "❌ Failed to ban member!",
+        "higher_role": "❌ You can't ban a member with a higher role than you!",
+        "no_member": "❌ Member not found!",
+        "no_reason": "No reason provided",
+        "not_bannable": "❌ I can't ban this member!",
+        "self": "❌ You can't ban yourself!",
+        "title": "{0} was banned!"
     },
     "experience": {
         "_description": "Toggle XP system in the current guild",
         "current": "XP System is now {0} for this guild!"
     },
+    "global": {
+        "admin_only": "This command is only available to server administrators!",
+        "disabled": "disabled",
+        "enabled": "enabled",
+        "guild_only": "This command is only available in guilds!",
+        "missing_permissions": "You are missing the following permissions: {0}",
+        "no_description": "No description provided",
+        "no_query": "⚠️ You must specify a search query!",
+        "none": "None",
+        "not_found": "❌ No results found!",
+        "not_implemented": "⚠️ This command is not implemented yet",
+        "owner_only": "This command is only available to the bot owner!",
+        "slash_only": "This command is only available as a slash command!"
+    },
+    "help": {
+        "_args_desc": {
+            "category": "The category to show information about",
+            "command": "The command to show information about"
+        },
+        "_description": "Shows a list of categories or information about a specific command",
+        "_usage": "[command|category]",
+        "admin": "Admin",
+        "admin_desc": "Commands that require administrator permissions",
+        "aliases": "Aliases",
+        "categories": "Categories",
+        "category": "Category",
+        "command": "`{0}` command",
+        "general": "General",
+        "general_desc": "General commands that everyone can use",
+        "levels": "Levels",
+        "levels_desc": "Give your members XP and Levels when they send messages and rank them by activity in a leaderboard",
+        "moderator": "Moderator",
+        "moderator_desc": "Commands for moderating your server",
+        "not_found": "Command `{0}` not found!",
+        "search": "Search",
+        "search_desc": "Commands that search for things",
+        "usage": "Usage",
+        "utils": "Utils",
+        "utils_desc": "Utility commands"
+    },
+    "imgur": {
+        "_args_desc": {
+            "query": "The image to search for"
+        },
+        "_description": "Search for an image on Imgur",
+        "_usage": "<query>"
+    },
+    "invite": {
+        "_description": "Get bot's invite link",
+        "message": "Invite me to your server with this link: {0}"
+    },
+    "kick": {
+        "_args_desc": {
+            "member": "The member to kick",
+            "reason": "The reason for the kick"
+        },
+        "_description": "Kick a member from the current guild",
+        "_usage": "<member> [reason]",
+        "description": "Reason: {0}",
+        "failed": "❌ Failed to kick member!",
+        "higher_role": "❌ You can't kick a member with a higher role than you!",
+        "no_member": "❌ Member not found!",
+        "no_reason": "No reason provided",
+        "not_kickable": "❌ I can't kick this member!",
+        "self": "❌ You can't kick yourself!",
+        "title": "{0} was kicked!"
+    },
+    "language": {
+        "_args_desc": {
+            "language": "The language code to use"
+        },
+        "_description": "Change the bot's language",
+        "_usage": "<language code>",
+        "name": "🇺🇸 English",
+        "supported": "Supported languages",
+        "updated": "Language has been updated to 🇺🇸 English"
+    },
+    "manga": {
+        "_args_desc": {
+            "query": "The manga to search for"
+        },
+        "_description": "Search for a manga on Kitsu.io",
+        "_usage": "<query>",
+        "chapters": "📖 Chapters",
+        "published": "📅 Published",
+        "volumes": "📕 Volumes"
+    },
+    "mute": {
+        "_args_desc": {
+            "member": "The member to mute",
+            "reason": "The reason for the mute",
+            "time": "Duration of the mute"
+        },
+        "_description": "Mute a member from the current guild",
+        "_usage": "<member> <time> [reason]",
+        "description": "Reason: {0}\nDuration: {1}",
+        "failed": "❌ Failed to mute member!",
+        "higher_role": "❌ You can't mute a member with a higher role than you!",
+        "invalid_time": "❌ Invalid time format! Valid formats are: `1h`, `1h30m`, `1d2h30m`",
+        "no_member": "❌ Member not found!",
+        "no_reason": "No reason provided",
+        "no_time": "❌ You must specify a duration to mute the member for!",
+        "not_muteable": "❌ I can't mute this member!",
+        "self": "❌ You can't mute yourself!",
+        "title": "{0} was muted!"
+    },
+    "permissions": {
+        "BanMembers": "Ban members"
+    },
+    "prefix": {
+        "_args_desc": {
+            "prefix": "The new prefix to use"
+        },
+        "_description": "Change the bot's prefix",
+        "_usage": "<new prefix>",
+        "current": "The current prefix is `{0}`",
+        "too_long": "The prefix must be 5 characters or less!",
+        "updated": "The prefix has been updated to `{0}`"
+    },
+    "rank": {
+        "_args_desc": {
+            "member": "The member to get the rank of"
+        },
+        "_description": "Get your rank or another member's rank",
+        "_usage": "[member]",
+        "level": "LEVEL",
+        "rank": "RANK",
+        "user_not_found": "❌ User not found or doesn't have any XP!",
+        "xp_disabled": "❌ XP is disabled in this guild!"
+    },
+    "unban": {
+        "_args_desc": {
+            "member": "Member ID to unban"
+        },
+        "_description": "Unban a member from the current guild",
+        "_usage": "<member>",
+        "failed": "❌ Failed to unban member!",
+        "no_member": "❌ Member not found!",
+        "title": "{0} was unbanned!"
+    },
+    "unmute": {
+        "_args_desc": {
+            "member": "The member to mute"
+        },
+        "_description": "Unmute a member from the current guild",
+        "_usage": "<member>",
+        "failed": "❌ Failed to unmute member!",
+        "no_member": "❌ Member not found!",
+        "not_unmuteable": "❌ I can't unmute this member!",
+        "title": "{0} was unmuted!"
+    },
+    "urban": {
+        "_args_desc": {
+            "query": "The term to search for"
+        },
+        "_description": "Search for a term on Urban Dictionary",
+        "_usage": "<query>",
+        "author": "Sent by {0}",
+        "example": "Example",
+        "title": "Definition of {0}"
+    },
+    "warstats": {
+        "_description": "Get latest stats of russian losses",
+        "aa_warfare_systems": "Anti-aircraft",
+        "armoured_fighting_vehicles": "Armored Vehicles",
+        "artillery_systems": "Artillery",
+        "atgm_srbm_systems": "ATGM/SRBM",
+        "cruise_missiles": "Missiles",
+        "data_verifying": "The data is being verified. The calculation is complicated by the high intensity of hostilities",
+        "description": "According to the General Staff of the AFU",
+        "helicopters": "Helicopters",
+        "mlrs": "MLRS",
+        "personnel_units": "Military personnel",
+        "planes": "Planes",
+        "special_military_equip": "Special equip.",
+        "tanks": "Tanks",
+        "th_day": "-th day",
+        "title": "Enemy losses",
+        "uav_systems": "UAV",
+        "vehicles_fuel_tanks": "Cars",
+        "warships_cutters": "Ships"
+    },
+    "weather": {
+        "_args_desc": {
+            "city": "The location to get the weather for"
+        },
+        "_description": "Get the weather for a location",
+        "_usage": "<city>",
+        "clouds": "☁️ Cloudiness",
+        "description": "**{0}°C** {1}",
+        "feels_like": "🌡️ Feels like",
+        "humidity": "💧 Humidity",
+        "local_time": "🕒 Local time",
+        "no_city": "❌ You must specify a city to get the weather for!",
+        "pressure": "📊 Pressure",
+        "pressure_format": "**{0}** hPa",
+        "sunrise": "🌅 Sunrise",
+        "sunset": "🌇 Sunset",
+        "title": "Weather in **{0}**",
+        "visibility": "👀 Visibility",
+        "visibility_format": "**{0}** m",
+        "wind": "💨 Wind",
+        "wind_format": "**{0}** m/s *({1}°)*"
+    },
     "xp": {
         "level_up": "⬆️ You are now level {0}!"
-    },
-    "global": {
-        "owner_only": "This command is only available to the bot owner!",
-        "guild_only": "This command is only available in guilds!",
-        "admin_only": "This command is only available to server administrators!",
-        "slash_only": "This command is only available as a slash command!",
-        "missing_permissions": "You are missing the following permissions: {0}",
-        "none": "None",
-        "not_implemented": "⚠️ This command is not implemented yet",
-        "no_query": "⚠️ You must specify a search query!",
-        "not_found": "❌ No results found!",
-        "enabled": "enabled",
-        "disabled": "disabled"
     }
 }

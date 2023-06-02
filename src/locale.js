@@ -39,6 +39,8 @@ module.exports = (locale) => {
     const localeFile = require(`./locales/${locale}.json`);
 
     return (key, ...args) => {
+        if (key === '_locale') return locale;
+
         let defaultNull = key.startsWith('!');
         if (defaultNull) key = key.substring(1);
 
@@ -46,9 +48,7 @@ module.exports = (locale) => {
         try {
             value = getNestedKey(localeFile, key);
         }
-        catch (e) {
-            process.logger.warn(`Locale key ${key} not found in ${locale}.`)
-        }
+        catch (e) {}
 
         if (!value && !defaultNull) {
             const defaultLocale = require(`./locales/${config.default_language}.json`);
@@ -56,14 +56,16 @@ module.exports = (locale) => {
                 value = getNestedKey(defaultLocale, key);
             }
             catch (e) {
-                process.logger.error(`Locale key ${key} not found in default language!`)
+                process.logger.error(`Locale key '${key}' not found in default locale '${config.default_language}'!`)
             }
 
             if (!value) return null;
         }
 
-        if (!value)
+        if (!value) {
+            process.logger.warn(`Locale key '${key}' not found in '${locale}'${!defaultNull ? ` and '${config.default_language}'` : ''}!`)
             return null;
+        }
 
         return value.replace(/{(\d+)}/g, (match, number) => {
             return typeof args[number] != 'undefined' ? args[number] : match;

@@ -1,0 +1,228 @@
+{
+    "anime": {
+        "_args_desc": {
+            "query": "Jakie anime chcesz znaleźć"
+        },
+        "_description": "Wyszukiwanie anime na Kitsu.io",
+        "_usage": "<zapytanie>",
+        "age_rating": "🔞 Ograniczenia wiekowe",
+        "aired": "📅 To było transmitowane",
+        "aired_format": "od **{0}** do **{1}**",
+        "average_rating": "⭐ Średnia ocena",
+        "duration": "⏱️ Czas trwania",
+        "genres": "📚 Gatunki",
+        "rank": "🏆 Ranking",
+        "status": "⏳ Status",
+        "statuses": {
+            "current": "Wciąż wychodzi",
+            "finished": "Zakończony"
+        },
+        "total_episodes": "💿 Całkowita liczba odcinków",
+        "type": "📺 Typ"
+    },
+    "ban": {
+        "_args_desc": {
+            "member": "Członek do zablokowania",
+            "reason": "Powód blokady"
+        },
+        "_description": "Zablokuj użytkownika na tym serwerze",
+        "_usage": "<uczestnik> [powód]",
+        "description": "Powód: {0}",
+        "failed": "❌ Nie udało się zablokować uczestnika!",
+        "higher_role": "❌ Nie możesz zablokować użytkownika, którego rola jest wyższa niż Twoja!",
+        "no_member": "❌ Nie znaleziono takiego użytkownika!",
+        "no_reason": "Przyczyna nie jest określona",
+        "not_bannable": "❌ Nie mogę zablokować tego użytkownika!",
+        "self": "❌ Nie możesz się zablokować!",
+        "title": "{0} został zablokowany!"
+    },
+    "experience": {
+        "_description": "Zmień system zdobywania XP na serwerze",
+        "current": "XP jest teraz {0} na tym serwerze!"
+    },
+    "global": {
+        "admin_only": "To polecenie jest dostępne tylko dla administratorów serwerów!",
+        "disabled": "wyłączony",
+        "enabled": "włączony",
+        "guild_only": "To polecenie jest dostępne tylko na serwerach!",
+        "missing_permissions": "Brakuje Ci następujących uprawnień: {0}",
+        "no_description": "Nie ma opisu",
+        "no_query": "⚠️ Musisz określić zapytanie wyszukiwania!",
+        "none": "pusty",
+        "not_found": "❌ Nic nie znaleziono!",
+        "not_implemented": "⚠️ To polecenie nie jest jeszcze zaimplementowane!",
+        "owner_only": "To polecenie jest dostępne tylko dla właściciela bota!",
+        "slash_only": "To polecenie jest dostępne tylko za pomocą poleceń z ukośnikiem!"
+    },
+    "help": {
+        "_args_desc": {
+            "category": "Kategoria",
+            "command": "Zespół"
+        },
+        "_description": "Wyświetla listę kategorii poleceń lub danego polecenia",
+        "_usage": "[drużyna|kategoria]",
+        "admin": "Admin",
+        "admin_desc": "Polecenia dostępne tylko dla administratorów serwera",
+        "aliases": "Skróty",
+        "categories": "Kategorie",
+        "category": "Kategoria",
+        "command": "Polecenie `{0}`",
+        "general": "Ogólny",
+        "general_desc": "Ogólne polecenia, które są dostępne dla wszystkich",
+        "levels": "poziomy",
+        "levels_desc": "",
+        "moderator": "Moderator",
+        "moderator_desc": "Komendy do moderowania serwera",
+        "not_found": "Nie znaleziono polecenia `{0}`!",
+        "search": "Szukaj",
+        "search_desc": "Zespoły szukają czegoś",
+        "usage": "Za pomocą",
+        "utils": "Narzędzia",
+        "utils_desc": "Przydatne polecenia"
+    },
+    "imgur": {
+        "_args_desc": {
+            "query": "Żądanie wyszukiwania"
+        },
+        "_description": "Wyszukiwanie grafiki na Imgur",
+        "_usage": "<prośba>"
+    },
+    "invite": {
+        "_description": "Uzyskaj link do bota zapraszającego",
+        "message": "Zaproś mnie na swój serwer za pomocą tego linku: {0}"
+    },
+    "kick": {
+        "_args_desc": {
+            "member": "Członek do wyrzucenia",
+            "reason": "Powód wydalenia"
+        },
+        "_description": "Zablokuj użytkownikowi dostęp do tego serwera",
+        "_usage": "<uczestnik> [powód]",
+        "description": "Powód: {0}",
+        "failed": "❌ Nie było możliwości wykluczenia uczestnika!",
+        "higher_role": "❌ Nie możesz wyrzucić użytkownika, którego rola jest wyższa niż Twoja!",
+        "no_member": "❌ Nie znaleziono takiego użytkownika!",
+        "no_reason": "Przyczyna nie jest określona",
+        "not_kickable": "❌ Nie mogę wykopać tego użytkownika!",
+        "self": "❌ Nie możesz się wyrzucić!",
+        "title": "{0} został wyrzucony!"
+    },
+    "language": {
+        "_args_desc": {
+            "language": "Kod języka"
+        },
+        "_description": "Zmień język bota",
+        "_usage": "<kod języka>",
+        "name": "🇺🇦 ukraiński",
+        "supported": "Obsługiwane języki",
+        "updated": "Język został zmieniony na 🇺🇦 ukraiński"
+    },
+    "manga": {
+        "_args_desc": {
+            "query": "Którą mangę chcesz znaleźć"
+        },
+        "_description": "Wyszukaj mangę na Kitsu.io",
+        "_usage": "<prośba>",
+        "chapters": "📖 Rozdz",
+        "published": "📅 Opublikowano",
+        "volumes": "📕 Tomow"
+    },
+    "mute": {
+        "_args_desc": {
+            "member": "Uczestnik do zabłocenia",
+            "reason": "Powód muta",
+            "time": "Czas trwania pierzenia"
+        },
+        "_description": "Zabłoć użytkownika na tym serwerze",
+        "_usage": "<uczestnik> <czas> [powód]",
+        "description": "Powód: {0}\nCzas trwania: {1}",
+        "failed": "❌Nie można było pomylić uczestnika!",
+        "higher_role": "❌ Nie możesz pomylić użytkownika, którego rola jest wyższa niż Twoja!",
+        "invalid_time": "❌ Nieprawidłowy format czasu! Poprawne formaty: `1h`, `1h30m`, `1d2h30m`",
+        "no_member": "❌ Nie znaleziono takiego użytkownika!",
+        "no_reason": "Przyczyna nie jest określona",
+        "no_time": "❌ Musisz określić czas, na jaki chcesz zdezorientować uczestnika!",
+        "not_muteable": "❌ Nie mogę zabłocić tego użytkownika!",
+        "self": "❌ Nie możesz się pomylić!",
+        "title": "{0} był torturowany!"
+    },
+    "permissions": {
+        "BanMembers": "Zablokuj użytkowników"
+    },
+    "prefix": {
+        "_args_desc": {
+            "prefix": "Nowy prefiks"
+        },
+        "_description": "Zmień prefiks bota",
+        "_usage": "<nowy prefiks>",
+        "current": "Bieżący przedrostek: `{0}`",
+        "too_long": "Prefiks musi zawierać co najmniej 5 znaków!",
+        "updated": "Przedrostek został zmieniony na `{0}`"
+    },
+    "rank": {
+        "_args_desc": {
+            "member": "Użytkownik, którego rangę chcesz uzyskać"
+        },
+        "_description": "Zdobądź swoją rangę lub rangę innego użytkownika",
+        "_usage": "[użytkownik]",
+        "level": "POZIOM",
+        "rank": "RANGA",
+        "user_not_found": "❌ Nie znaleziono użytkownika!",
+        "xp_disabled": "❌ XP jest wyłączony na tym serwerze!"
+    },
+    "unban": {
+        "_args_desc": {
+            "member": "Identyfikator członka, który ma zostać odblokowany"
+        },
+        "_description": "Odblokuj użytkownika na tym serwerze",
+        "_usage": "<uczestnik>",
+        "failed": "❌ Nie było możliwości odblokowania uczestnika!",
+        "no_member": "❌ Nie znaleziono uczestnika!",
+        "title": "{0} zostało odblokowane!"
+    },
+    "unmute": {
+        "_args_desc": {
+            "member": "Uczestnik do zabłocenia"
+        },
+        "_description": "Zdenerwuj użytkownika na tym serwerze",
+        "_usage": "<uczestnik>",
+        "failed": "❌ Uczestnika nie dało się zdenerwować!",
+        "no_member": "❌ Nie znaleziono takiego użytkownika!",
+        "not_unmuteable": "❌ Nie mogę zdenerwować tego użytkownika!",
+        "title": "{0} był zdenerwowany!"
+    },
+    "urban": {
+        "_args_desc": {
+            "query": "Żądanie wyszukiwania"
+        },
+        "_description": "Sprawdź termin w Urban Dictionary",
+        "_usage": "<prośba>",
+        "author": "{0} utworzone",
+        "example": "Przykład",
+        "title": "Definicja {0}"
+    },
+    "warstats": {
+        "_description": "Pobierz najnowsze rosyjskie statystyki ofiar",
+        "aa_warfare_systems": "obrona powietrzna",
+        "armoured_fighting_vehicles": "Pojazdy opancerzone",
+        "artillery_systems": "Artyleria",
+        "atgm_srbm_systems": "OTRK/TRK",
+        "cruise_missiles": "Rakiety",
+        "data_verifying": "Trwa weryfikacja danych. Obliczenia komplikuje duża intensywność działań wojennych",
+        "description": "Według Sztabu Generalnego Sił Zbrojnych Ukrainy",
+        "helicopters": "Helikoptery",
+        "mlrs": "RSZV",
+        "personnel_units": "Personel",
+        "planes": "Samolot",
+        "special_military_equip": "Specyfikacja maszyneria",
+        "tanks": "czołgi",
+        "th_day": "dzień",
+        "title": "Straty wroga",
+        "uav_systems": "UAV",
+        "vehicles_fuel_tanks": "Samochody",
+        "warships_cutters": "statki"
+    },
+    "xp": {
+        "level_up": "⬆️ Jesteś teraz na poziomie {0}!"
+    }
+}

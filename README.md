@@ -17,6 +17,7 @@ You should also change settings for database connection. Supported database back
 
 ## Commands
 ### Admin
+- `experience` - Toggle XP system for this server.
 - `language <language code>` - Change bot language for this server.
 - `prefix <prefix>` - Change bot prefix for this server.
 
@@ -24,15 +25,25 @@ You should also change settings for database connection. Supported database back
 - `help [category|command]` - Show help message.
 - `invite` - Get bot invite link.
 
+### Levels
+- `rank [user]` - Show user rank card.
+
+### Moderator
+- `ban <user> [reason]` - Ban user.
+- `kick <user> [reason]` - Kick user.
+- `mute <user> <duration> [reason]` - Mute user.
+- `unban <user>` - Unban user.
+- `unmute <user>` - Unmute user.
+
 ### Search
 - `anime <query>` - Search for anime.
-- `manga <query>` - Search for manga.
 - `imgur <query>` - Search for image on Imgur.
+- `manga <query>` - Search for manga.
 - `urban <query>` - Search for term on Urban Dictionary.
 
 ### Utils
 - `warstats` - Get statistics of russian losses in war with Ukraine.
-
+- `weather <city>` - Get weather for city.
 
 ## Adding new commands
 Adding new commands is very easy. To do that, a simple framework was implemented, to wrap the creation of new commands. To create a new command, go into src/commands folder, choose a category folder or create one and create a new file inside with the name of your new command.
@@ -106,11 +117,11 @@ Example:
 ```json
 {
     "echo": {
-        "_description": "Echo command description",
-        "_usage": "<text>",
         "_args_desc": {
             "text": "Text to echo"
         },
+        "_description": "Echo command description",
+        "_usage": "<text>",
         ... Other keys required for localization ...
     }
 }
@@ -127,8 +138,9 @@ Take a close look at `language` key, because it contains subkey `name` which is 
 Inside command file, you can access localization function by calling `locale` argument. It's passed inside `run` method and is properly set up to use language chosen for server it is called from.  
 It has several features for easy localization:
 - `locale('key.subkey.nested_key')` - Get value of key. If key is not found, it will return `null`. You can use dot to access nested keys.
-- `locale('key.formatted', value1, value2)` - Use this to format strings. It will replace `{0}`, `{1}`, etc. with values passed as arguments.
+- `locale('command.formatted', value1, value2)` - Use this to format strings. It will replace `{0}`, `{1}`, etc. with values passed as arguments.
 - `locale('!key')` - Use exclamation mark to forbid fallback to default language. It's not used as much as other features, but it can be useful in some cases, for example if you want to check if key exists in localization file.
+- `locale('_locale')` - Use this to get current locale code.
 
 ## Adding new database backends
 Database backends are located in `src/database` folder. To add a new one, you need to create a new file with the name of your backend. Then, you need to export a class, which extends `DatabaseContext` class, which you can require like this:
@@ -172,6 +184,12 @@ class DatabaseContext {
     async createUser(user) { notImplemented(); }
     async updateUser(user) { notImplemented(); }
     async deleteUser(user_id, guild_id) { notImplemented(); }
+    
+    async getProfiles() { notImplemented(); }
+    async getProfile(user_id) { notImplemented(); }
+    async createProfile(profile) { notImplemented(); }
+    async updateProfile(profile) { notImplemented(); }
+    async deleteProfile(user_id) { notImplemented(); }
 }
 ```
 
@@ -194,8 +212,16 @@ init() {
             id TEXT,
             guild_id TEXT NOT NULL,
             xp INTEGER NOT NULL,
+            message_count INTEGER NOT NULL,
             last_message INTEGER NOT NULL,
             PRIMARY KEY (id, guild_id)
+        )`);
+
+        this.db.run(`CREATE TABLE IF NOT EXISTS profiles (
+            id TEXT PRIMARY KEY,
+            card_color TEXT NOT NULL,
+            card_background TEXT NOT NULL,
+            card_opacity INTEGER NOT NULL
         )`);
     });
 }

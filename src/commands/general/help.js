@@ -57,16 +57,17 @@ module.exports = class extends Command {
             this.client.commands.forEach(command => {
                 if (command.category !== args.category) return;
                 if (command.hidden) return;
+                const usage = locale(`${command.name}._usage`);
 
                 fields.push({
-                    name: `</${command.name}:${command._id}>`,
-                    value: locale(`${command.name}._description`)
+                    name: `</${command.name}:${command._id}>${usage ? ` \`${usage}\`` : ''}`,
+                    value: locale(`${command.name}._description`) ?? locale('global.no_description')
                 });
             });
 
             const embed = this.createEmbed({
-                title: category,
-                description: locale(`help.${args.category}_desc`),
+                title: category ?? args.category,
+                description: locale(`help.${args.category}_desc`) ?? locale('global.no_description'),
                 fields
             });
 
@@ -83,15 +84,20 @@ module.exports = class extends Command {
 
             const embed = this.createEmbed({
                 title: locale('help.command', command.name),
-                description: locale(`${command.name}._description`),
+                description: locale(`${command.name}._description`) ?? locale('global.no_description'),
                 fields: [
+                    ...command.args.map(arg => ({
+                        name: arg.name,
+                        value: locale(`${command.name}._args_desc.${arg.name}`) ?? locale('global.no_description'),
+                        inline: true
+                    })),
                     {
                         name: locale('help.aliases'),
                         value: command.aliases.length ? command.aliases.map(a => `\`${a}\``).join(', ') : locale('global.none')
                     },
                     {
                         name: locale('help.category'),
-                        value: locale(`help.${command.category}`)
+                        value: locale(`help.${command.category}`) ?? command.category
                     }
                 ]
             });
@@ -125,13 +131,13 @@ module.exports = class extends Command {
 
         // if no args, show all categories
         const categories = this.getCategories(locale);
-        
+
 
         if (args.length === 0) {
             let fields = [];
             for (const [category, categoryLocale] of Object.entries(categories)) {
                 fields.push({
-                    name: categoryLocale,
+                    name: categoryLocale ?? category,
                     value: `\`${prefix}help ${category}\``,
                     inline: true
                 });
@@ -150,11 +156,16 @@ module.exports = class extends Command {
         const arg = args[0].toLowerCase();
         const command = this.client.commands.find(c => c.name == arg || (c.aliases && c.aliases.includes(arg)));
         if (command) {
-            const usage = locale(`!${command.name}._usage`);
+            const usage = locale(`${command.name}._usage`);
             const embed = this.createEmbed({
                 title: locale('help.command', command.name),
-                description: locale(`${command.name}._description`),
+                description: locale(`${command.name}._description`) ?? locale('global.no_description'),
                 fields: [
+                    ...command.args.map(arg => ({
+                        name: `${arg.name}${arg.required ? '*' : ''}`,
+                        value: locale(`${command.name}._args_desc.${arg.name}`) ?? locale('global.no_description'),
+                        inline: true
+                    })),
                     {
                         name: locale('help.usage'),
                         value: `\`${prefix}${command.name}${usage ? ` ${usage}` : ''}\``
@@ -165,7 +176,7 @@ module.exports = class extends Command {
                     },
                     {
                         name: locale('help.category'),
-                        value: locale(`help.${command.category}`)
+                        value: locale(`help.${command.category}`) ?? command.category
                     }
                 ]
             });
@@ -175,20 +186,22 @@ module.exports = class extends Command {
         }
 
         const category = categories[arg];
-        if (category) {
+        if (category !== undefined) {
             let fields = [];
             this.client.commands.forEach(command => {
                 if (command.hidden) return;
                 if (command.category !== arg) return;
+                const usage = locale(`${command.name}._usage`);
+
                 fields.push({
-                    name: `\`${prefix}${command.name}\``,
-                    value: locale(`${command.name}._description`)
+                    name: `\`${prefix}${command.name}${usage ? ` ${usage}` : ''}\``,
+                    value: locale(`${command.name}._description`) ?? locale('global.no_description'),
                 });
             });
 
             const embed = this.createEmbed({
                 title: category ?? arg,
-                description: locale(`help.${arg}_desc`),
+                description: locale(`help.${arg}_desc`) ?? locale('global.no_description'),
                 fields
             });
 

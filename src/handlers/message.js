@@ -55,13 +55,12 @@ module.exports = async (client, message) => {
         return message.reply(locale('global.admin_only'));
 
     if (cmd.permissions.length > 0) {
-        const missing = message.member.permissions.missing(cmd.permissions);
+        const missing = message.member.permissions
+            .missing(cmd.permissions)
+            .map(p => locale(`permissions.${p}`) ?? p);
         if (missing.length > 0)
             return message.reply(locale('global.missing_permissions', missing.join(', ')));
     }
-
-    // TODO: Check if the user has the required permissions.
-    // TODO: Parse the arguments to a map.
 
     await cmd.run(message, locale, args);
 }
