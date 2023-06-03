@@ -37,6 +37,7 @@ You should also change settings for database connection. Supported database back
 - `unmute <user>` - Unmute user.
 
 ### Music
+- `autoplay` - Toggle autoplay mode.
 - `join` - Join voice channel.
 - `leave` - Leave voice channel.
 - `nowplaying` - Show currently playing song.

@@ -69,7 +69,7 @@
         "command": "Polecenie `{0}`",
         "general": "Ogólny",
         "general_desc": "Ogólne polecenia, które są dostępne dla wszystkich",
-        "levels": "poziomy",
+        "levels": "Poziomy",
         "levels_desc": "Daje członkom serwera XP, gdy publikują posty i umieszcza ich na tablicy wyników",
         "moderator": "Moderator",
         "moderator_desc": "Komendy do moderowania serwera",
@@ -122,7 +122,7 @@
         "_usage": "<kod języka>",
         "name": ":flag_pl: Polski (Polish)",
         "supported": "Obsługiwane języki",
-        "updated": "Język został zmieniony na 🇺🇦 ukraiński"
+        "updated": "Język został zmieniony na :flag_pl: polski"
     },
     "leave": {
         "_description": "Wyjdź z kanału głosowego, w którym jesteś",
@@ -211,7 +211,7 @@
             "one": "dzień",
             "other": "dni"
         },
-        "description": "Jestem aktywny na serwerach {0}",
+        "description": "Jestem aktywny na {0} serwerach",
         "memory": "📈 Wykorzystanie pamięci",
         "memory_format": "{0} MB",
         "node_version": "Wersja Node.js: {0}",
@@ -223,6 +223,12 @@
         "total_memory": "💾 Całkowita pamięć",
         "total_memory_format": "{0} / {1} GB",
         "uptime": "⏱️Godziny pracy"
+    },
+    "stop": {
+        "_description": "Zatrzymaj odtwarzanie muzyki i wyczyść kolejkę",
+        "no_queue": "❌ Teraz nie jest odtwarzana żadna muzyka",
+        "no_voice": "❌ Aby użyć tego polecenia, musisz być na kanale głosowym!",
+        "success": "✅ Pomyślnie zatrzymano muzykę!"
     },
     "unban": {
         "_args_desc": {
@@ -257,8 +263,8 @@
     },
     "warstats": {
         "_description": "Pobierz najnowsze rosyjskie statystyki ofiar",
-        "aa_warfare_systems": "obrona powietrzna",
-        "armoured_fighting_vehicles": "Pojazdy opancerzone",
+        "aa_warfare_systems": "Obrona powietrzna",
+        "armoured_fighting_vehicles": "AFV",
         "artillery_systems": "Artyleria",
         "atgm_srbm_systems": "OTRK/TRK",
         "cruise_missiles": "Rakiety",
@@ -268,13 +274,13 @@
         "mlrs": "RSZV",
         "personnel_units": "Personel",
         "planes": "Samolot",
-        "special_military_equip": "Specyfikacja maszyneria",
-        "tanks": "czołgi",
+        "special_military_equip": "Spec.maszyneria",
+        "tanks": "Czołgi",
         "th_day": "dzień",
         "title": "Straty wroga",
         "uav_systems": "UAV",
         "vehicles_fuel_tanks": "Samochody",
-        "warships_cutters": "statki"
+        "warships_cutters": "Statki"
     },
     "weather": {
         "_args_desc": {

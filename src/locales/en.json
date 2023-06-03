@@ -20,6 +20,12 @@
         "total_episodes": "💿 Total episodes",
         "type": "📺 Type"
     },
+    "autoplay": {
+        "_description": "Toggle autoplay for the current queue",
+        "no_queue": "❌ There aren't any music playing right now",
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "success": "{0} Autoplay is now {1} for this queue!"
+    },
     "ban": {
         "_args_desc": {
             "member": "The member to ban",
@@ -70,7 +76,7 @@
         "general": "General",
         "general_desc": "General commands that everyone can use",
         "levels": "Levels",
-        "levels_desc": "Give your members XP and Levels when they send messages and rank them by activity in a leaderboard",
+        "levels_desc": "Give your members XP when they send messages and rank them in a leaderboard",
         "moderator": "Moderator",
         "moderator_desc": "Commands for moderating your server",
         "music": "Music",
@@ -92,6 +98,11 @@
     "invite": {
         "_description": "Get bot's invite link",
         "message": "Invite me to your server with this link: {0}"
+    },
+    "join": {
+        "_description": "Join the voice channel you are in",
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "success": "✅ Successfully joined voice channel!"
     },
     "kick": {
         "_args_desc": {
@@ -119,6 +130,11 @@
         "supported": "Supported languages",
         "updated": "Language has been updated to 🇺🇸 English"
     },
+    "leave": {
+        "_description": "Leave the voice channel you are in",
+        "no_voice": "❌ I'm not in a voice channel!",
+        "success": "✅ Successfully left voice channel!"
+    },
     "manga": {
         "_args_desc": {
             "query": "The manga to search for"
@@ -128,23 +144,6 @@
         "chapters": "📖 Chapters",
         "published": "📅 Published",
         "volumes": "📕 Volumes"
-    },
-    "join": {
-        "_description": "Join the voice channel you are in",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
-        "success": "✅ Successfully joined voice channel!"
-    },
-    "leave": {
-        "_description": "Leave the voice channel you are in",
-        "no_voice": "❌ I'm not in a voice channel!",
-        "success": "✅ Successfully left voice channel!"
-    },
-    "nowplaying": {
-        "_description": "Show the currently playing song",
-        "no_queue": "❌ There aren't any music playing right now",
-        "duration": "⏱️ Duration",
-        "views": "👀 Views",
-        "requested_by": "👤 Requested by"
     },
     "mute": {
         "_args_desc": {
@@ -165,6 +164,20 @@
         "self": "❌ You can't mute yourself!",
         "title": "{0} was muted!"
     },
+    "nowplaying": {
+        "_description": "Show the currently playing song",
+        "duration": "⏱️ Duration",
+        "no_queue": "❌ There aren't any music playing right now",
+        "requested_by": "👤 Requested by",
+        "views": "👀 Views"
+    },
+    "pause": {
+        "_description": "Pause/resume the current song",
+        "no_queue": "❌ There aren't any music playing right now",
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "paused": "⏸️ Paused the music!",
+        "resumed": "▶️ Resumed the music!"
+    },
     "permissions": {
         "BanMembers": "Ban members"
     },
@@ -174,12 +187,12 @@
         },
         "_description": "Play music in a voice channel",
         "_usage": "<query|URL>",
+        "added": "✅ Added **{0}** by **{1}** *({2})* to the queue!",
+        "error": "❌ **{0}**",
         "no_query": "❌ You must specify a query or URL to play!",
         "no_voice": "❌ You must be in a voice channel to use this command!",
-        "added": "✅ Added **{0}** by **{1}** *({2})* to the queue!",
-        "success": "✅ Started playing",
-        "error": "❌ **{0}**",
-        "not_found": "Song not found!"
+        "not_found": "Song not found!",
+        "success": "✅ Started playing"
     },
     "playskip": {
         "_args_desc": {
@@ -198,31 +211,15 @@
         "too_long": "The prefix must be 5 characters or less!",
         "updated": "The prefix has been updated to `{0}`"
     },
-    "status": {
-        "_description": "Get bot's status (uptime, memory, etc.)",
-        "title": "Bot status",
-        "description": "I am active on {0} servers",
-        "ping": "🏓 Ping",
-        "ping_format": "{0} ms",
-        "uptime": "⏱️ Uptime",
-        "day": {
-            "one": "day",
-            "other": "days"
-        },
-        "memory": "📈 Memory usage",
-        "memory_format": "{0} MB",
-        "total_memory": "💾 Total memory",
-        "total_memory_format": "{0} / {1} GB",
-        "os": "🖥️ Operating system",
-        "os_format": "{0} {1}",
-        "node_version": "Node.js version: {0}",
-        "connecting": "Starting up..."
-    },
-    "stop": {
-        "_description": "Stop the music and clear the queue",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
+    "queue": {
+        "_description": "Get the current music queue",
         "no_queue": "❌ There aren't any music playing right now",
-        "success": "✅ Successfully stopped the music!"
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "now_playing": "**Now playing**",
+        "page": "Page {0} of {1} ({2} songs)",
+        "queue": "**Queue**",
+        "title": "🎶 Current queue",
+        "total_duration": "**Total playtime**: `{0}`"
     },
     "rank": {
         "_args_desc": {
@@ -234,6 +231,43 @@
         "rank": "RANK",
         "user_not_found": "❌ User not found or doesn't have any XP!",
         "xp_disabled": "❌ XP is disabled in this guild!"
+    },
+    "skip": {
+        "_args_desc": {
+            "count": "The number of songs to skip"
+        },
+        "_description": "Skip the current song (or multiple songs)",
+        "_usage": "[count]",
+        "error": "❌ Failed to skip current song!",
+        "no_queue": "❌ There aren't any music playing right now",
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "success": "✅ Skipped current song!"
+    },
+    "status": {
+        "_description": "Get bot's status (uptime, memory, etc.)",
+        "connecting": "Starting up...",
+        "day": {
+            "one": "day",
+            "other": "days"
+        },
+        "description": "I am active on {0} servers",
+        "memory": "📈 Memory usage",
+        "memory_format": "{0} MB",
+        "node_version": "Node.js version: {0}",
+        "os": "🖥️ Operating system",
+        "os_format": "{0} {1}",
+        "ping": "🏓 Ping",
+        "ping_format": "{0} ms",
+        "title": "Bot status",
+        "total_memory": "💾 Total memory",
+        "total_memory_format": "{0} / {1} GB",
+        "uptime": "⏱️ Uptime"
+    },
+    "stop": {
+        "_description": "Stop the music and clear the queue",
+        "no_queue": "❌ There aren't any music playing right now",
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "success": "✅ Successfully stopped the music!"
     },
     "unban": {
         "_args_desc": {
@@ -266,45 +300,17 @@
         "example": "Example",
         "title": "Definition of {0}"
     },
-    "queue": {
-        "_description": "Get the current music queue",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
-        "no_queue": "❌ There aren't any music playing right now",
-        "title": "🎶 Current queue",
-        "total_duration": "**Total playtime**: `{0}`",
-        "now_playing": "**Now playing**",
-        "queue": "**Queue**",
-        "page": "Page {0} of {1} ({2} songs)"
-    },
     "volume": {
         "_args_desc": {
             "volume": "The new volume to use"
         },
         "_description": "Change the music volume",
         "_usage": "<volume>",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
-        "no_queue": "❌ There aren't any music playing right now",
         "current_volume": "🔊 Current volume is **{0}**%",
-        "success": "✅ Updated volume to **{0}**%",
-        "invalid_volume": "❌ Volume must be between 0 and {0}!"
-    },
-    "pause": {
-        "_description": "Pause/resume the current song",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "invalid_volume": "❌ Volume must be between 0 and {0}!",
         "no_queue": "❌ There aren't any music playing right now",
-        "paused": "⏸️ Paused the music!",
-        "resumed": "▶️ Resumed the music!"
-    },
-    "skip": {
-        "_args_desc": {
-            "count": "The number of songs to skip"
-        },
-        "_description": "Skip the current song (or multiple songs)",
-        "_usage": "[count]",
         "no_voice": "❌ You must be in a voice channel to use this command!",
-        "no_queue": "❌ There aren't any music playing right now",
-        "success": "✅ Skipped current song!",
-        "error": "❌ Failed to skip current song!"
+        "success": "✅ Updated volume to **{0}**%"
     },
     "warstats": {
         "_description": "Get latest stats of russian losses",
