@@ -3,8 +3,8 @@ const { AttachmentBuilder } = require('discord.js');
 
 const { join } = require('path');
 const https = require("https");
-const { createCanvas, registerFont, loadImage } = require('canvas')
-registerFont(join(__dirname, '../../assets/e-UkraineHead-Regular.ttf'), { family: 'e-Ukraine' })
+const { createCanvas, GlobalFonts, loadImage } = require('@napi-rs/canvas')
+GlobalFonts.registerFromPath(join(__dirname, '../../assets/e-UkraineHead-Regular.ttf'), 'e-Ukraine');
 
 module.exports = class extends Command {
     constructor(client, database) {
@@ -48,8 +48,8 @@ module.exports = class extends Command {
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
         ctx.restore();
 
-        text(locale('warstats.title'), 35, 40, 800, 94, '#ffffff');
-        text(locale('warstats.description'), 40, 150, 800, 38, '#ffffff');
+        text(locale('warstats.title'), 35, 50, 800, 94, '#ffffff');
+        text(locale('warstats.description'), 45, 150, 800, 38, '#ffffff');
 
         data.day = data.day.toString();
         const dayLabelCenterX = 1065;
@@ -58,11 +58,11 @@ module.exports = class extends Command {
         const centerWidth = (dayWidth + dayLabelWidth) / 2;
         const offsetDay = (dayWidth / 2) - centerWidth;
         const offsetDayLabel = (dayLabelWidth / 2) - centerWidth;
-        text(data.day, dayLabelCenterX + offsetDay, 45, 330, 90, '#000', 'center');
-        text(locale('warstats.th_day'), dayLabelCenterX - offsetDayLabel, 100, 330, 30, '#000', 'center');
-        text(data.date, dayLabelCenterX, 150, 330, 36, '#000', 'center');
+        text(data.day, dayLabelCenterX + offsetDay, 55, 330, 90, '#000', 'center');
+        text(locale('warstats.th_day'), dayLabelCenterX - offsetDayLabel, 105, 330, 30, '#000', 'center');
+        text(data.date, dayLabelCenterX, 155, 330, 36, '#000', 'center');
 
-        text(locale('warstats.data_verifying'), canvas.width / 2, 1030, 1150, 24, '#ffffff', 'center');
+        text(locale('warstats.data_verifying'), canvas.width / 2, 1035, 1150, 24, '#ffffff', 'center');
 
         const stats = data.stats;
         const increase = data.increase;
@@ -73,7 +73,7 @@ module.exports = class extends Command {
             const numberWidth = calculateTextWidth(numberStr, 38);
             if (delta) {
                 const deltaStr = `(+${delta.toLocaleString('en-US').replace(',', ' ')})`;
-                text(deltaStr, x + numberWidth + 10, y + 8, 390, 24, '#000');
+                text(deltaStr, x + numberWidth + 10, y + 5, 390, 24, '#000');
             }
             text(title, x, y + 40, 390, 36, '#000');
         }
@@ -84,7 +84,7 @@ module.exports = class extends Command {
             const numberWidth = calculateTextWidth(numberStr, 30);
             if (delta) {
                 const deltaStr = `(+${delta.toLocaleString('en-US').replace(',', ' ')})`;
-                text(deltaStr, x + numberWidth + 10, y + 8, 250, 18, '#000');
+                text(deltaStr, x + numberWidth + 10, y + 5, 250, 18, '#000');
             }
             text(title, x, y + 32, 250, 30, '#000');
         }
@@ -96,22 +96,22 @@ module.exports = class extends Command {
                 bigCard(x, y, locale(`warstats.${name}`), stats[name], increase[name]);
         }
 
-        card(250, 275, 'big', 'personnel_units');
-        card(870, 275, 'big', 'tanks');
-        card(180, 435, 'small', 'armoured_fighting_vehicles');
-        card(570, 435, 'small', 'artillery_systems');
-        card(960, 435, 'small', 'mlrs');
-        card(180, 580, 'small', 'aa_warfare_systems');
-        card(570, 580, 'small', 'planes');
-        card(960, 580, 'small', 'helicopters');
-        card(180, 735, 'small', 'vehicles_fuel_tanks');
-        card(570, 735, 'small', 'warships_cutters');
-        card(960, 735, 'small', 'uav_systems');
-        card(180, 885, 'small', 'special_military_equip');
-        card(570, 885, 'small', 'atgm_srbm_systems');
-        card(960, 885, 'small', 'cruise_missiles');
+        card(250, 280, 'big', 'personnel_units');
+        card(870, 280, 'big', 'tanks');
+        card(180, 440, 'small', 'armoured_fighting_vehicles');
+        card(570, 440, 'small', 'artillery_systems');
+        card(960, 440, 'small', 'mlrs');
+        card(180, 585, 'small', 'aa_warfare_systems');
+        card(570, 585, 'small', 'planes');
+        card(960, 585, 'small', 'helicopters');
+        card(180, 740, 'small', 'vehicles_fuel_tanks');
+        card(570, 740, 'small', 'warships_cutters');
+        card(960, 740, 'small', 'uav_systems');
+        card(180, 890, 'small', 'special_military_equip');
+        card(570, 890, 'small', 'atgm_srbm_systems');
+        card(960, 890, 'small', 'cruise_missiles');
 
-        const attachment = new AttachmentBuilder(canvas.toBuffer(), { name: 'stats.png' });
+        const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'stats.png' });
         return attachment;
     }
 
