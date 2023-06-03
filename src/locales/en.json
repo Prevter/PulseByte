@@ -159,6 +159,26 @@
         "too_long": "The prefix must be 5 characters or less!",
         "updated": "The prefix has been updated to `{0}`"
     },
+    "status": {
+        "_description": "Get bot's status (uptime, memory, etc.)",
+        "title": "Bot status",
+        "description": "I am active on {0} servers",
+        "ping": "🏓 Ping",
+        "ping_format": "{0} ms",
+        "uptime": "⏱️ Uptime",
+        "day": {
+            "one": "day",
+            "other": "days"
+        },
+        "memory": "📈 Memory usage",
+        "memory_format": "{0} MB",
+        "total_memory": "💾 Total memory",
+        "total_memory_format": "{0} / {1} GB",
+        "os": "🖥️ Operating system",
+        "os_format": "{0} {1}",
+        "node_version": "Node.js version: {0}",
+        "connecting": "Starting up..."
+    },
     "rank": {
         "_args_desc": {
             "member": "The member to get the rank of"
