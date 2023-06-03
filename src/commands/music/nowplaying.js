@@ -42,6 +42,9 @@ module.exports = class extends Command {
                 case 'vimeo':
                     embed.footer = { text: 'Vimeo' };
                     break;
+                case 'telegram:embed':
+                    embed.footer = { text: 'Telegram' };
+                    break;
                 case 'generic':
                     embed.footer = { text: 'External' };
                     break;

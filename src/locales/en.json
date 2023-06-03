@@ -288,6 +288,24 @@
         "success": "✅ Updated volume to **{0}**%",
         "invalid_volume": "❌ Volume must be between 0 and {0}!"
     },
+    "pause": {
+        "_description": "Pause/resume the current song",
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "no_queue": "❌ There aren't any music playing right now",
+        "paused": "⏸️ Paused the music!",
+        "resumed": "▶️ Resumed the music!"
+    },
+    "skip": {
+        "_args_desc": {
+            "count": "The number of songs to skip"
+        },
+        "_description": "Skip the current song (or multiple songs)",
+        "_usage": "[count]",
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "no_queue": "❌ There aren't any music playing right now",
+        "success": "✅ Skipped current song!",
+        "error": "❌ Failed to skip current song!"
+    },
     "warstats": {
         "_description": "Get latest stats of russian losses",
         "aa_warfare_systems": "Anti-aircraft",

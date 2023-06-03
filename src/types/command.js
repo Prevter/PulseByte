@@ -46,6 +46,7 @@ module.exports = class Command {
 
         this._locales = locales;
         this.config = config;
+        this.logger = client.logger;
     }
 
     /**

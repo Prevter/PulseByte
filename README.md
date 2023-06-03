@@ -40,9 +40,11 @@ You should also change settings for database connection. Supported database back
 - `join` - Join voice channel.
 - `leave` - Leave voice channel.
 - `nowplaying` - Show currently playing song.
+- `pause` - Pause/resume playing.
 - `play <query>` - Play song by query or URL.
 - `playskip <query>` - Play song by query or URL and skip current song.
 - `queue` - Show queue.
+- `skip [count]` - Skip current song (or multiple songs).
 - `stop` - Stop playing and clear queue.
 - `volume <volume>` - Change volume.
 
