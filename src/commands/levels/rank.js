@@ -2,8 +2,8 @@ const Command = require("../../types/command");
 const XPModule = require("../../modules/xp");
 const { AttachmentBuilder } = require('discord.js');
 const { join } = require('path');
-const { createCanvas, GlobalFonts, loadImage } = require('@napi-rs/canvas')
-GlobalFonts.registerFromPath(join(__dirname, '../../assets/OpenSans.ttf'), 'Open Sans');
+const { createCanvas, registerFont, loadImage } = require('canvas')
+registerFont(join(__dirname, '../../assets/e-UkraineHead-Regular.ttf'), { family: 'e-Ukraine' })
 
 module.exports = class extends Command {
     constructor(client, database) {
@@ -113,11 +113,11 @@ module.exports = class extends Command {
         ctx.restore();
 
         // Avatar and username
-        const avatar_body = await this.fetchBinary(user_data.avatar);
+        const avatar_body = await this.fetchBinary(user_data.avatar.replace('.webp', '.png'));
         const avatar = await loadImage(avatar_body);
         drawAvatar(avatar, 40, 60, 160, 160);
-        text(user_data.username, 260, 140, 330, 32, '#ffffff', 'left');
-        text('#' + user_data.discriminator, 260 + calculateTextWidth(user_data.username, 32) + 5, 146, 100, 24, '#aaaaaa', 'left');
+        text(user_data.username, 260, 135, 330, 32, '#ffffff', 'left');
+        text('#' + user_data.discriminator, 260 + calculateTextWidth(user_data.username, 32) + 5, 141, 100, 24, '#aaaaaa', 'left');
 
         // XP
         const level = XPModule.getLevel(user_data.xp);
@@ -127,26 +127,26 @@ module.exports = class extends Command {
         const xpForLevel = xpToNextLevel - xpToPrevLevel;
 
         const next_level = ` / ${this.nFormatter(xpToNextLevel, 2)} XP`;
-        text(next_level, 880, 146, 150, 24, '#aaaaaa', 'right');
+        text(next_level, 880, 141, 150, 24, '#aaaaaa', 'right');
         const next_level_width = calculateTextWidth(next_level, 24);
-        text(`${this.nFormatter(user_data.xp, 2)}`, 880 - next_level_width, 146, 150, 24, '#ffffff', 'right');
+        text(`${this.nFormatter(user_data.xp, 2)}`, 880 - next_level_width, 141, 150, 24, '#ffffff', 'right');
 
         // Level and place
-        text(`${level}`, 880, 56, 100, 54, user_data.profile.card_color, 'right');
+        text(`${level}`, 880, 45, 100, 54, user_data.profile.card_color, 'right');
         const level_width = calculateTextWidth(`${level}`, 54);
         const level_text = locale('rank.level')
-        text(level_text, 880 - level_width - 8, 82, 100, 24, user_data.profile.card_color, 'right');
+        text(level_text, 880 - level_width - 8, 74, 100, 24, user_data.profile.card_color, 'right');
         const level_text_width = calculateTextWidth(level_text, 24);
         const place_x = 880 - level_width - 8 - level_text_width - 8;
         const place_text = `#${user_data.place}`;
         const place_width = calculateTextWidth(place_text, 54);
-        text(place_text, place_x, 56, 100, 54, '#fff', 'right');
-        text(locale('rank.rank'), place_x - 8 - place_width, 82, 100, 24, '#fff', 'right');
+        text(place_text, place_x, 45, 100, 54, '#fff', 'right');
+        text(locale('rank.rank'), place_x - 8 - place_width, 74, 100, 24, '#fff', 'right');
 
         // Progress bar 
         drawProgressBar(xpInLevel, xpForLevel, 242, 182, 650, 40, user_data.profile.card_color);
 
-        const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'stats.png' });
+        const attachment = new AttachmentBuilder(canvas.toBuffer(), { name: 'stats.png' });
         return attachment;
     }
 
