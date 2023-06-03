@@ -36,7 +36,7 @@ module.exports = class extends Command {
             return Command.createErrorEmbed('weather.no_city');
 
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${this.config.weather_api_key}&lang=${locale('_locale')}&units=metric`;
-        const response = await this.fetch(url);
+        const response = await Command.fetch(url);
 
         if (response.cod === '404')
             return Command.createErrorEmbed(locale('weather.not_found'));

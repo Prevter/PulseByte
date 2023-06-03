@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
     async getData(query, locale) {
         const url = `https://api.urbandictionary.com/v0/define?term=${encodeURIComponent(query)}`;
-        const response = await this.fetch(url);
+        const response = await Command.fetch(url);
 
         if (response.list.length > 0) {
             const result = response.list[0];

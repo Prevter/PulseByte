@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
     async getData(query) {
         const url = `https://api.imgur.com/3/gallery/search/time/0/?q=${encodeURIComponent(query)}`;
-        const response = await this.fetch(url, {
+        const response = await Command.fetch(url, {
             headers: {
                 "Authorization": `Client-ID ${this.config.imgur_client_id}`
             }

@@ -24,6 +24,7 @@ You should also change settings for database connection. Supported database back
 ### General
 - `help [category|command]` - Show help message.
 - `invite` - Get bot invite link.
+- `status` - Show bot status.
 
 ### Levels
 - `rank [user]` - Show user rank card.
@@ -40,6 +41,10 @@ You should also change settings for database connection. Supported database back
 - `leave` - Leave voice channel.
 - `nowplaying` - Show currently playing song.
 - `play <query>` - Play song by query or URL.
+- `playskip <query>` - Play song by query or URL and skip current song.
+- `queue` - Show queue.
+- `stop` - Stop playing and clear queue.
+- `volume <volume>` - Change volume.
 
 ### Search
 - `anime <query>` - Search for anime.
@@ -75,7 +80,7 @@ module.exports = class extends Command {
 }
 ```
 
-This will work with both prefix and slash commands, but only if your command is simple enough. If for example you a command with arguments, you'll need to override `runAsSlash` method. Here is an example of a command with arguments:
+This will work with both prefix and slash commands, but only if your command is simple enough. If for example you have a command with arguments, you'll need to override `runAsSlash` method. Here is an example of a command with arguments:
 ```js
 const Command = require("../../types/command");
 

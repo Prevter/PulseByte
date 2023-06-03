@@ -16,12 +16,12 @@ module.exports = class extends Command {
 
     async getData(query, locale) {
         const url = `https://kitsu.io/api/edge/manga?filter[text]=${query}&page[limit]=1`;
-        const response = await this.fetch(url);
+        const response = await Command.fetch(url);
         const result = response.data[0];
         if (!result) return Command.createErrorEmbed(locale('global.not_found'));
 
         const genres_url = result.relationships.genres.links.related;
-        const genres_response = await this.fetch(genres_url);
+        const genres_response = await Command.fetch(genres_url);
         const genres = genres_response.data.map(value => value.attributes.name);
 
         const data = {

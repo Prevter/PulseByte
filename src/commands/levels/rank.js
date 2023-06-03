@@ -113,7 +113,7 @@ module.exports = class extends Command {
         ctx.restore();
 
         // Avatar and username
-        const avatar_body = await this.fetchBinary(user_data.avatar);
+        const avatar_body = await Command.fetchBinary(user_data.avatar);
         const avatar = await loadImage(avatar_body);
         drawAvatar(avatar, 40, 60, 160, 160);
         text(user_data.username, 260, 140, 330, 32, '#ffffff', 'left');
@@ -183,7 +183,7 @@ module.exports = class extends Command {
 
         let user_data;
         if (args.member) {
-            const member = await this.loadMember(interaction.guild, args.member);
+            const member = await Command.loadMember(interaction.guild, args.member);
             const data = await this.database.getUser(member.id, interaction.guild.id);
             if (!data)
                 return await interaction.editReply({ embeds: [Command.createErrorEmbed(locale('rank.user_not_found'))] });
@@ -213,7 +213,7 @@ module.exports = class extends Command {
 
         let user_data;
         if (args.length > 0) {
-            const member = await this.loadMember(message.guild, args[0]);
+            const member = await Command.loadMember(message.guild, args[0]);
             const data = await this.database.getUser(member.id, message.guild.id);
             if (!data)
                 return await message.reply({ embeds: [Command.createErrorEmbed(locale('rank.user_not_found'))] });

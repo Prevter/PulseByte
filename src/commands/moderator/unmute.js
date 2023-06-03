@@ -47,7 +47,7 @@ module.exports = class extends Command {
 
         let member;
         try {
-            member = await this.loadMember(interaction.guild, args.member);
+            member = await Command.loadMember(interaction.guild, args.member);
         }
         catch (e) {
             return interaction.reply({ embeds: [Command.createErrorEmbed(locale('unmute.no_member'))] });
@@ -62,7 +62,7 @@ module.exports = class extends Command {
 
         let member;
         try {
-            member = await this.loadMember(message.guild, args[0]);
+            member = await Command.loadMember(message.guild, args[0]);
         }
         catch (e) {
             return message.channel.send({ embeds: [Command.createErrorEmbed(locale('unmute.no_member'))] });
