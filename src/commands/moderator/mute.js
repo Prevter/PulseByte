@@ -62,20 +62,20 @@ module.exports = class extends Command {
 
     async muteUser(author, member, time, reason, locale) {
         if (!member)
-            return this.createErrorEmbed(locale('mute.no_member'));
+            return Command.createErrorEmbed(locale('mute.no_member'));
 
         const parsedTime = this.parseTimeStr(time);
         if (parsedTime <= 0)
-            return this.createErrorEmbed(locale('mute.invalid_time'));
+            return Command.createErrorEmbed(locale('mute.invalid_time'));
 
         if (member.id === author.id)
-            return this.createErrorEmbed(locale('mute.self'));
+            return Command.createErrorEmbed(locale('mute.self'));
 
         if (member.roles.highest.position >= author.roles.highest.position)
-            return this.createErrorEmbed(locale('mute.higher_role'));
+            return Command.createErrorEmbed(locale('mute.higher_role'));
 
         if (!member.moderatable)
-            return this.createErrorEmbed(locale('mute.not_muteable'));
+            return Command.createErrorEmbed(locale('mute.not_muteable'));
 
         if (reason && reason.length === 0)
             reason = null;
@@ -83,10 +83,10 @@ module.exports = class extends Command {
         try {
             await member.timeout(parsedTime, reason ?? locale('mute.no_reason'));
         } catch (e) {
-            return this.createErrorEmbed(locale('mute.failed'));
+            return Command.createErrorEmbed(locale('mute.failed'));
         }
 
-        return this.createEmbed({
+        return Command.createEmbed({
             title: locale('mute.title', member.user.tag),
             description: locale('mute.description', reason ?? locale('mute.no_reason'), time),
             author: {
@@ -101,17 +101,17 @@ module.exports = class extends Command {
 
     async runAsSlash(interaction, locale, args) {
         if (!args.member)
-            return interaction.reply({ embeds: [this.createErrorEmbed(locale('mute.no_member'))] });
+            return interaction.reply({ embeds: [Command.createErrorEmbed(locale('mute.no_member'))] });
 
         if (!args.time)
-            return interaction.reply({ embeds: [this.createErrorEmbed(locale('mute.no_time'))] });
+            return interaction.reply({ embeds: [Command.createErrorEmbed(locale('mute.no_time'))] });
 
         let member;
         try {
             member = await this.loadMember(interaction.guild, args.member);
         }
         catch (e) {
-            return interaction.reply({ embeds: [this.createErrorEmbed(locale('mute.no_member'))] });
+            return interaction.reply({ embeds: [Command.createErrorEmbed(locale('mute.no_member'))] });
         }
 
         interaction.reply({ embeds: [await this.muteUser(interaction.member, member, args.time, args.reason, locale)] });
@@ -119,17 +119,17 @@ module.exports = class extends Command {
 
     async run(message, locale, args) {
         if (args.length < 1)
-            return message.channel.send({ embeds: [this.createErrorEmbed(locale('mute.no_member'))] });
+            return message.channel.send({ embeds: [Command.createErrorEmbed(locale('mute.no_member'))] });
 
         if (args.length < 2)
-            return message.channel.send({ embeds: [this.createErrorEmbed(locale('mute.no_time'))] });
+            return message.channel.send({ embeds: [Command.createErrorEmbed(locale('mute.no_time'))] });
 
         let member;
         try {
             member = await this.loadMember(message.guild, args[0]);
         }
         catch (e) {
-            return message.channel.send({ embeds: [this.createErrorEmbed(locale('mute.no_member'))] });
+            return message.channel.send({ embeds: [Command.createErrorEmbed(locale('mute.no_member'))] });
         }
 
         message.reply({ embeds: [await this.muteUser(message.member, member, args[1], args.slice(2).join(' '), locale)] });

@@ -62,6 +62,27 @@ module.exports = class DiscordClient {
             ]
         });
 
+        this.client.distube.on("playSong", async (queue, song) => {
+            const guildId = queue.textChannel.guild.id;
+            const guild = await this.database.getGuild(guildId);
+            const language = guild ? guild.language : config.default_language;
+            const locale = localeBuilder(language);
+            const embed = require('./commands/music/nowplaying')
+                .createEmbed(locale, song, queue, false);
+            queue.message = await queue.textChannel.send({ embeds: [embed] });
+        });
+        
+        this.client.distube.on("finishSong", async (queue, song) => {
+            if (queue.message) {
+                await queue.message.delete();
+                queue.message = null;
+            }
+        });
+
+        this.client.distube.on("searchNoResult", async (message, query) => {
+            console.warn(`No results found for query: ${query}`);
+        });
+
         const loadCommand = (filePath) => {
             const path = filePath.replace('.js', '');
             const command = require(path);

@@ -17,19 +17,19 @@ module.exports = class extends Command {
 
     async unmuteUser(author, member, locale) {
         if (!member)
-            return this.createErrorEmbed(locale('unmute.no_member'));
+            return Command.createErrorEmbed(locale('unmute.no_member'));
 
         if (!member.moderatable)
-            return this.createErrorEmbed(locale('unmute.not_unmuteable'));
+            return Command.createErrorEmbed(locale('unmute.not_unmuteable'));
 
         try {
             await member.timeout(null);
         }
         catch (e) {
-            return this.createErrorEmbed(locale('unmute.failed'));
+            return Command.createErrorEmbed(locale('unmute.failed'));
         }
 
-        return this.createEmbed({
+        return Command.createEmbed({
             title: locale('unmute.title', member.user.tag),
             author: {
                 name: author.user.username,
@@ -43,14 +43,14 @@ module.exports = class extends Command {
 
     async runAsSlash(interaction, locale, args) {
         if (!args.member)
-            return interaction.reply({ embeds: [this.createErrorEmbed(locale('unmute.no_member'))] });
+            return interaction.reply({ embeds: [Command.createErrorEmbed(locale('unmute.no_member'))] });
 
         let member;
         try {
             member = await this.loadMember(interaction.guild, args.member);
         }
         catch (e) {
-            return interaction.reply({ embeds: [this.createErrorEmbed(locale('unmute.no_member'))] });
+            return interaction.reply({ embeds: [Command.createErrorEmbed(locale('unmute.no_member'))] });
         }
 
         interaction.reply({ embeds: [await this.unmuteUser(interaction.member, member, locale)] });
@@ -58,14 +58,14 @@ module.exports = class extends Command {
 
     async run(message, locale, args) {
         if (args.length < 1)
-            return message.channel.send({ embeds: [this.createErrorEmbed(locale('unmute.no_member'))] });
+            return message.channel.send({ embeds: [Command.createErrorEmbed(locale('unmute.no_member'))] });
 
         let member;
         try {
             member = await this.loadMember(message.guild, args[0]);
         }
         catch (e) {
-            return message.channel.send({ embeds: [this.createErrorEmbed(locale('unmute.no_member'))] });
+            return message.channel.send({ embeds: [Command.createErrorEmbed(locale('unmute.no_member'))] });
         }
         message.reply({ embeds: [await this.unmuteUser(message.member, member, locale)] });
     }

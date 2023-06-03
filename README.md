@@ -35,6 +35,12 @@ You should also change settings for database connection. Supported database back
 - `unban <user>` - Unban user.
 - `unmute <user>` - Unmute user.
 
+### Music
+- `join` - Join voice channel.
+- `leave` - Leave voice channel.
+- `nowplaying` - Show currently playing song.
+- `play <query>` - Play song by query or URL.
+
 ### Search
 - `anime <query>` - Search for anime.
 - `imgur <query>` - Search for image on Imgur.

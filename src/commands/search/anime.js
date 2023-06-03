@@ -18,7 +18,7 @@ module.exports = class extends Command {
         const url = `https://kitsu.io/api/edge/anime?filter[text]=${query}&page[limit]=1`;
         const response = await this.fetch(url);
         const result = response.data[0];
-        if (!result) return this.createErrorEmbed(locale('global.not_found'));
+        if (!result) return Command.createErrorEmbed(locale('global.not_found'));
 
         const genres_url = result.relationships.genres.links.related;
         const genres_response = await this.fetch(genres_url);
@@ -76,12 +76,12 @@ module.exports = class extends Command {
             ]
         };
 
-        return this.createEmbed(data);
+        return Command.createEmbed(data);
     }
 
     async run(message, locale, args) {
         if (args.length === 0) {
-            await message.reply({ embeds: [this.createErrorEmbed(locale('global.no_query'))] });
+            await message.reply({ embeds: [Command.createErrorEmbed(locale('global.no_query'))] });
             return;
         }
 
@@ -92,7 +92,7 @@ module.exports = class extends Command {
 
     async runAsSlash(interaction, locale, args) {
         if (!args.query) {
-            await interaction.reply({ embeds: [this.createErrorEmbed(locale('global.no_query'))] });
+            await interaction.reply({ embeds: [Command.createErrorEmbed(locale('global.no_query'))] });
             return;
         }
 

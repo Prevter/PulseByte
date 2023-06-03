@@ -20,16 +20,16 @@ module.exports = class extends Command {
 
     async banUser(author, member, reason, locale) {
         if (!member)
-            return this.createErrorEmbed(locale('ban.no_member'));
+            return Command.createErrorEmbed(locale('ban.no_member'));
 
         if (member.id === author.id)
-            return this.createErrorEmbed(locale('ban.self'));
+            return Command.createErrorEmbed(locale('ban.self'));
 
         if (member.roles.highest.position >= author.roles.highest.position)
-            return this.createErrorEmbed(locale('ban.higher_role'));
+            return Command.createErrorEmbed(locale('ban.higher_role'));
 
         if (!member.bannable)
-            return this.createErrorEmbed(locale('ban.not_bannable'));
+            return Command.createErrorEmbed(locale('ban.not_bannable'));
 
         if (reason && reason.length === 0)
             reason = null;
@@ -37,10 +37,10 @@ module.exports = class extends Command {
         try {
             await member.ban({ reason: reason ?? locale('ban.no_reason') });
         } catch (e) {
-            return this.createErrorEmbed(locale('ban.failed'));
+            return Command.createErrorEmbed(locale('ban.failed'));
         }
 
-        return this.createEmbed({
+        return Command.createEmbed({
             title: locale('ban.title', member.user.tag),
             description: locale('ban.description', reason ?? locale('ban.no_reason')),
             author: {
@@ -55,14 +55,14 @@ module.exports = class extends Command {
 
     async runAsSlash(interaction, locale, args) {
         if (!args.member)
-            return interaction.reply({ embeds: [this.createErrorEmbed(locale('ban.no_member'))] });
+            return interaction.reply({ embeds: [Command.createErrorEmbed(locale('ban.no_member'))] });
 
         let member;
         try {
             member = await this.loadMember(interaction.guild, args.member);
         }
         catch (e) {
-            return interaction.reply({ embeds: [this.createErrorEmbed(locale('ban.no_member'))] });
+            return interaction.reply({ embeds: [Command.createErrorEmbed(locale('ban.no_member'))] });
         }
 
         interaction.reply({ embeds: [await this.banUser(interaction.member, member, args.reason, locale)] });
@@ -70,14 +70,14 @@ module.exports = class extends Command {
 
     async run(message, locale, args) {
         if (args.length < 1)
-            return message.channel.send({ embeds: [this.createErrorEmbed(locale('ban.no_member'))] });
+            return message.channel.send({ embeds: [Command.createErrorEmbed(locale('ban.no_member'))] });
 
         let member;
         try {
             member = await this.loadMember(message.guild, args[0]);
         }
         catch (e) {
-            return message.channel.send({ embeds: [this.createErrorEmbed(locale('ban.no_member'))] });
+            return message.channel.send({ embeds: [Command.createErrorEmbed(locale('ban.no_member'))] });
         }
 
         message.reply({ embeds: [await this.banUser(message.member, member, args.slice(1).join(' '), locale)] });

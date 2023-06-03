@@ -70,9 +70,11 @@
         "general": "Ogólny",
         "general_desc": "Ogólne polecenia, które są dostępne dla wszystkich",
         "levels": "poziomy",
-        "levels_desc": "",
+        "levels_desc": "Daje członkom serwera XP, gdy publikują posty i umieszcza ich na tablicy wyników",
         "moderator": "Moderator",
         "moderator_desc": "Komendy do moderowania serwera",
+        "music": "Muzyka",
+        "music_desc": "Polecenia do odtwarzania muzyki w kanałach głosowych",
         "not_found": "Nie znaleziono polecenia `{0}`!",
         "search": "Szukaj",
         "search_desc": "Zespoły szukają czegoś",
@@ -90,6 +92,11 @@
     "invite": {
         "_description": "Uzyskaj link do bota zapraszającego",
         "message": "Zaproś mnie na swój serwer za pomocą tego linku: {0}"
+    },
+    "join": {
+        "_description": "Dołącz do kanału głosowego, gdzie jesteś",
+        "no_voice": "❌ Aby użyć tego polecenia, musisz być na kanale głosowym!",
+        "success": "✅ Pomyślnie dołączyłeś do kanału głosowego!"
     },
     "kick": {
         "_args_desc": {
@@ -113,9 +120,14 @@
         },
         "_description": "Zmień język bota",
         "_usage": "<kod języka>",
-        "name": "🇺🇦 ukraiński",
+        "name": ":flag_pl: Polski (Polish)",
         "supported": "Obsługiwane języki",
         "updated": "Język został zmieniony na 🇺🇦 ukraiński"
+    },
+    "leave": {
+        "_description": "Wyjdź z kanału głosowego, w którym jesteś",
+        "no_voice": "❌ Nie jestem na kanale głosowym!",
+        "success": "✅ Pomyślnie opuściłeś kanał głosowy!"
     },
     "manga": {
         "_args_desc": {
@@ -146,8 +158,28 @@
         "self": "❌ Nie możesz się pomylić!",
         "title": "{0} był torturowany!"
     },
+    "nowplaying": {
+        "_description": "Pokaż aktualny utwór",
+        "duration": "⏱️ Czas trwania",
+        "no_queue": "❌ Teraz nie jest odtwarzana żadna muzyka",
+        "requested_by": "👤 Na życzenie",
+        "views": "👀 Wyświetlenia"
+    },
     "permissions": {
         "BanMembers": "Zablokuj użytkowników"
+    },
+    "play": {
+        "_args_desc": {
+            "query": "Wyszukiwane zapytanie lub adres URL"
+        },
+        "_description": "Odtwarzanie muzyki w kanale głosowym",
+        "_usage": "<żądanie|adres URL>",
+        "added": "✅ Dodano **{0}** **{1}** *({2})* do kolejki!",
+        "error": "❌ Wystąpił błąd: **{0}**",
+        "no_query": "❌ Aby odtworzyć, musisz podać zapytanie lub adres URL!",
+        "no_voice": "❌ Aby użyć tego polecenia, musisz być na kanale głosowym!",
+        "not_found": "Nie znaleziono utworu!",
+        "success": "✅ Zaczął grać muzykę"
     },
     "prefix": {
         "_args_desc": {
@@ -169,6 +201,28 @@
         "rank": "RANGA",
         "user_not_found": "❌ Nie znaleziono użytkownika!",
         "xp_disabled": "❌ XP jest wyłączony na tym serwerze!"
+    },
+    "status": {
+        "_description": "Uzyskaj status bota (czas działania, pamięć itp.)",
+        "connecting": "Uruchamianie...",
+        "day": {
+            "few": "dni",
+            "many": "dni",
+            "one": "dzień",
+            "other": "dni"
+        },
+        "description": "Jestem aktywny na serwerach {0}",
+        "memory": "📈 Wykorzystanie pamięci",
+        "memory_format": "{0} MB",
+        "node_version": "Wersja Node.js: {0}",
+        "os": "🖥️ System operacyjny",
+        "os_format": "{0} {1}",
+        "ping": "🏓 Pinguj",
+        "ping_format": "{0} ms",
+        "title": "Stan bota",
+        "total_memory": "💾 Całkowita pamięć",
+        "total_memory_format": "{0} / {1} GB",
+        "uptime": "⏱️Godziny pracy"
     },
     "unban": {
         "_args_desc": {
@@ -221,6 +275,29 @@
         "uav_systems": "UAV",
         "vehicles_fuel_tanks": "Samochody",
         "warships_cutters": "statki"
+    },
+    "weather": {
+        "_args_desc": {
+            "city": "Miasto, dla którego chcesz uzyskać prognozę pogody"
+        },
+        "_description": "Pobierz prognozę pogody dla miasta",
+        "_usage": "<miasto>",
+        "clouds": "☁️ Zachmurzenie",
+        "description": "**{0}°C** {1}",
+        "feels_like": "🌡️ Czuje się",
+        "humidity": "💧 Wilgotność",
+        "local_time": "🕒 Czas lokalny",
+        "no_city": "❌ Musisz podać miasto, dla którego chcesz otrzymać prognozę pogody",
+        "not_found": "❌ Nie znaleziono miasta!",
+        "pressure": "📊 Presja",
+        "pressure_format": "**{0}** hPa",
+        "sunrise": "🌅 Wschód",
+        "sunset": "🌇 Zachód słońca",
+        "title": "Pogoda w **{0}**",
+        "visibility": "👀 Widoczność",
+        "visibility_format": "**{0}** m",
+        "wind": "💨 Wiatr",
+        "wind_format": "**{0}** m/s *({1}°)*"
     },
     "xp": {
         "level_up": "⬆️ Jesteś teraz na poziomie {0}!"

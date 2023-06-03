@@ -158,7 +158,7 @@ module.exports = class Command {
      * @param {string[]} args Command arguments
     */
     async run(message, locale, args) {
-        message.reply({ embeds: [this.createErrorEmbed(locale('global.not_implemented'))] });
+        message.reply({ embeds: [Command.createErrorEmbed(locale('global.not_implemented'))] });
         throw new Error('Command not implemented.');
     }
 
@@ -176,7 +176,7 @@ module.exports = class Command {
      * @param {Object[]} options.fields
      * @returns {discord.EmbedBuilder}
      * @example
-     * const embed = this.createEmbed({
+     * const embed = Command.createEmbed({
      *     title: 'Hello world!',
      *     description: 'This is an embed.',
      *     fields: [{
@@ -189,7 +189,7 @@ module.exports = class Command {
      *     }]
      * });
     */
-    createEmbed(options) {
+    static createEmbed(options) {
         let embed = new discord.EmbedBuilder();
         embed.setColor(config.bot.embed_color);
 
@@ -232,8 +232,8 @@ module.exports = class Command {
      * @param {string} message Error message
      * @returns {discord.EmbedBuilder}
     */
-    createErrorEmbed(message) {
-        return this.createEmbed({
+    static createErrorEmbed(message) {
+        return Command.createEmbed({
             color: config.bot.error_embed_color,
             description: message
         });
@@ -245,7 +245,7 @@ module.exports = class Command {
      * @param {https.RequestOptions} options Fetch options
      * @returns {Promise<Object>} Result JSON
      */
-    async fetch(url, options = {}) {
+    static async fetch(url, options = {}) {
         return new Promise((resolve, reject) => {
             https.get(url, options, (res) => {
                 let data = '';
@@ -268,7 +268,7 @@ module.exports = class Command {
      * @param {https.RequestOptions} options Fetch options
      * @returns {Promise<Buffer>} Result buffer
      */
-    async fetchBinary(url, options = {}) {
+    static async fetchBinary(url, options = {}) {
         return new Promise((resolve, reject) => {
             https.get(url, options, (res) => {
                 let data = [];
@@ -291,7 +291,7 @@ module.exports = class Command {
      * @param {string} member_id Member ID
      * @returns {Promise<discord.GuildMember>} Discord guild member
      */
-    async loadMember(guild, member_id) {
+    static async loadMember(guild, member_id) {
         if (!member_id) return;
 
         if (member_id.startsWith('<@') && member_id.endsWith('>')) {
@@ -314,7 +314,7 @@ module.exports = class Command {
      * formatDate(new Date(), 'YYYY-MM-DD'); // 2021-01-01
      * formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss'); // 2021-01-01 12:34:56
      */
-    formatDate(timestamp, formatString) {
+    static formatDate(timestamp, formatString) {
         const date = new Date(timestamp);
         const format = formatString.replace(/YYYY/g, date.getUTCFullYear())
             .replace(/MM/g, ('0' + (date.getUTCMonth() + 1)).slice(-2))

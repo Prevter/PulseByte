@@ -33,20 +33,20 @@ module.exports = class extends Command {
 
     async loadWeatherData(city, locale) {
         if (city.length === 0)
-            return this.createErrorEmbed('weather.no_city');
+            return Command.createErrorEmbed('weather.no_city');
 
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${this.config.weather_api_key}&lang=${locale('_locale')}&units=metric`;
         const response = await this.fetch(url);
 
         if (response.cod === '404')
-            return this.createErrorEmbed(locale('weather.not_found'));
+            return Command.createErrorEmbed(locale('weather.not_found'));
 
         const timezone_hours = response.timezone / 3600;
         const gmt_string = `GMT${timezone_hours > 0 ? '+' : ''}${timezone_hours}`
         const offset_ms = response.timezone * 1000;
         const timestamp = new Date().getTime() + offset_ms;
 
-        return this.createEmbed({
+        return Command.createEmbed({
             title: locale('weather.title', response.name),
             description: locale('weather.description', response.main.temp, response.weather[0].description),
             thumbnail: weatherIcons[response.weather[0].icon],
@@ -110,7 +110,7 @@ module.exports = class extends Command {
 
     async run(message, locale, args) {
         if (args.length < 1)
-            return await message.reply({ embeds: [this.createErrorEmbed(locale('weather.no_city'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('weather.no_city'))] });
 
         const city = args.join(' ');
         const result = await this.loadWeatherData(city, locale);

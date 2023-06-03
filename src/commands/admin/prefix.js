@@ -24,18 +24,29 @@ module.exports = class extends Command {
 
     async run(message, locale, args) {
         if (args.length === 0) {
-            message.reply(locale('prefix.current', message.guild_data.prefix));
-            return;
+            return await message.reply({
+                embeds: [
+                    Command.createEmbed({ description: locale('prefix.current', message.guild_data.prefix) })
+                ]
+            });
         }
 
         const prefix = args.join(' ');
         if (prefix.length > 5) {
-            message.reply(locale('prefix.too_long'));
-            return;
+            return await message.reply({
+                embeds: [
+                    Command.createEmbed({
+                        description: locale('prefix.too_long')
+                    })]
+            });
         }
 
         message.guild_data.prefix = prefix;
         await this.database.updateGuild(message.guild_data);
-        message.reply(locale('prefix.updated', prefix));
+        await message.reply({
+            embeds: [
+                Command.createEmbed({ description: locale('prefix.updated', prefix) })
+            ]
+        });
     }
 }

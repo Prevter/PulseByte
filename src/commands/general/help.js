@@ -65,7 +65,7 @@ module.exports = class extends Command {
                 });
             });
 
-            const embed = this.createEmbed({
+            const embed = Command.createEmbed({
                 title: category ?? args.category,
                 description: locale(`help.${args.category}_desc`) ?? locale('global.no_description'),
                 fields
@@ -82,7 +82,7 @@ module.exports = class extends Command {
                 return;
             }
 
-            const embed = this.createEmbed({
+            const embed = Command.createEmbed({
                 title: locale('help.command', command.name),
                 description: locale(`${command.name}._description`) ?? locale('global.no_description'),
                 fields: [
@@ -115,7 +115,7 @@ module.exports = class extends Command {
             });
         }
 
-        const embed = this.createEmbed({
+        const embed = Command.createEmbed({
             title: locale('help.categories'),
             thumbnail: this.discord.user.displayAvatarURL(),
             fields
@@ -143,7 +143,7 @@ module.exports = class extends Command {
                 });
             }
 
-            const embed = this.createEmbed({
+            const embed = Command.createEmbed({
                 title: locale('help.categories'),
                 thumbnail: this.discord.user.displayAvatarURL(),
                 fields
@@ -157,7 +157,7 @@ module.exports = class extends Command {
         const command = this.client.commands.find(c => c.name == arg || (c.aliases && c.aliases.includes(arg)));
         if (command) {
             const usage = locale(`${command.name}._usage`);
-            const embed = this.createEmbed({
+            const embed = Command.createEmbed({
                 title: locale('help.command', command.name),
                 description: locale(`${command.name}._description`) ?? locale('global.no_description'),
                 fields: [
@@ -199,7 +199,7 @@ module.exports = class extends Command {
                 });
             });
 
-            const embed = this.createEmbed({
+            const embed = Command.createEmbed({
                 title: category ?? arg,
                 description: locale(`help.${arg}_desc`) ?? locale('global.no_description'),
                 fields

@@ -43,15 +43,15 @@ module.exports = class extends Command {
                 ],
                 footer: { text: locale('urban.author', result.author) }
             };
-            return this.createEmbed(data);
+            return Command.createEmbed(data);
         }
 
-        return this.createErrorEmbed(locale('global.not_found'));
+        return Command.createErrorEmbed(locale('global.not_found'));
     }
 
     async run(message, locale, args) {
         if (args.length === 0) {
-            await message.reply({ embeds: [this.createErrorEmbed(locale('global.no_query'))] });
+            await message.reply({ embeds: [Command.createErrorEmbed(locale('global.no_query'))] });
             return;
         }
 
@@ -62,7 +62,7 @@ module.exports = class extends Command {
 
     async runAsSlash(interaction, locale, args) {
         if (!args.query) {
-            interaction.reply({ embeds: [this.createErrorEmbed(locale('global.no_query'))] });
+            interaction.reply({ embeds: [Command.createErrorEmbed(locale('global.no_query'))] });
             return;
         }
 

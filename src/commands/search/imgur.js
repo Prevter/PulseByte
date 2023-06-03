@@ -32,20 +32,20 @@ module.exports = class extends Command {
 
     async run(message, locale, args) {
         if (args.length === 0) {
-            await message.reply({ embeds: [this.createErrorEmbed(locale('global.no_query'))] });
+            await message.reply({ embeds: [Command.createErrorEmbed(locale('global.no_query'))] });
             return;
         }
 
         const query = args.join(' ');
         const image = await this.getData(query);
         if (!image)
-            return await message.reply({ embeds: [this.createErrorEmbed(locale('global.not_found'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('global.not_found'))] });
         await message.reply(image);
     }
 
     async runAsSlash(interaction, locale, args) {
         if (!args.query) {
-            interaction.reply({ embeds: [this.createErrorEmbed(locale('global.no_query'))] });
+            interaction.reply({ embeds: [Command.createErrorEmbed(locale('global.no_query'))] });
             return;
         }
 
@@ -53,7 +53,7 @@ module.exports = class extends Command {
         const query = args.query;
         const image = await this.getData(query);
         if (!image)
-            return await interaction.editReply({ embeds: [this.createErrorEmbed(locale('global.not_found'))] });
+            return await interaction.editReply({ embeds: [Command.createErrorEmbed(locale('global.not_found'))] });
         await interaction.editReply(image);
     }
 }

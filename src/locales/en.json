@@ -73,6 +73,8 @@
         "levels_desc": "Give your members XP and Levels when they send messages and rank them by activity in a leaderboard",
         "moderator": "Moderator",
         "moderator_desc": "Commands for moderating your server",
+        "music": "Music",
+        "music_desc": "Commands for playing music in voice channels",
         "not_found": "Command `{0}` not found!",
         "search": "Search",
         "search_desc": "Commands that search for things",
@@ -127,6 +129,23 @@
         "published": "📅 Published",
         "volumes": "📕 Volumes"
     },
+    "join": {
+        "_description": "Join the voice channel you are in",
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "success": "✅ Successfully joined voice channel!"
+    },
+    "leave": {
+        "_description": "Leave the voice channel you are in",
+        "no_voice": "❌ I'm not in a voice channel!",
+        "success": "✅ Successfully left voice channel!"
+    },
+    "nowplaying": {
+        "_description": "Show the currently playing song",
+        "no_queue": "❌ There aren't any music playing right now",
+        "duration": "⏱️ Duration",
+        "views": "👀 Views",
+        "requested_by": "👤 Requested by"
+    },
     "mute": {
         "_args_desc": {
             "member": "The member to mute",
@@ -148,6 +167,19 @@
     },
     "permissions": {
         "BanMembers": "Ban members"
+    },
+    "play": {
+        "_args_desc": {
+            "query": "Query to search or URL"
+        },
+        "_description": "Play music in a voice channel",
+        "_usage": "<query|URL>",
+        "no_query": "❌ You must specify a query or URL to play!",
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "added": "✅ Added **{0}** by **{1}** *({2})* to the queue!",
+        "success": "✅ Started playing",
+        "error": "❌ **{0}**",
+        "not_found": "Song not found!"
     },
     "prefix": {
         "_args_desc": {

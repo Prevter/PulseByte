@@ -17,12 +17,12 @@ module.exports = class extends Command {
 
     async unbanUser(author, member_id, locale, guild) {
         if (!member_id)
-            return this.createErrorEmbed(locale('unban.no_member'));
+            return Command.createErrorEmbed(locale('unban.no_member'));
 
         try {
             await guild.members.unban(member_id);
         } catch (e) {
-            return this.createErrorEmbed(locale('unban.failed'));
+            return Command.createErrorEmbed(locale('unban.failed'));
         }
 
         let member = { user: { tag: member_id, avatarURL: () => '' } };
@@ -30,7 +30,7 @@ module.exports = class extends Command {
             member = await guild.members.fetch(member_id);
         } catch (e) { }
 
-        return this.createEmbed({
+        return Command.createEmbed({
             title: locale('unban.title', member.user.tag),
             author: {
                 name: author.user.username,
@@ -54,7 +54,7 @@ module.exports = class extends Command {
 
     async runAsSlash(interaction, locale, args) {
         if (!args.member)
-            return interaction.reply({ embeds: [this.createErrorEmbed(locale('unmute.no_member'))] });
+            return interaction.reply({ embeds: [Command.createErrorEmbed(locale('unmute.no_member'))] });
 
         const member = this.getMemberId(args.member);
         interaction.reply({ embeds: [await this.unbanUser(interaction.member, member, locale, interaction.guild)] });
@@ -62,7 +62,7 @@ module.exports = class extends Command {
 
     async run(message, locale, args) {
         if (args.length < 1)
-            return message.channel.send({ embeds: [this.createErrorEmbed(locale('unmute.no_member'))] });
+            return message.channel.send({ embeds: [Command.createErrorEmbed(locale('unmute.no_member'))] });
 
         const member = this.getMemberId(args[0]);
         message.reply({ embeds: [await this.unbanUser(message.member, member, locale, message.guild)] });

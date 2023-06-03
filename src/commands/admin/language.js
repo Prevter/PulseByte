@@ -46,7 +46,7 @@ module.exports = class extends Command {
             langs[l] = loc;
         });
 
-        const showAllLangs = () => {
+        const showAllLangs = async () => {
             let fields = [];
             for (const [key, value] of Object.entries(langs)) {
                 fields.push({
@@ -55,25 +55,25 @@ module.exports = class extends Command {
                 });
             }
 
-            const embed = this.createEmbed({
+            const embed = Command.createEmbed({
                 title: locale('language.supported'),
                 fields
             });
 
-            message.reply({ embeds: [embed] });
+            await message.reply({ embeds: [embed] });
         };
 
         if (args.length === 0) {
-            return showAllLangs();
+            return await showAllLangs();
         }
 
         const language = args[0];
         if (!this._locales.includes(language)) {
-            return showAllLangs();
+            return await showAllLangs();
         }
 
         message.guild_data.language = language;
         await this.database.updateGuild(message.guild_data);
-        message.reply(langs[language]('language.updated'));
+        await message.reply({ embeds: [Command.createEmbed({ description: langs[language]('language.updated') })] });
     }
 }

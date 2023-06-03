@@ -174,10 +174,10 @@ module.exports = class extends Command {
 
     async runAsSlash(interaction, locale, args) {
         if (!interaction.guild_data.xp_enabled)
-            return await interaction.reply({ embeds: [this.createErrorEmbed(locale('rank.xp_disabled'))] });
+            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('rank.xp_disabled'))] });
 
         if (!interaction.user_data)
-            return await interaction.reply({ embeds: [this.createErrorEmbed(locale('rank.user_not_found'))] });
+            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('rank.user_not_found'))] });
 
         await interaction.deferReply();
 
@@ -186,7 +186,7 @@ module.exports = class extends Command {
             const member = await this.loadMember(interaction.guild, args.member);
             const data = await this.database.getUser(member.id, interaction.guild.id);
             if (!data)
-                return await interaction.editReply({ embeds: [this.createErrorEmbed(locale('rank.user_not_found'))] });
+                return await interaction.editReply({ embeds: [Command.createErrorEmbed(locale('rank.user_not_found'))] });
 
             user_data = await this.getProfile(data, interaction.guild.id);
             user_data.avatar = member.displayAvatarURL({ format: 'png', size: 256 });
@@ -206,17 +206,17 @@ module.exports = class extends Command {
 
     async run(message, locale, args) {
         if (!message.guild_data.xp_enabled)
-            return await message.reply({ embeds: [this.createErrorEmbed(locale('rank.xp_disabled'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('rank.xp_disabled'))] });
 
         if (!message.user_data)
-            return await message.reply({ embeds: [this.createErrorEmbed(locale('rank.user_not_found'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('rank.user_not_found'))] });
 
         let user_data;
         if (args.length > 0) {
             const member = await this.loadMember(message.guild, args[0]);
             const data = await this.database.getUser(member.id, message.guild.id);
             if (!data)
-                return await message.reply({ embeds: [this.createErrorEmbed(locale('rank.user_not_found'))] });
+                return await message.reply({ embeds: [Command.createErrorEmbed(locale('rank.user_not_found'))] });
 
             user_data = await this.getProfile(data, message.guild.id);
             user_data.avatar = member.displayAvatarURL({ format: 'png', size: 256 });

@@ -5,7 +5,7 @@ module.exports = class extends Command {
     constructor(client, database) {
         super(client, database, {
             name: 'status',
-            aliases: ['stats', 'botinfo', 'stat', 'info'],
+            aliases: ['stats', 'botinfo', 'stat', 'info', 'ping'],
             category: 'general'
         });
     }
@@ -61,7 +61,7 @@ module.exports = class extends Command {
         const freeMemory = os.freemem() / 1024 / 1024 / 1024;
 
         message.reply({
-            embeds: [this.createEmbed({
+            embeds: [Command.createEmbed({
                 title: locale('status.title'),
                 description: locale('status.description', serverCount),
                 fields: [
