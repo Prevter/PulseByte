@@ -77,7 +77,7 @@ module.exports = class extends Command {
             .addComponents(prev_page, next_page);
     }
 
-    createButtonCollector(message, author, ratings, embed, locale) {
+    createButtonCollector(message, author, guild_id, ratings, embed, locale) {
         let page = 1;
         let lastEmbed = embed;
         const collector = message.createMessageComponentCollector({ filter: i => i.user.id === author.id, time: this.config.bot.buttons_timeout });
@@ -85,14 +85,14 @@ module.exports = class extends Command {
             const maxPages = this.getPageCount(ratings);
             if (i.customId === "prev_page") {
                 page--;
-                lastEmbed = this.buildLeaderboardEmbed(message.guild.id, ratings, page, locale);
+                lastEmbed = this.buildLeaderboardEmbed(guild_id, ratings, page, locale);
                 await i.update({
                     embeds: [lastEmbed],
                     components: [this.createButtons(page, maxPages)]
                 });
             } else if (i.customId === "next_page") {
                 page++;
-                lastEmbed = this.buildLeaderboardEmbed(message.guild.id, ratings, page, locale);
+                lastEmbed = this.buildLeaderboardEmbed(guild_id, ratings, page, locale);
                 await i.update({
                     embeds: [lastEmbed],
                     components: [this.createButtons(page, maxPages)]
@@ -126,6 +126,6 @@ module.exports = class extends Command {
         const embed = this.buildLeaderboardEmbed(message.guild.id, userLevels, 1, locale);
         const buttons = this.createButtons(1, this.getPageCount(userLevels));
         const msg = await message.reply({ embeds: [embed], components: [buttons] });
-        this.createButtonCollector(msg, message.author, userLevels, embed, locale);
+        this.createButtonCollector(msg, message.member, message.guild.id, userLevels, embed, locale);
     }
 }

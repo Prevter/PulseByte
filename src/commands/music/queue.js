@@ -125,6 +125,6 @@ module.exports = class extends Command {
             embeds: [embed],
             components: [this.createButtons(1, pages)]
         });
-        this.createButtonCollector(msg, message.author, embed, queue, locale);
+        this.createButtonCollector(msg, message.member, embed, queue, locale);
     }
 }
