@@ -1,6 +1,7 @@
 const { PermissionsBitField } = require('discord.js');
 const config = require('../../config');
 const localeBuilder = require('../locale');
+const Command = require('../types/command');
 
 module.exports = async (client, message) => {
     if (message.author.bot) return;
@@ -43,23 +44,27 @@ module.exports = async (client, message) => {
     client.logger.log(`📨 ${message.author.tag} called a command: ${message.content}`)
 
     if (cmd.slash_only)
-        return message.reply(locale('global.slash_only'));
+        return message.reply({ embeds: [Command.createErrorEmbed(locale('global.slash_only'))] });
 
     if (cmd.owner_only && !config.bot.owners.includes(message.author.id))
-        return message.reply(locale('global.owner_only'));
+        return message.reply({ embeds: [Command.createErrorEmbed(locale('global.owner_only'))] });
 
     if (cmd.guild_only && !message.guild)
-        return message.reply(locale('global.guild_only'));
+        return message.reply({ embeds: [Command.createErrorEmbed(locale('global.guild_only'))] });
 
     if (cmd.admin_only && !message.member.permissions.has(PermissionsBitField.Flags.Administrator))
-        return message.reply(locale('global.admin_only'));
+        return message.reply({ embeds: [Command.createErrorEmbed(locale('global.admin_only'))] });
 
     if (cmd.permissions.length > 0) {
         const missing = message.member.permissions
             .missing(cmd.permissions)
             .map(p => locale(`permissions.${p}`) ?? p);
         if (missing.length > 0)
-            return message.reply(locale('global.missing_permissions', missing.join(', ')));
+            return message.reply({
+                embeds: [
+                    Command.createErrorEmbed(locale('global.missing_permissions', missing.join(', ')))
+                ]
+            });
     }
 
     await cmd.run(message, locale, args);

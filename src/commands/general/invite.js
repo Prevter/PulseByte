@@ -11,6 +11,6 @@ module.exports = class extends Command {
 
     async run(message, locale, args) {
         let invite = `https://discord.com/oauth2/authorize?client_id=${this.discord.user.id}&scope=bot&permissions=8`;
-        message.reply(locale('invite.message', invite));
+        message.reply({ embeds: [Command.createEmbed({ description: locale('invite.message', invite) })] });
     }
 }

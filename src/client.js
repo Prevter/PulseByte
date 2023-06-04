@@ -70,7 +70,7 @@ module.exports = class DiscordClient {
                 .createEmbed(locale, song, queue, false);
             queue.message = await queue.textChannel.send({ embeds: [embed] });
         });
-        
+
         this.client.distube.on("finishSong", async (queue, song) => {
             if (queue.message) {
                 await queue.message.delete();
@@ -82,8 +82,18 @@ module.exports = class DiscordClient {
             console.warn(`No results found for query: ${query}`);
         });
 
+        this.reloadCommands();
+    }
+
+    reloadCommands() {
+        this.commands = [];
+        this.modules = [];
+
         const loadCommand = (filePath) => {
             const path = filePath.replace('.js', '');
+            if (require.cache[require.resolve(path)]) {
+                delete require.cache[require.resolve(path)];
+            }
             const command = require(path);
             const instance = new command(this, this.database);
             this.commands.push(instance);
@@ -103,6 +113,9 @@ module.exports = class DiscordClient {
 
         fs.readdirSync('./src/modules', { withFileTypes: true }).forEach(file => {
             const path = `./modules/${file.name}`;
+            if (require.cache[require.resolve(path)]) {
+                delete require.cache[require.resolve(path)];
+            }
             const module = require(path);
             this.modules.push(new module(this, this.database));
         });
@@ -115,7 +128,9 @@ module.exports = class DiscordClient {
     async registerCommands() {
         const cmds = [];
         for (const cmd of this.commands) {
-            cmds.push(cmd.buildSlashCommand().toJSON());
+            const slashCommandData = cmd.buildSlashCommand();
+            if (slashCommandData)
+                cmds.push(slashCommandData.toJSON());
         }
 
         const rest = new discord.REST({ version: '10' }).setToken(this.token);

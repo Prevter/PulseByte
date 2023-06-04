@@ -77,7 +77,7 @@ module.exports = class extends Command {
 
         if (args.command) {
             const command = this.client.commands.find(c => c.name == args.command || (c.aliases && c.aliases.includes(args.command)));
-            if (!command) {
+            if (!command || command.hidden) {
                 interaction.reply({ content: locale('help.not_found', ''), ephemeral: true });
                 return;
             }
@@ -155,7 +155,7 @@ module.exports = class extends Command {
 
         const arg = args[0].toLowerCase();
         const command = this.client.commands.find(c => c.name == arg || (c.aliases && c.aliases.includes(arg)));
-        if (command) {
+        if (command && !command.hidden) {
             const usage = locale(`${command.name}._usage`);
             const embed = Command.createEmbed({
                 title: locale('help.command', command.name),
