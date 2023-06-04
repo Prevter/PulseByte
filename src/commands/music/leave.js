@@ -16,14 +16,15 @@ module.exports = class extends Command {
             await this.discord.distube.voices.leave(interaction);
             return await interaction.reply({ embeds: [Command.createEmbed({ description: locale('leave.success') })] })
         }
-        await interaction.reply({ embeds: [Command.createErrorEmbed(locale('leave.no_voice'))] });
+        await interaction.reply({ embeds: [Command.createErrorEmbed(locale('music.no_voice'))] });
     }
 
     async run(message, locale, args) {
         const disVoice = this.discord.distube.voices.get(message.guild.id);
         if (disVoice) {
             await this.discord.distube.voices.leave(message);
-            await message.react('✅');
+            return await message.react('✅');
         }
+        await message.react('❌');
     }
 }

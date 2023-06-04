@@ -3,8 +3,8 @@ const Command = require("../../types/command");
 module.exports = class extends Command {
     constructor(client, database) {
         super(client, database, {
-            name: 'pause',
-            aliases: ['resume', 'unpause'],
+            name: 'previous',
+            aliases: ['prev', 'back'],
             category: 'music',
             guild_only: true
         });
@@ -19,14 +19,8 @@ module.exports = class extends Command {
         if (!queue)
             return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('music.no_queue'))] });
 
-        if (queue.paused) {
-            await queue.resume();
-            await interaction.reply({ embeds: [Command.createEmbed({ description: locale('pause.resumed') })] })
-        }
-        else {
-            await queue.pause();
-            await interaction.reply({ embeds: [Command.createEmbed({ description: locale('pause.paused') })] })
-        }
+        await queue.previous();
+        await interaction.reply({ embeds: [Command.createEmbed({ description: locale('previous.success') })] })
     }
 
     async run(message, locale, args) {
@@ -38,11 +32,7 @@ module.exports = class extends Command {
         if (!queue)
             return await message.reply({ embeds: [Command.createErrorEmbed(locale('music.no_queue'))] });
 
-        if (queue.paused)
-            await queue.resume();
-        else
-            await queue.pause();
-
+        await queue.previous();
         await message.react('✅');
     }
 }

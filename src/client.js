@@ -50,7 +50,6 @@ module.exports = class DiscordClient {
         this.client.distube = new DisTube(this.client, {
             leaveOnStop: false,
             leaveOnFinish: false,
-            emitNewSongOnly: true,
             emitAddSongWhenCreatingQueue: false,
             emitAddListWhenCreatingQueue: false,
             plugins: [

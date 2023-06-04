@@ -19,11 +19,11 @@ module.exports = class extends Command {
     async runAsSlash(interaction, locale, args) {
         const voiceChannel = interaction.member?.voice?.channel;
         if (!voiceChannel)
-            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('volume.no_voice'))] });
+            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('music.no_voice'))] });
 
         const queue = this.discord.distube.getQueue(interaction);
         if (!queue)
-            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('volume.no_queue'))] });
+            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('music.no_queue'))] });
 
         if (!args.volume)
             return await interaction.reply({
@@ -42,11 +42,11 @@ module.exports = class extends Command {
     async run(message, locale, args) {
         const voiceChannel = message.member?.voice?.channel;
         if (!voiceChannel)
-            return await message.reply({ embeds: [Command.createErrorEmbed(locale('volume.no_voice'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('music.no_voice'))] });
 
         const queue = this.discord.distube.getQueue(message);
         if (!queue)
-            return await message.reply({ embeds: [Command.createErrorEmbed(locale('volume.no_queue'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('music.no_queue'))] });
 
         if (!args[0])
             return await message.reply({

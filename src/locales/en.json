@@ -22,8 +22,6 @@
     },
     "autoplay": {
         "_description": "Toggle autoplay for the current queue",
-        "no_queue": "❌ There aren't any music playing right now",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
         "success": "{0} Autoplay is now {1} for this queue!"
     },
     "ban": {
@@ -99,9 +97,36 @@
         "_description": "Get bot's invite link",
         "message": "Invite me to your server with this link: {0}"
     },
+    "filter": {
+        "_args_desc": {
+            "filter": "The filter to apply (`off` to disable all filters)"
+        },
+        "_description": "Apply a filter to the current queue",
+        "_usage": "[filter|off]",
+        "title": "🔊 Filters",
+        "3d": "Audio spins around the listener in a circle",
+        "bassboost": "Boosts the bass of the audio",
+        "echo": "Adds an echo effect to the audio",
+        "karaoke": "Removes the vocals from the audio",
+        "nightcore": "Speeds up the audio",
+        "vaporwave": "Slow down the audio and adds an echo effect",
+        "flanger": "Flanging effect on the audio",
+        "gate": "Clears audio noise",
+        "haas": "Precedence effect",
+        "reverse": "Reverses the audio",
+        "surround": "Surround upmix filter",
+        "mcompand": "Expand audio dynamic range",
+        "phaser": "Creates series of peaks and troughs in the audio",
+        "tremolo": "Modulation of the volume",
+        "earwax": "Make audio \"easier\" to listen to",
+        "success": {
+            "off": "✅ All filters disabled!",
+            "enable": "🟢 Filter `{0}` enabled!",
+            "disable": "🔴 Filter `{0}` disabled!"
+        }
+    },
     "join": {
         "_description": "Join the voice channel you are in",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
         "success": "✅ Successfully joined voice channel!"
     },
     "kick": {
@@ -145,6 +170,10 @@
         "published": "📅 Published",
         "volumes": "📕 Volumes"
     },
+    "music": {
+        "no_voice": "❌ You must be in a voice channel to use this command!",
+        "no_queue": "❌ There aren't any music playing right now"
+    },
     "mute": {
         "_args_desc": {
             "member": "The member to mute",
@@ -167,14 +196,11 @@
     "nowplaying": {
         "_description": "Show the currently playing song",
         "duration": "⏱️ Duration",
-        "no_queue": "❌ There aren't any music playing right now",
         "requested_by": "👤 Requested by",
         "views": "👀 Views"
     },
     "pause": {
         "_description": "Pause/resume the current song",
-        "no_queue": "❌ There aren't any music playing right now",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
         "paused": "⏸️ Paused the music!",
         "resumed": "▶️ Resumed the music!"
     },
@@ -190,9 +216,15 @@
         "added": "✅ Added **{0}** by **{1}** *({2})* to the queue!",
         "error": "❌ **{0}**",
         "no_query": "❌ You must specify a query or URL to play!",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
         "not_found": "Song not found!",
         "success": "✅ Started playing"
+    },
+    "playnow": {
+        "_args_desc": {
+            "query": "Query to search or URL"
+        },
+        "_description": "Add music to the front of the queue",
+        "_usage": "<query|URL>"
     },
     "playskip": {
         "_args_desc": {
@@ -211,10 +243,12 @@
         "too_long": "The prefix must be 5 characters or less!",
         "updated": "The prefix has been updated to `{0}`"
     },
+    "previous":{
+        "_description": "Play the previous song",
+        "success": "↩️ Playing the previous song!"
+    },
     "queue": {
         "_description": "Get the current music queue",
-        "no_queue": "❌ There aren't any music playing right now",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
         "now_playing": "**Now playing**",
         "page": "Page {0} of {1} ({2} songs)",
         "queue": "**Queue**",
@@ -232,6 +266,35 @@
         "user_not_found": "❌ User not found or doesn't have any XP!",
         "xp_disabled": "❌ XP is disabled in this guild!"
     },
+    "repeat": {
+        "_args_desc": {
+            "mode": "The repeat mode to use. Valid modes are: `off`, `song`, `queue`"
+        },
+        "_description": "Change the repeat mode",
+        "_usage": "<mode>",
+        "no_mode": "❌ You must specify a repeat mode to use!",
+        "invalid_mode": "❌ Invalid repeat mode! Valid modes are: `off`, `song`, `queue`",
+        "success": {
+            "0": "➡️ Repeat mode has been disabled!",
+            "1": "🔂 Repeat mode has been enabled for the current song!",
+            "2": "🔁 Repeat mode has been enabled for the queue!"
+        }
+    },
+    "seek": {
+        "_args_desc": {
+            "time": "The time to seek to. Format: `24`, `1:30`, `1:23:45`"
+        },
+        "_description": "Seek to a specific time in the current song",
+        "_usage": "<time>",
+        "no_time": "❌ You must specify time to seek to!",
+        "invalid_time": "❌ Invalid time format! Valid formats are: `24`, `1:30`, `1:23:45`",
+        "success": "✅ Seeked to **{0}**!",
+        "error": "❌ Failed to seek to **{0}**!"
+    },
+    "shuffle": {
+        "_description": "Shuffle the current queue",
+        "success": "🔀 Queue has been shuffled!"
+    },
     "skip": {
         "_args_desc": {
             "count": "The number of songs to skip"
@@ -239,8 +302,6 @@
         "_description": "Skip the current song (or multiple songs)",
         "_usage": "[count]",
         "error": "❌ Failed to skip current song!",
-        "no_queue": "❌ There aren't any music playing right now",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
         "success": "✅ Skipped current song!"
     },
     "status": {
@@ -265,8 +326,6 @@
     },
     "stop": {
         "_description": "Stop the music and clear the queue",
-        "no_queue": "❌ There aren't any music playing right now",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
         "success": "✅ Successfully stopped the music!"
     },
     "unban": {
@@ -308,8 +367,6 @@
         "_usage": "<volume>",
         "current_volume": "🔊 Current volume is **{0}**%",
         "invalid_volume": "❌ Volume must be between 0 and {0}!",
-        "no_queue": "❌ There aren't any music playing right now",
-        "no_voice": "❌ You must be in a voice channel to use this command!",
         "success": "✅ Updated volume to **{0}**%"
     },
     "warstats": {

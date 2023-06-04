@@ -13,7 +13,7 @@ module.exports = class extends Command {
     async runAsSlash(interaction, locale, args) {
         const voiceChannel = interaction.member?.voice?.channel;
         if (!voiceChannel)
-            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('join.no_voice'))] });
+            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('music.no_voice'))] });
 
         await this.discord.distube.voices.join(voiceChannel);
         await interaction.reply({ embeds: [Command.createEmbed({ description: locale('join.success') })] })
@@ -22,7 +22,7 @@ module.exports = class extends Command {
     async run(message, locale, args) {
         const voiceChannel = message.member?.voice?.channel;
         if (!voiceChannel)
-            return await message.reply({ embeds: [Command.createErrorEmbed(locale('join.no_voice'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('music.no_voice'))] });
 
         await this.discord.distube.voices.join(voiceChannel);
         await message.react('✅');

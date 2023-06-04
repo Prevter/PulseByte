@@ -10,35 +10,14 @@ module.exports = class extends Command {
         });
     }
 
-    async runAsSlash(interaction, locale, args) {
-        const voiceChannel = interaction.member?.voice?.channel;
-        if (!voiceChannel)
-            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('autoplay.no_voice'))] });
-
-        const queue = this.discord.distube.getQueue(interaction);
-        if (!queue)
-            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('autoplay.no_queue'))] });
-
-        const autoplay = queue.toggleAutoplay();
-        await interaction.reply({
-            embeds: [Command.createEmbed({
-                description: locale(
-                    'autoplay.success',
-                    autoplay ? '🟢' : '🔴',
-                    autoplay ? locale('global.enabled') : locale('global.disabled')
-                )
-            })]
-        })
-    }
-
     async run(message, locale, args) {
         const voiceChannel = message.member?.voice?.channel;
         if (!voiceChannel)
-            return await message.reply({ embeds: [Command.createErrorEmbed(locale('autoplay.no_voice'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('music.no_voice'))] });
 
         const queue = this.discord.distube.getQueue(message);
         if (!queue)
-            return await message.reply({ embeds: [Command.createErrorEmbed(locale('autoplay.no_queue'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('music.no_queue'))] });
 
         const autoplay = queue.toggleAutoplay();
         await message.reply({

@@ -93,7 +93,7 @@ module.exports = class extends Command {
     async run(message, locale, args) {
         const queue = this.discord.distube.getQueue(message);
         if (!queue)
-            return await message.reply({ embeds: [Command.createErrorEmbed(locale('nowplaying.no_queue'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('music.no_queue'))] });
 
         const song = queue.songs[0];
         const embed = module.exports.createEmbed(locale, song, queue, true);

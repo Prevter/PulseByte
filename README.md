@@ -15,6 +15,11 @@ You should also change settings for database connection. Supported database back
 
 > (more coming soon)
 
+Run the bot:
+```
+npm run start
+```
+
 ## Commands
 ### Admin
 - `experience` - Toggle XP system for this server.
@@ -38,13 +43,19 @@ You should also change settings for database connection. Supported database back
 
 ### Music
 - `autoplay` - Toggle autoplay mode.
+- `filter [filter]` - Change audio filter.
 - `join` - Join voice channel.
 - `leave` - Leave voice channel.
 - `nowplaying` - Show currently playing song.
 - `pause` - Pause/resume playing.
 - `play <query>` - Play song by query or URL.
+- `playnow <query>` - Add song to the front of the queue.
 - `playskip <query>` - Play song by query or URL and skip current song.
+- `previous` - Play previous song.
 - `queue` - Show queue.
+- `repeat <off|song|queue>` - Change repeat mode.
+- `seek <time>` - Seek to time in song.
+- `shuffle` - Shuffle queue.
 - `skip [count]` - Skip current song (or multiple songs).
 - `stop` - Stop playing and clear queue.
 - `volume <volume>` - Change volume.

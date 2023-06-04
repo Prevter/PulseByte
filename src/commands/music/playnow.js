@@ -3,8 +3,8 @@ const Command = require("../../types/command");
 module.exports = class extends Command {
     constructor(client, database) {
         super(client, database, {
-            name: 'playskip',
-            aliases: ['ps', 'skipplay'],
+            name: 'playnow',
+            aliases: ['pn'],
             category: 'music',
             guild_only: true,
             args: [{
@@ -27,16 +27,31 @@ module.exports = class extends Command {
             textChannel: interaction.channel,
             member: interaction.member,
             interaction,
-            skip: true
+            position: 1
         };
 
         try {
             await this.discord.distube.play(voiceChannel, args.query, options);
 
-            const songs = await this.discord.distube.getQueue(interaction)?.songs;
-            if (!songs) throw new Error(locale('play.not_found'));
+            const songs = await this.discord.distube.getQueue(interaction).songs;
+            const track = songs[songs.length - 1];
+            const isCurrent = songs.length === 1;
 
-            await interaction.reply({ embeds: [Command.createEmbed({ description: locale('play.success') })] });
+            if (!args.query.startsWith('http') && !isCurrent) {
+                const name = track.name ?? 'Unknown';
+                const author = track.uploader.name ?? 'Unknown';
+                const duration = track.formattedDuration ?? 'Unknown';
+                const thumbnail = track.thumbnail ?? '';
+                await interaction.reply({
+                    embeds: [Command.createEmbed({
+                        description: locale('play.added', name, author, duration),
+                        thumbnail: thumbnail
+                    })]
+                });
+            }
+            else {
+                await interaction.reply({ embeds: [Command.createEmbed({ description: locale('play.success') })] });
+            }
         }
         catch (e) {
             this.client.logger.error(e);
@@ -57,7 +72,7 @@ module.exports = class extends Command {
             textChannel: message.channel,
             member: message.member,
             message,
-            skip: true
+            position: 1
         };
 
         try {
@@ -66,7 +81,24 @@ module.exports = class extends Command {
             const songs = await this.discord.distube.getQueue(message)?.songs;
             if (!songs) throw new Error(locale('play.not_found'));
 
-            await message.react('✅');
+            const track = songs[songs.length - 1];
+            const isCurrent = songs.length === 1;
+
+            if (!args[0].startsWith('http') && !isCurrent) {
+                const name = track.name ?? 'Unknown';
+                const author = track.uploader.name ?? 'Unknown';
+                const duration = track.formattedDuration ?? 'Unknown';
+                const thumbnail = track.thumbnail ?? '';
+                await message.reply({
+                    embeds: [Command.createEmbed({
+                        description: locale('play.added', name, author, duration),
+                        thumbnail: thumbnail
+                    })]
+                });
+            }
+            else {
+                await message.react('✅');
+            }
         }
         catch (e) {
             await message.reply({ embeds: [Command.createErrorEmbed(locale('play.error', e.message))] });

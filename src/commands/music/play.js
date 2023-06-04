@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
         const voiceChannel = interaction.member?.voice?.channel;
         if (!voiceChannel)
-            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('play.no_voice'))] });
+            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('music.no_voice'))] });
 
         const options = {
             textChannel: interaction.channel,
@@ -54,7 +54,7 @@ module.exports = class extends Command {
         }
         catch (e) {
             this.client.logger.error(e);
-            await interaction.reply({ embeds: [Command.createErrorEmbed(locale('play.error', err.message))] });
+            await interaction.reply({ embeds: [Command.createErrorEmbed(locale('play.error', e.message))] });
         }
 
     }
@@ -65,7 +65,7 @@ module.exports = class extends Command {
 
         const voiceChannel = message.member?.voice?.channel;
         if (!voiceChannel)
-            return await message.reply({ embeds: [Command.createErrorEmbed(locale('play.no_voice'))] });
+            return await message.reply({ embeds: [Command.createErrorEmbed(locale('music.no_voice'))] });
 
         const options = {
             textChannel: message.channel,
