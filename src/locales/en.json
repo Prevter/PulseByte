@@ -155,6 +155,13 @@
         "supported": "Supported languages",
         "updated": "Language has been updated to 🇺🇸 English"
     },
+    "leaderboard": {
+        "_description": "Shows the top 10 members with the most XP",
+        "title": "🏆 Leaderboard",
+        "xp_level_messages": "XP: **{0}** | Level: **{1}** | Messages: **{2}**",
+        "page":"Page {0} of {1} ({2} members)",
+        "description": "[View full leaderboard online]({0}leaderboard/{1})"
+    },
     "leave": {
         "_description": "Leave the voice channel you are in",
         "no_voice": "❌ I'm not in a voice channel!",

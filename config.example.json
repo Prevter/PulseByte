@@ -24,14 +24,16 @@
                 "background": "#090a0b",
                 "background_opacity": 100
             }
-        }
+        },
+        "buttons_timeout": 60000
     },
     "database": {
         "type": "sqlite",
         "connection_string": "./database.db"
     },
     "web": {
-        "port": 80
+        "port": 80,
+        "url": "http://localhost/"
     },
     "logger": {
         "level": "log",

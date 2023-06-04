@@ -132,7 +132,7 @@ module.exports = class Command {
         }
 
         // Parse permissions.
-        let flags = null;
+        let flags = this.admin_only ? discord.PermissionFlagsBits.Administrator : null;
         for (let perm of this.permissions) {
             if (flags === null) flags = discord.PermissionFlagsBits[perm];
             else flags |= discord.PermissionFlagsBits[perm];
@@ -222,7 +222,7 @@ module.exports = class Command {
             }
         }
         catch (e) {
-            this.client.logger.error(`Failed to create embed on step ${creationStep}. Full embed object: \n${JSON.stringify(options, null, 4)}`);
+            process.logger.error(`Failed to create embed on step ${creationStep}. Full embed object: \n${JSON.stringify(options, null, 4)}`);
         }
 
         return embed;

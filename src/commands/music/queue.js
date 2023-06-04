@@ -81,7 +81,7 @@ module.exports = class extends Command {
     createButtonCollector(message, author, embed, queue, locale) {
         let page = 1;
         let lastEmbed = embed;
-        const collector = message.createMessageComponentCollector({ filter: i => i.user.id === author.id, time: 60000 });
+        const collector = message.createMessageComponentCollector({ filter: i => i.user.id === author.id, time: this.config.bot.buttons_timeout });
         collector.on("collect", async i => {
             const maxPages = this.getPageCount(queue);
             if (i.customId === "prev_page") {
@@ -108,24 +108,6 @@ module.exports = class extends Command {
                 });
             }
         });
-    }
-
-    async runAsSlash(interaction, locale, args) {
-        const voiceChannel = interaction.member?.voice?.channel;
-        if (!voiceChannel)
-            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('music.no_voice'))] });
-
-        const queue = this.discord.distube.getQueue(interaction);
-        if (!queue)
-            return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('music.no_queue'))] });
-
-        const pages = this.getPageCount(queue);
-        const embed = this.buildQueueEmbed(queue, 1, locale);
-        const msg = await interaction.reply({
-            embeds: [embed],
-            components: [this.createButtons(1, pages)]
-        });
-        this.createButtonCollector(msg, message.author, embed, queue, locale);
     }
 
     async run(message, locale, args) {
