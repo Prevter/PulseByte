@@ -83,17 +83,17 @@ module.exports = class extends Command {
                 },
                 {
                     name: locale('weather.sunrise'),
-                    value: `${this.formatDate(response.sys.sunrise * 1000 + offset_ms, 'HH:mm:ss')} ${gmt_string}`,
+                    value: `${Command.formatDate(response.sys.sunrise * 1000 + offset_ms, 'HH:mm:ss')} ${gmt_string}`,
                     inline: true
                 },
                 {
                     name: locale('weather.sunset'),
-                    value: `${this.formatDate(response.sys.sunset * 1000 + offset_ms, 'HH:mm:ss')} ${gmt_string}`,
+                    value: `${Command.formatDate(response.sys.sunset * 1000 + offset_ms, 'HH:mm:ss')} ${gmt_string}`,
                     inline: true
                 },
                 {
                     name: locale('weather.local_time'),
-                    value: `${this.formatDate(timestamp, 'HH:mm:ss')} ${gmt_string}`,
+                    value: `${Command.formatDate(timestamp, 'HH:mm:ss')} ${gmt_string}`,
                     inline: true
                 }
             ],
