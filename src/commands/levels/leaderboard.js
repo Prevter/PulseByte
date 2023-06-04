@@ -9,7 +9,8 @@ module.exports = class extends Command {
         super(client, database, {
             name: 'leaderboard',
             aliases: ['lb', 'top'],
-            category: 'levels'
+            category: 'levels',
+            guild_only: true
         });
     }
 
