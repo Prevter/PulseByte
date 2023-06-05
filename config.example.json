@@ -1,0 +1,48 @@
+{
+    "name": "My Bot",
+    "default_language": "en",
+    "bot": {
+        "token": "<Discord Bot Token>",
+        "prefix": "-",
+        "owners": [
+            "400199033915965441"
+        ],
+        "embed_color": "#0099FF",
+        "error_embed_color": "#F04848",
+        "activity": {
+            "status": "online",
+            "type": "PLAYING",
+            "name": "-help"
+        },
+        "xp": {
+            "enabled": true,
+            "cooldown": 60,
+            "min": 15,
+            "max": 25,
+            "card": {
+                "accent_color": "#ffbb5c",
+                "background": "#090a0b",
+                "background_opacity": 100
+            }
+        },
+        "buttons_timeout": 60000
+    },
+    "database": {
+        "type": "sqlite",
+        "connection_string": "./database.db"
+    },
+    "web": {
+        "port": 80,
+        "url": "http://localhost/"
+    },
+    "logger": {
+        "level": "log",
+        "file": "./logs.log",
+        "options": {
+            "stdout": true,
+            "file": true
+        }
+    },
+    "imgur_client_id": "<Imgur Client ID>",
+    "weather_api_key": "<OpenWeatherMap API Key>"
+}

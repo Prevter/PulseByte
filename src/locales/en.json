@@ -1,0 +1,426 @@
+{
+    "anime": {
+        "_args_desc": {
+            "query": "The anime to search for"
+        },
+        "_description": "Search for an anime on Kitsu.io",
+        "_usage": "<query>",
+        "age_rating": "🔞 Age restriction",
+        "aired": "📅 Aired",
+        "aired_format": "from **{0}** to **{1}**",
+        "average_rating": "⭐ Average rating",
+        "duration": "⏱️ Duration",
+        "genres": "📚 Genres",
+        "rank": "🏆 Rank",
+        "status": "⏳ Status",
+        "statuses": {
+            "current": "Current",
+            "finished": "Finished"
+        },
+        "total_episodes": "💿 Total episodes",
+        "type": "📺 Type"
+    },
+    "autoplay": {
+        "_description": "Toggle autoplay for the current queue",
+        "success": "{0} Autoplay is now {1} for this queue!"
+    },
+    "ban": {
+        "_args_desc": {
+            "member": "The member to ban",
+            "reason": "The reason for the ban"
+        },
+        "_description": "Ban a member from the current guild",
+        "_usage": "<member> [reason]",
+        "description": "Reason: {0}",
+        "failed": "❌ Failed to ban member!",
+        "higher_role": "❌ You can't ban a member with a higher role than you!",
+        "no_member": "❌ Member not found!",
+        "no_reason": "No reason provided",
+        "not_bannable": "❌ I can't ban this member!",
+        "self": "❌ You can't ban yourself!",
+        "title": "{0} was banned!"
+    },
+    "experience": {
+        "_description": "Toggle XP system in the current guild",
+        "current": "XP System is now {0} for this guild!"
+    },
+    "filter": {
+        "3d": "Audio spins around the listener in a circle",
+        "_args_desc": {
+            "filter": "The filter to apply (`off` to disable all filters)"
+        },
+        "_description": "Apply a filter to the current queue",
+        "_usage": "[filter|off]",
+        "bassboost": "Boosts the bass of the audio",
+        "earwax": "Make audio \"easier\" to listen to",
+        "echo": "Adds an echo effect to the audio",
+        "flanger": "Flanging effect on the audio",
+        "gate": "Clears audio noise",
+        "haas": "Precedence effect",
+        "karaoke": "Removes the vocals from the audio",
+        "mcompand": "Expand audio dynamic range",
+        "nightcore": "Speeds up the audio",
+        "phaser": "Creates series of peaks and troughs in the audio",
+        "reverse": "Reverses the audio",
+        "success": {
+            "disable": "🔴 Filter `{0}` disabled!",
+            "enable": "🟢 Filter `{0}` enabled!",
+            "off": "✅ All filters disabled!"
+        },
+        "surround": "Surround upmix filter",
+        "title": "🔊 Filters",
+        "tremolo": "Modulation of the volume",
+        "vaporwave": "Slow down the audio and adds an echo effect"
+    },
+    "global": {
+        "admin_only": "This command is only available to server administrators!",
+        "disabled": "disabled",
+        "enabled": "enabled",
+        "guild_only": "This command is only available in guilds!",
+        "missing_permissions": "You are missing the following permissions: {0}",
+        "no_description": "No description provided",
+        "no_query": "⚠️ You must specify a search query!",
+        "none": "None",
+        "not_found": "❌ No results found!",
+        "not_implemented": "⚠️ This command is not implemented yet",
+        "owner_only": "This command is only available to the bot owner!",
+        "slash_only": "This command is only available as a slash command!"
+    },
+    "help": {
+        "_args_desc": {
+            "category": "The category to show information about",
+            "command": "The command to show information about"
+        },
+        "_description": "Shows a list of categories or information about a specific command",
+        "_usage": "[command|category]",
+        "admin": "Admin",
+        "admin_desc": "Commands that require administrator permissions",
+        "aliases": "Aliases",
+        "categories": "Categories",
+        "category": "Category",
+        "command": "`{0}` command",
+        "general": "General",
+        "general_desc": "General commands that everyone can use",
+        "levels": "Levels",
+        "levels_desc": "Give your members XP when they send messages and rank them in a leaderboard",
+        "moderator": "Moderator",
+        "moderator_desc": "Commands for moderating your server",
+        "music": "Music",
+        "music_desc": "Commands for playing music in voice channels",
+        "not_found": "Command `{0}` not found!",
+        "search": "Search",
+        "search_desc": "Commands that search for things",
+        "usage": "Usage",
+        "utils": "Utils",
+        "utils_desc": "Utility commands"
+    },
+    "imgur": {
+        "_args_desc": {
+            "query": "The image to search for"
+        },
+        "_description": "Search for an image on Imgur",
+        "_usage": "<query>"
+    },
+    "invite": {
+        "_description": "Get bot's invite link",
+        "message": "Invite me to your server with this link: {0}"
+    },
+    "join": {
+        "_description": "Join the voice channel you are in",
+        "success": "✅ Successfully joined voice channel!"
+    },
+    "kick": {
+        "_args_desc": {
+            "member": "The member to kick",
+            "reason": "The reason for the kick"
+        },
+        "_description": "Kick a member from the current guild",
+        "_usage": "<member> [reason]",
+        "description": "Reason: {0}",
+        "failed": "❌ Failed to kick member!",
+        "higher_role": "❌ You can't kick a member with a higher role than you!",
+        "no_member": "❌ Member not found!",
+        "no_reason": "No reason provided",
+        "not_kickable": "❌ I can't kick this member!",
+        "self": "❌ You can't kick yourself!",
+        "title": "{0} was kicked!"
+    },
+    "language": {
+        "_args_desc": {
+            "language": "The language code to use"
+        },
+        "_description": "Change the bot's language",
+        "_usage": "<language code>",
+        "name": "🇺🇸 English",
+        "supported": "Supported languages",
+        "updated": "Language has been updated to 🇺🇸 English"
+    },
+    "leaderboard": {
+        "_description": "Shows the top 10 members with the most XP",
+        "description": "[View full leaderboard online]({0}leaderboard/{1})",
+        "page": "Page {0} of {1} ({2} members)",
+        "title": "🏆 Leaderboard",
+        "xp_level_messages": "XP: **{0}** | Level: **{1}** | Messages: **{2}**"
+    },
+    "leave": {
+        "_description": "Leave the voice channel you are in",
+        "no_voice": "❌ I'm not in a voice channel!",
+        "success": "✅ Successfully left voice channel!"
+    },
+    "manga": {
+        "_args_desc": {
+            "query": "The manga to search for"
+        },
+        "_description": "Search for a manga on Kitsu.io",
+        "_usage": "<query>",
+        "chapters": "📖 Chapters",
+        "published": "📅 Published",
+        "volumes": "📕 Volumes"
+    },
+    "music": {
+        "no_queue": "❌ There aren't any music playing right now",
+        "no_voice": "❌ You must be in a voice channel to use this command!"
+    },
+    "mute": {
+        "_args_desc": {
+            "member": "The member to mute",
+            "reason": "The reason for the mute",
+            "time": "Duration of the mute"
+        },
+        "_description": "Mute a member from the current guild",
+        "_usage": "<member> <time> [reason]",
+        "description": "Reason: {0}\nDuration: {1}",
+        "failed": "❌ Failed to mute member!",
+        "higher_role": "❌ You can't mute a member with a higher role than you!",
+        "invalid_time": "❌ Invalid time format! Valid formats are: `1h`, `1h30m`, `1d2h30m`",
+        "no_member": "❌ Member not found!",
+        "no_reason": "No reason provided",
+        "no_time": "❌ You must specify a duration to mute the member for!",
+        "not_muteable": "❌ I can't mute this member!",
+        "self": "❌ You can't mute yourself!",
+        "title": "{0} was muted!"
+    },
+    "nowplaying": {
+        "_description": "Show the currently playing song",
+        "duration": "⏱️ Duration",
+        "requested_by": "👤 Requested by",
+        "views": "👀 Views"
+    },
+    "pause": {
+        "_description": "Pause/resume the current song",
+        "paused": "⏸️ Paused the music!",
+        "resumed": "▶️ Resumed the music!"
+    },
+    "permissions": {
+        "BanMembers": "Ban members"
+    },
+    "play": {
+        "_args_desc": {
+            "query": "Query to search or URL"
+        },
+        "_description": "Play music in a voice channel",
+        "_usage": "<query|URL>",
+        "added": "✅ Added **{0}** by **{1}** *({2})* to the queue!",
+        "error": "❌ **{0}**",
+        "no_query": "❌ You must specify a query or URL to play!",
+        "not_found": "Song not found!",
+        "success": "✅ Started playing"
+    },
+    "playnow": {
+        "_args_desc": {
+            "query": "Query to search or URL"
+        },
+        "_description": "Add music to the front of the queue",
+        "_usage": "<query|URL>"
+    },
+    "playskip": {
+        "_args_desc": {
+            "query": "Query to search or URL"
+        },
+        "_description": "Play music and skip the current song",
+        "_usage": "<query|URL>"
+    },
+    "prefix": {
+        "_args_desc": {
+            "prefix": "The new prefix to use"
+        },
+        "_description": "Change the bot's prefix",
+        "_usage": "<new prefix>",
+        "current": "The current prefix is `{0}`",
+        "too_long": "The prefix must be 5 characters or less!",
+        "updated": "The prefix has been updated to `{0}`"
+    },
+    "previous": {
+        "_description": "Play the previous song",
+        "success": "↩️ Playing the previous song!"
+    },
+    "queue": {
+        "_description": "Get the current music queue",
+        "now_playing": "**Now playing**",
+        "page": "Page {0} of {1} ({2} songs)",
+        "queue": "**Queue**",
+        "title": "🎶 Current queue",
+        "total_duration": "**Total playtime**: `{0}`"
+    },
+    "rank": {
+        "_args_desc": {
+            "member": "The member to get the rank of"
+        },
+        "_description": "Get your rank or another member's rank",
+        "_usage": "[member]",
+        "level": "LEVEL",
+        "rank": "RANK",
+        "user_not_found": "❌ User not found or doesn't have any XP!",
+        "xp_disabled": "❌ XP is disabled in this guild!"
+    },
+    "repeat": {
+        "_args_desc": {
+            "mode": "The repeat mode to use. Valid modes are: `off`, `song`, `queue`"
+        },
+        "_description": "Change the repeat mode",
+        "_usage": "<mode>",
+        "invalid_mode": "❌ Invalid repeat mode! Valid modes are: `off`, `song`, `queue`",
+        "no_mode": "❌ You must specify a repeat mode to use!",
+        "success": {
+            "0": "➡️ Repeat mode has been disabled!",
+            "1": "🔂 Repeat mode has been enabled for the current song!",
+            "2": "🔁 Repeat mode has been enabled for the queue!"
+        }
+    },
+    "seek": {
+        "_args_desc": {
+            "time": "The time to seek to. Format: `24`, `1:30`, `1:23:45`"
+        },
+        "_description": "Seek to a specific time in the current song",
+        "_usage": "<time>",
+        "error": "❌ Failed to seek to **{0}**!",
+        "invalid_time": "❌ Invalid time format! Valid formats are: `24`, `1:30`, `1:23:45`",
+        "no_time": "❌ You must specify time to seek to!",
+        "success": "✅ Seeked to **{0}**!"
+    },
+    "shuffle": {
+        "_description": "Shuffle the current queue",
+        "success": "🔀 Queue has been shuffled!"
+    },
+    "skip": {
+        "_args_desc": {
+            "count": "The number of songs to skip"
+        },
+        "_description": "Skip the current song (or multiple songs)",
+        "_usage": "[count]",
+        "error": "❌ Failed to skip current song!",
+        "success": "✅ Skipped current song!"
+    },
+    "status": {
+        "_description": "Get bot's status (uptime, memory, etc.)",
+        "connecting": "Starting up...",
+        "day": {
+            "one": "day",
+            "other": "days"
+        },
+        "description": "I am active on {0} servers",
+        "memory": "📈 Memory usage",
+        "memory_format": "{0} MB",
+        "node_version": "Node.js version: {0}",
+        "os": "🖥️ Operating system",
+        "os_format": "{0} {1}",
+        "ping": "🏓 Ping",
+        "ping_format": "{0} ms",
+        "title": "Bot status",
+        "total_memory": "💾 Total memory",
+        "total_memory_format": "{0} / {1} GB",
+        "uptime": "⏱️ Uptime"
+    },
+    "stop": {
+        "_description": "Stop the music and clear the queue",
+        "success": "✅ Successfully stopped the music!"
+    },
+    "unban": {
+        "_args_desc": {
+            "member": "Member ID to unban"
+        },
+        "_description": "Unban a member from the current guild",
+        "_usage": "<member>",
+        "failed": "❌ Failed to unban member!",
+        "no_member": "❌ Member not found!",
+        "title": "{0} was unbanned!"
+    },
+    "unmute": {
+        "_args_desc": {
+            "member": "The member to mute"
+        },
+        "_description": "Unmute a member from the current guild",
+        "_usage": "<member>",
+        "failed": "❌ Failed to unmute member!",
+        "no_member": "❌ Member not found!",
+        "not_unmuteable": "❌ I can't unmute this member!",
+        "title": "{0} was unmuted!"
+    },
+    "urban": {
+        "_args_desc": {
+            "query": "The term to search for"
+        },
+        "_description": "Search for a term on Urban Dictionary",
+        "_usage": "<query>",
+        "author": "Sent by {0}",
+        "example": "Example",
+        "title": "Definition of {0}"
+    },
+    "volume": {
+        "_args_desc": {
+            "volume": "The new volume to use"
+        },
+        "_description": "Change the music volume",
+        "_usage": "<volume>",
+        "current_volume": "🔊 Current volume is **{0}%**",
+        "invalid_volume": "❌ Volume must be between 0 and {0}!",
+        "success": "✅ Updated volume to **{0}**%"
+    },
+    "warstats": {
+        "_description": "Get latest stats of russian losses",
+        "aa_warfare_systems": "Anti-aircraft",
+        "armoured_fighting_vehicles": "Armored Vehicles",
+        "artillery_systems": "Artillery",
+        "atgm_srbm_systems": "ATGM/SRBM",
+        "cruise_missiles": "Missiles",
+        "data_verifying": "The data is being verified. The calculation is complicated by the high intensity of hostilities",
+        "description": "According to the General Staff of the AFU",
+        "helicopters": "Helicopters",
+        "mlrs": "MLRS",
+        "personnel_units": "Military personnel",
+        "planes": "Planes",
+        "special_military_equip": "Special equip.",
+        "tanks": "Tanks",
+        "th_day": "-th day",
+        "title": "Enemy losses",
+        "uav_systems": "UAV",
+        "vehicles_fuel_tanks": "Cars",
+        "warships_cutters": "Ships"
+    },
+    "weather": {
+        "_args_desc": {
+            "city": "The location to get the weather for"
+        },
+        "_description": "Get the weather for a location",
+        "_usage": "<city>",
+        "clouds": "☁️ Cloudiness",
+        "description": "**{0}°C** {1}",
+        "feels_like": "🌡️ Feels like",
+        "humidity": "💧 Humidity",
+        "local_time": "🕒 Local time",
+        "no_city": "❌ You must specify a city to get the weather for!",
+        "not_found": "❌ City not found!",
+        "pressure": "📊 Pressure",
+        "pressure_format": "**{0}** hPa",
+        "sunrise": "🌅 Sunrise",
+        "sunset": "🌇 Sunset",
+        "title": "Weather in **{0}**",
+        "visibility": "👀 Visibility",
+        "visibility_format": "**{0}** m",
+        "wind": "💨 Wind",
+        "wind_format": "**{0}** m/s *({1}°)*"
+    },
+    "xp": {
+        "level_up": "⬆️ You are now level {0}!"
+    }
+}
