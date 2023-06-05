@@ -97,6 +97,6 @@ module.exports = class extends Command {
 
         const song = queue.songs[0];
         const embed = module.exports.createEmbed(locale, song, queue, true);
-        await message.channel.send({ embeds: [embed] });
+        await message.reply({ embeds: [embed] });
     }
 }

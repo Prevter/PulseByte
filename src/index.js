@@ -41,10 +41,6 @@ client.once(Events.ClientReady, c => {
 
 client.on("messageCreate", (msg) => messageHandler(client, msg));
 client.on("interactionCreate", (int) => slashCommandHandler(client, int));
-client.on("interactionCreate", (int) => {
-    // TODO: make button, modal, select menu handler
-});
-
 client.login();
 
 // Express

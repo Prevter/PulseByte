@@ -44,6 +44,34 @@
         "_description": "Toggle XP system in the current guild",
         "current": "XP System is now {0} for this guild!"
     },
+    "filter": {
+        "3d": "Audio spins around the listener in a circle",
+        "_args_desc": {
+            "filter": "The filter to apply (`off` to disable all filters)"
+        },
+        "_description": "Apply a filter to the current queue",
+        "_usage": "[filter|off]",
+        "bassboost": "Boosts the bass of the audio",
+        "earwax": "Make audio \"easier\" to listen to",
+        "echo": "Adds an echo effect to the audio",
+        "flanger": "Flanging effect on the audio",
+        "gate": "Clears audio noise",
+        "haas": "Precedence effect",
+        "karaoke": "Removes the vocals from the audio",
+        "mcompand": "Expand audio dynamic range",
+        "nightcore": "Speeds up the audio",
+        "phaser": "Creates series of peaks and troughs in the audio",
+        "reverse": "Reverses the audio",
+        "success": {
+            "disable": "🔴 Filter `{0}` disabled!",
+            "enable": "🟢 Filter `{0}` enabled!",
+            "off": "✅ All filters disabled!"
+        },
+        "surround": "Surround upmix filter",
+        "title": "🔊 Filters",
+        "tremolo": "Modulation of the volume",
+        "vaporwave": "Slow down the audio and adds an echo effect"
+    },
     "global": {
         "admin_only": "This command is only available to server administrators!",
         "disabled": "disabled",
@@ -97,34 +125,6 @@
         "_description": "Get bot's invite link",
         "message": "Invite me to your server with this link: {0}"
     },
-    "filter": {
-        "_args_desc": {
-            "filter": "The filter to apply (`off` to disable all filters)"
-        },
-        "_description": "Apply a filter to the current queue",
-        "_usage": "[filter|off]",
-        "title": "🔊 Filters",
-        "3d": "Audio spins around the listener in a circle",
-        "bassboost": "Boosts the bass of the audio",
-        "echo": "Adds an echo effect to the audio",
-        "karaoke": "Removes the vocals from the audio",
-        "nightcore": "Speeds up the audio",
-        "vaporwave": "Slow down the audio and adds an echo effect",
-        "flanger": "Flanging effect on the audio",
-        "gate": "Clears audio noise",
-        "haas": "Precedence effect",
-        "reverse": "Reverses the audio",
-        "surround": "Surround upmix filter",
-        "mcompand": "Expand audio dynamic range",
-        "phaser": "Creates series of peaks and troughs in the audio",
-        "tremolo": "Modulation of the volume",
-        "earwax": "Make audio \"easier\" to listen to",
-        "success": {
-            "off": "✅ All filters disabled!",
-            "enable": "🟢 Filter `{0}` enabled!",
-            "disable": "🔴 Filter `{0}` disabled!"
-        }
-    },
     "join": {
         "_description": "Join the voice channel you are in",
         "success": "✅ Successfully joined voice channel!"
@@ -157,10 +157,10 @@
     },
     "leaderboard": {
         "_description": "Shows the top 10 members with the most XP",
+        "description": "[View full leaderboard online]({0}leaderboard/{1})",
+        "page": "Page {0} of {1} ({2} members)",
         "title": "🏆 Leaderboard",
-        "xp_level_messages": "XP: **{0}** | Level: **{1}** | Messages: **{2}**",
-        "page":"Page {0} of {1} ({2} members)",
-        "description": "[View full leaderboard online]({0}leaderboard/{1})"
+        "xp_level_messages": "XP: **{0}** | Level: **{1}** | Messages: **{2}**"
     },
     "leave": {
         "_description": "Leave the voice channel you are in",
@@ -178,8 +178,8 @@
         "volumes": "📕 Volumes"
     },
     "music": {
-        "no_voice": "❌ You must be in a voice channel to use this command!",
-        "no_queue": "❌ There aren't any music playing right now"
+        "no_queue": "❌ There aren't any music playing right now",
+        "no_voice": "❌ You must be in a voice channel to use this command!"
     },
     "mute": {
         "_args_desc": {
@@ -250,7 +250,7 @@
         "too_long": "The prefix must be 5 characters or less!",
         "updated": "The prefix has been updated to `{0}`"
     },
-    "previous":{
+    "previous": {
         "_description": "Play the previous song",
         "success": "↩️ Playing the previous song!"
     },
@@ -279,8 +279,8 @@
         },
         "_description": "Change the repeat mode",
         "_usage": "<mode>",
-        "no_mode": "❌ You must specify a repeat mode to use!",
         "invalid_mode": "❌ Invalid repeat mode! Valid modes are: `off`, `song`, `queue`",
+        "no_mode": "❌ You must specify a repeat mode to use!",
         "success": {
             "0": "➡️ Repeat mode has been disabled!",
             "1": "🔂 Repeat mode has been enabled for the current song!",
@@ -293,10 +293,10 @@
         },
         "_description": "Seek to a specific time in the current song",
         "_usage": "<time>",
-        "no_time": "❌ You must specify time to seek to!",
+        "error": "❌ Failed to seek to **{0}**!",
         "invalid_time": "❌ Invalid time format! Valid formats are: `24`, `1:30`, `1:23:45`",
-        "success": "✅ Seeked to **{0}**!",
-        "error": "❌ Failed to seek to **{0}**!"
+        "no_time": "❌ You must specify time to seek to!",
+        "success": "✅ Seeked to **{0}**!"
     },
     "shuffle": {
         "_description": "Shuffle the current queue",
@@ -372,7 +372,7 @@
         },
         "_description": "Change the music volume",
         "_usage": "<volume>",
-        "current_volume": "🔊 Current volume is **{0}**%",
+        "current_volume": "🔊 Current volume is **{0}%**",
         "invalid_volume": "❌ Volume must be between 0 and {0}!",
         "success": "✅ Updated volume to **{0}**%"
     },
