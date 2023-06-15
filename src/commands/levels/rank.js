@@ -117,7 +117,10 @@ module.exports = class extends Command {
         const avatar = await loadImage(avatar_body);
         drawAvatar(avatar, 40, 60, 160, 160);
         text(user_data.username, 260, 140, 330, 32, '#ffffff', 'left');
-        text('#' + user_data.discriminator, 260 + calculateTextWidth(user_data.username, 32) + 5, 146, 100, 24, '#aaaaaa', 'left');
+        
+        // check if discriminator is not 0
+        if (user_data.discriminator != '0')
+            text('#' + user_data.discriminator, 260 + calculateTextWidth(user_data.username, 32) + 5, 146, 100, 24, '#aaaaaa', 'left');
 
         // XP
         const level = XPModule.getLevel(user_data.xp);

@@ -42,7 +42,7 @@ module.exports = class XPModule extends Module {
     
                 if (new_level > level) {
                     message.reply(locale('xp.level_up', new_level));
-                    this.logger.log(`⬆️ User ${user_data.id} leveled up to level ${new_level} in guild ${user_data.guild_id}`)
+                    this.logger.log(`[XP] ⬆️ User ${user_data.id} leveled up to level ${new_level} in guild ${user_data.guild_id}`)
                 }
             }
             this.database.updateUser(user_data);
@@ -56,7 +56,7 @@ module.exports = class XPModule extends Module {
                 last_message: current_time
             }
             this.database.createUser(user_data);
-            this.logger.log(`👤 Created user ${user_data.id} in guild ${user_data.guild_id}`)
+            this.logger.log(`[XP] 👤 Created user ${user_data.id} in guild ${user_data.guild_id}`)
         }
     }
 }

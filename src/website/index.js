@@ -7,7 +7,7 @@ module.exports = (logger, client, database) => {
     router.get('/', (req, res) => {
         ejs.renderFile("./src/website/pages/index.ejs", { client }, {}, function (err, str) {
             if (err) {
-                logger.error(err);
+                logger.error('[WEBSITE]', err);
                 return res.send("An error occurred while rendering the page.");
             }
             

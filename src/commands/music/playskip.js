@@ -39,7 +39,7 @@ module.exports = class extends Command {
             await interaction.reply({ embeds: [Command.createEmbed({ description: locale('play.success') })] });
         }
         catch (e) {
-            this.client.logger.error(e);
+            this.client.logger.error('[PLAYSKIP]', e);
             await interaction.reply({ embeds: [Command.createErrorEmbed(locale('play.error', err.message))] });
         }
 

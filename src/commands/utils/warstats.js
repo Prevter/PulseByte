@@ -136,7 +136,7 @@ module.exports = class extends Command {
                     resolve(response);
                 });
             }).on('error', function (e) {
-                this.logger.error("WarStats error:", e);
+                this.logger.error('[WARSTATS]', e);
                 reject(e);
             });
         });

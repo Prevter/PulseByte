@@ -1,6 +1,7 @@
 const discord = require('discord.js');
 const localeBuilder = require('../locale');
 const config = require('../../config');
+require('../utils.js')
 
 const https = require("https");
 const fs = require('fs');
@@ -222,7 +223,7 @@ module.exports = class Command {
             }
         }
         catch (e) {
-            process.logger.error(`Failed to create embed on step ${creationStep}. Full embed object: \n${JSON.stringify(options, null, 4)}`);
+            process.logger.error(`[COMMAND] Failed to create embed on step ${creationStep}. Full embed object: \n${JSON.stringify(options, null, 4)}`);
         }
 
         return embed;

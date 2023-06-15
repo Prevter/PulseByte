@@ -20,6 +20,78 @@ const con_string = config.database.connection_string;
 const db_context = require(`./database/${config.database.type}`)
 const database = new db_context(con_string, logger);
 
+// Database backup
+if (config.database.enable_backup) {
+    const fs = require('fs');
+    const path = require('path');
+
+    const doBackup = async () => {
+        logger.info('[BACKUP] 💾 Starting backup...');
+
+        const db_export = await database.export();
+        let files = {};
+        for (const key in db_export) {
+            const data = JSON.stringify(db_export[key], null, 4);
+            files[`${key}.bak`] = data;
+        }
+
+        if (!fs.existsSync(config.database.backup_path))
+            fs.mkdirSync(config.database.backup_path);
+
+        const date_str = new Date().toLocaleString()
+            .replace(/\./g, '-')
+            .replace(/\, /g, '_')
+            .replace(/\:/g, '-');
+        const backup_dir = path.join(config.database.backup_path, date_str);
+        fs.mkdirSync(backup_dir);
+
+        // Write files
+        for (const filename in files) {
+            fs.writeFile(`${backup_dir}/${filename}`, files[filename], (err) => {
+                if (err) {
+                    logger.error(`[BACKUP] Failed to export ${filename} to ${backup_dir}`, err);
+                    return;
+                }
+        
+            });
+        }
+
+        logger.info(`[BACKUP] 💾 Saved backup in '${date_str}'`);
+        
+        fs.readdir(config.database.backup_path, (err, files) => {
+            files.sort((a, b) => {
+                // get date from folder name
+                // format: YYYY-MM-DD_HH-MM-SS
+                // newest should be first
+                const date_a = a.split('_')[0].split('-');
+                const time_a = a.split('_')[1].split('-');
+                const date_b = b.split('_')[0].split('-');
+                const time_b = b.split('_')[1].split('-');
+
+                const date_a_obj = new Date(date_a[0], date_a[1], date_a[2], time_a[0], time_a[1], time_a[2]);
+                const date_b_obj = new Date(date_b[0], date_b[1], date_b[2], time_b[0], time_b[1], time_b[2]);
+
+                return date_b_obj - date_a_obj;
+            });
+
+            for (let i = config.database.backup_count; i < files.length; i++) {
+                const file = files[i];
+                fs.rm(`${config.database.backup_path}/${file}`, { recursive: true }, (err) => {
+                    if (err) {
+                        logger.error(`[BACKUP] Failed to delete ${file}`, err);
+                        return;
+                    }
+            
+                    logger.info(`[BACKUP] Deleted old backup '${file}'`);
+                });
+            }
+        });
+    };
+
+    setInterval(doBackup, config.database.backup_interval);
+    if (config.database.backup_on_start) doBackup();
+}
+
 // Discord
 const { Events, ActivityType } = require('discord.js');
 const { messageHandler, slashCommandHandler } = require('./handlers');
@@ -29,7 +101,7 @@ client.init();
 
 // Handlers
 client.once(Events.ClientReady, c => {
-    logger.info(`✅ Ready! Logged in as ${c.user.id}`);
+    logger.info(`[DISCORD] ✅ Ready! Logged in as ${c.user.id}`);
 
     c.user.setActivity({
         name: config.bot.activity.name,
@@ -49,7 +121,7 @@ app.use('/', router);
 app.use(express.static('./src/website/public'));
 
 app.listen(port, () => {
-    logger.info(`🚀 Server listening on port ${port}`);
+    logger.info(`[WEBSITE] 🚀 Server listening on port ${port}`);
 });
 
 // Exit handlers and error handlers

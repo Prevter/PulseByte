@@ -30,7 +30,7 @@ module.exports = class extends Command {
         }
 
         return Command.createEmbed({
-            title: locale('unmute.title', member.user.tag),
+            title: locale('unmute.title', member.user.tag.stripTag(true)),
             author: {
                 name: author.user.username,
                 iconURL: author.user.avatarURL()

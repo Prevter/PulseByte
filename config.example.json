@@ -28,8 +28,13 @@
         "buttons_timeout": 60000
     },
     "database": {
-        "type": "sqlite",
-        "connection_string": "./database.db"
+        "type": "mongodb",
+        "connection_string": "mongodb://127.0.0.1:27017/bot",
+        "enable_backup": false,
+        "backup_interval": 3600000,
+        "backup_count": 5,
+        "backup_path": "./backups/",
+        "backup_on_start": false
     },
     "web": {
         "port": 80,

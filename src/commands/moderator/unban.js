@@ -31,7 +31,7 @@ module.exports = class extends Command {
         } catch (e) { }
 
         return Command.createEmbed({
-            title: locale('unban.title', member.user.tag),
+            title: locale('unban.title', member.user.tag.stripTag(true)),
             author: {
                 name: author.user.username,
                 iconURL: author.user.avatarURL()

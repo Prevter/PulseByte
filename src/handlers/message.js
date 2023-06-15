@@ -2,6 +2,7 @@ const { PermissionsBitField } = require('discord.js');
 const config = require('../../config');
 const localeBuilder = require('../locale');
 const Command = require('../types/command');
+require('../utils.js');
 
 module.exports = async (client, message) => {
     if (message.author.bot) return;
@@ -41,7 +42,8 @@ module.exports = async (client, message) => {
     const cmd = client.commands.find(c => c.name === command || c.aliases.includes(command));
     if (!cmd) return;
 
-    client.logger.log(`📨 ${message.author.tag} called a command: ${message.content}`)
+
+    client.logger.log(`[MESSAGE] 📨 ${message.author.tag.stripTag(true)} called a command: ${message.content}`)
 
     if (cmd.slash_only)
         return message.reply({ embeds: [Command.createErrorEmbed(locale('global.slash_only'))] });

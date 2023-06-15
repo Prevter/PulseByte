@@ -30,7 +30,7 @@ module.exports = class DiscordClient {
      * Starts the client and loads all the commands and modules
      */
     init() {
-        this.logger.info('🤖 Connecting to Discord...');
+        this.logger.info('[DISCORD] 🤖 Connecting...');
 
         this.client = new discord.Client({
             intents: [
@@ -79,7 +79,7 @@ module.exports = class DiscordClient {
         });
 
         this.client.distube.on("searchNoResult", async (message, query) => {
-            console.warn(`No results found for query: ${query}`);
+            console.warn(`[DISTUBE] No results found for query: ${query}`);
         });
 
         this.reloadCommands();
@@ -135,7 +135,7 @@ module.exports = class DiscordClient {
 
         const rest = new discord.REST({ version: '10' }).setToken(this.token);
         try {
-            this.logger.info(`🔄️ Started refreshing ${cmds.length} commands.`);
+            this.logger.info(`[DISCORD] 🔄️ Started refreshing ${cmds.length} commands.`);
             const data = await rest.put(
                 discord.Routes.applicationCommands(this.client.user.id),
                 { body: cmds },
@@ -144,9 +144,9 @@ module.exports = class DiscordClient {
                 const command = this.commands.find(c => c.name === cmd.name);
                 command._id = cmd.id;
             }
-            this.logger.info(`✅ Successfully reloaded ${data.length} commands.`);
+            this.logger.info(`[DISCORD] ✅ Successfully reloaded ${data.length} commands.`);
         } catch (error) {
-            this.logger.error(error);
+            this.logger.error('[DISCORD]', error);
         }
     }
 

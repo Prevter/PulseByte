@@ -41,7 +41,7 @@ module.exports = class extends Command {
         }
 
         return Command.createEmbed({
-            title: locale('kick.title', member.user.tag),
+            title: locale('kick.title', member.user.tag.stripTag(true)),
             description: locale('kick.description', reason ?? locale('kick.no_reason')),
             author: {
                 name: author.user.username,

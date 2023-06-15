@@ -56,14 +56,14 @@ module.exports = (locale) => {
                 value = getNestedKey(defaultLocale, key);
             }
             catch (e) {
-                process.logger.error(`Locale key '${key}' not found in default locale '${config.default_language}'!`)
+                process.logger.error(`[LOCALE] Locale key '${key}' not found in default locale '${config.default_language}'!`)
             }
 
             if (!value) return null;
         }
 
         if (!value) {
-            process.logger.warn(`Locale key '${key}' not found in '${locale}'${!defaultNull ? ` and '${config.default_language}'` : ''}!`)
+            process.logger.warn(`[LOCALE] Locale key '${key}' not found in '${locale}'${!defaultNull ? ` and '${config.default_language}'` : ''}!`)
             return null;
         }
 

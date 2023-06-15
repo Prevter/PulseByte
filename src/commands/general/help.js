@@ -14,7 +14,7 @@ module.exports = class extends Command {
         const categories = _categories.map(value => ({
             name: client.locale(`help.${value}`) ?? value,
             value
-        }));
+        })).filter(c => c.name !== 'owner');
 
         super(client, database, {
             name: 'help',

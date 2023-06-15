@@ -2,6 +2,7 @@ const { PermissionsBitField } = require('discord.js');
 const config = require('../../config');
 const localeBuilder = require('../locale');
 const Command = require('../types/command');
+require('../utils.js')
 
 module.exports = async (client, interaction) => {
     if (!interaction.isChatInputCommand()) return;
@@ -26,7 +27,8 @@ module.exports = async (client, interaction) => {
     interaction.guild_data = guild;
     interaction.user_data = user;
 
-    client.logger.log(`📨 ${interaction.user.tag} called a slash command: ${interaction.commandName}`)
+    const arg_string = interaction.options.data.map(o => o.value).join(' ');
+    client.logger.log(`[INTERACTION] 📨 ${interaction.user.tag.stripTag(true)} called a slash command: ${interaction.commandName} ${arg_string}`)
 
     const locale = localeBuilder(guild ? guild.language : config.default_language);
 

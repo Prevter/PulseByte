@@ -12,3 +12,4 @@ package-lock.json
 # Config and database
 config.json
 database.db
+backups/

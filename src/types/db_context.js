@@ -21,13 +21,32 @@ module.exports = class DatabaseContext {
      */
     close() { }
     
+    /**
+     * Exports each table
+     */
+    async export() {
+        const guilds = await this.getGuilds();
+        let users = [];
+        for (const guild of guilds) {
+            const guild_users = await this.getUsers(guild.id);
+            users = users.concat(guild_users);
+        }
+        const profiles = await this.getProfiles();
+
+        return {
+            guilds,
+            users,
+            profiles
+        };
+    }
+
     async getGuilds() { notImplemented(); }
     async getGuild(guild_id) { notImplemented(); }
     async createGuild(guild) { notImplemented(); }
     async updateGuild(guild) { notImplemented(); }
     async deleteGuild(guild_id) { notImplemented(); }
 
-    async getUsers() { notImplemented(); }
+    async getUsers(guild_id) { notImplemented(); }
     async getUser(user_id, guild_id) { notImplemented(); }
     async createUser(user) { notImplemented(); }
     async updateUser(user) { notImplemented(); }

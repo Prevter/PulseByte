@@ -39,7 +39,7 @@ module.exports = class extends Command {
             }
             return await interaction.reply({ embeds: [Command.createEmbed({ description: locale('skip.success') })] })
         } catch (e) {
-            this.logger.error('Error skipping track:', e);
+            this.logger.error('[SKIP] Error skipping track:', e);
             return await interaction.reply({ embeds: [Command.createErrorEmbed(locale('skip.error'))] })
         }
     }
@@ -69,7 +69,7 @@ module.exports = class extends Command {
             }
             await message.react('✅');
         } catch (e) {
-            this.logger.error('Error skipping track:', e);
+            this.logger.error('[SKIP] Error skipping track:', e);
             await message.react('❌');
         }
     }
