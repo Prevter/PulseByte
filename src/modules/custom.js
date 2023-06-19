@@ -249,7 +249,14 @@ module.exports = class CustomCommands extends Module {
             if (!cmd) return;
 
             // Run actions
-            let storage = { "$message": message, "$guild": message.guild, "$channel": message.channel, "$user": message.author, "$content": message.content };
+            let storage = { 
+                "$message": message, 
+                "$guild": message.guild, 
+                "$channel": message.channel, 
+                "$user": message.author, 
+                "$content": message.content,
+                "$mention": `<@${message.author.id}>`,
+            };
             for (const action of cmd) {
                 await action.run(message, storage);
             }

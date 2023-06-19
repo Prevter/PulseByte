@@ -150,7 +150,7 @@ module.exports = class Command {
      * @param {Object} args Command arguments
     */
     async runAsSlash(interaction, locale, args) {
-        this.run(interaction, locale, args);
+        this.run(interaction, locale, Object.values(args));
     }
 
     /**

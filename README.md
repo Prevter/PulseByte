@@ -1,7 +1,6 @@
 # SashkoBot
 Multipurpose Discord bot. Supports multiple languages, has a lot of commands and features. Can work with prefix commands and slash commands. Has an XP system, economy, music, moderation, and much more. *(MEE6 replacement)*  
-This is a third iteration of this project, written in JavaScript.  
-**Currently in beta.**
+This is a third iteration of this project, written in JavaScript. 
 
 ## Running
 Install all requirements using npm:
@@ -9,11 +8,83 @@ Install all requirements using npm:
 npm i
 ```
 
+### Config file
 Rename `config.example.json` to `config.json` and fill it with your bot token and prefix. You can also change other settings there.  
-You should also change settings for database connection. Supported database backends are:
-- `sqlite` - SQLite database. Connection string should be the path to the database file. Example: `"./storage.db"`
 
-> (more coming soon)
+Example config file:
+```js
+{
+    "name": "My Bot", // Bot name
+    "default_language": "en", // Default language code
+    "bot": {
+        "token": "<Discord Bot Token>", // Your bot token
+        "prefix": "-", // Default bot prefix
+        "owners": [ // Array of bot owners
+            "400199033915965441"
+        ],
+        "embed_color": "#0099FF", // Default embed color
+        "error_embed_color": "#F04848", // Default embed color for error messages
+        "activity": { // Bot activity (displayed in status)
+            "status": "online", // Bot status (online, idle, dnd, invisible)
+            "type": "PLAYING", // Bot activity type (PLAYING, STREAMING, LISTENING, WATCHING, COMPETING)
+            "name": "-help" // Bot activity text
+        },
+        "xp": { // XP system settings
+            "enabled": true,
+            "cooldown": 60, // XP cooldown in seconds
+            "min": 15, // Minimum XP per message
+            "max": 25, // Maximum XP per message
+            "card": { // Rank card default settings
+                "accent_color": "#ffbb5c", // Rank card accent color (for progress bar and level number)
+                "background": "#090a0b", // Rank card background color
+                "background_opacity": 100 // Rank card background opacity (0-100)
+            }
+        },
+        "buttons_timeout": 60000, // Timeout for buttons used in some commands
+        "about": { // If any of these fields are not specified, they will be hidden in the about command
+            "repo": "https://github.com/Prevter/SanyaBot", // Bot repository URL
+            "support": "https://discord.gg/FDyJVPFNT7" // Bot support server URL
+        }
+    },
+    "database": { // Database settings
+        "type": "mongodb", // Database backend (sqlite, mongodb)
+        "connection_string": "mongodb://127.0.0.1:27017/bot", // Database connection string
+        "enable_backup": false, // Enable database backup
+        "backup_interval": 3600000, // Database backup interval in milliseconds
+        "backup_count": 5, // Number of backups to keep
+        "backup_path": "./backups/", // Path to store backups
+        "backup_on_start": false // Create backup on bot start
+    },
+    "web": { // Web server settings
+        "port": 80, // Web server port
+        "url": "http://localhost/" // Default web server URL
+    },
+    "logger": { // Logger settings
+        "level": "info", // Minimum log level (log, info, warn, error, fatal)
+        "file": { // File logger settings
+            "enable": true,
+            "path": "./logs.log" // Path to log file
+        },
+        "stdout": { // Console logger settings
+            "enable": true
+        },
+        "webhook": { // Discord webhook logger settings
+            "enable": false,
+            "override_level": null, // Same as logger.level, but for webhook logger if you want to log only errors for example
+            "url": "" // Discord webhook URL
+        }
+    },
+    "imgur_client_id": "<Imgur Client ID>", // Imgur client ID for image search command
+    "weather_api_key": "<OpenWeatherMap API Key>" // OpenWeatherMap API key for weather command
+}
+```
+
+
+You should also change settings for database connection. Supported database backends are:
+- `sqlite` - SQLite database. Connection string should be the path to the database file.  
+Example: `"./storage.db"`
+- `mongodb` - MongoDB database. Connection string should be a valid MongoDB connection string.  
+Example: `"mongodb://127.0.0.1:27017/dbname"`
 
 Run the bot:
 ```
@@ -27,11 +98,13 @@ npm run start
 - `prefix <prefix>` - Change bot prefix for this server.
 
 ### General
+- `about` - Show information about bot.
 - `help [category|command]` - Show help message.
 - `invite` - Get bot invite link.
 - `status` - Show bot status.
 
 ### Levels
+- `leaderboard` - Show server leaderboard.
 - `rank [user]` - Show user rank card.
 
 ### Moderator
@@ -60,6 +133,9 @@ npm run start
 - `stop` - Stop playing and clear queue.
 - `volume <volume>` - Change volume.
 
+### Owner-only
+- `reload` - Reload all commands and localization files without restarting (hot reload).
+
 ### Search
 - `anime <query>` - Search for anime.
 - `imgur <query>` - Search for image on Imgur.
@@ -69,6 +145,79 @@ npm run start
 ### Utils
 - `warstats` - Get statistics of russian losses in war with Ukraine.
 - `weather <city>` - Get weather for city.
+
+## Custom commands
+This bot has a support for custom commands, which can be defined by guild admins.
+> **Note:** Currently, there is no way to add custom commands, except by directly editing database. This will be fixed in future by implementing a web interface for managing custom commands.
+Database structure for a custom command is following:
+```json
+{
+    "guild_id": "123456789012345678",
+    "name": "test",
+    "use_prefix": true,
+    "mode": "normal",
+    "code": "..."
+}
+```
+- `guild_id` - ID of guild, where this command is defined.
+- `name` - Name of command (or regex pattern, if `mode` is set to `regex`)
+- `use_prefix` - Whether to only match this command if it starts with prefix.
+- `mode` - Command mode. Can be `normal`, `regex`, `startsWith`, `endsWith` or `contains`
+- `code` - Code to execute when command is matched. Check [documentation](#custom-command-code-documentation) for creating custom commands.
+
+### **Custom command code documentation**
+> **Note:** This documentation will be updated in future, when more features will be added.
+
+To abstract away the process of creating custom commands, a simple scripting language was implemented. It is very simple and has only a few commands.
+
+Basic syntax looks like this:
+```
+{[ <command> <arg1> <arg2> <arg3> ... ]}
+```
+It also has a way to save values to variables and use them.  
+For example, you can reply to a message with a copy of it, by using this code:
+```
+{[ reply "You sent: `%$content%`" ]}
+```
+Notice that variable name is surrounded by `%` symbols. This is how you can use variables in strings. $content is a special variable, which contains the content of the message, which triggered this command.
+
+Here is a list of all available commands:
+- `reply <string | json embed> [handle]` - Reply to message with text. If handle is provided, save it to variable with that name.
+- `send <string | json embed> [handle]` - Same as reply, but send a new message instead of replying.
+- `send_channel <channel id> <string | json embed> [handle]` - Same as send, but send message to specified channel ID.
+- `edit <handle> <string | json embed>` - Edit message with given handle with text or embed.
+- `delete [handle]` - Delete message with given handle. If handle is not provided, delete the message, which triggered this command.
+- `react <handle> [emoji 1] [emoji 2] ...` - React to message with given handle with emoji. You can provide multiple emojis up to 20 (Discord limit).
+- `sleep <time in ms>` - Wait for given amount of time.
+
+Built-in variables:
+- `$author` - User object of author of message, which triggered this command.
+- `$channel` - Channel object of channel, where message, which triggered this command, was sent.
+- `$guild` - Guild object of guild, where message, which triggered this command, was sent.
+- `$message` - Message object of message, which triggered this command.
+- `$content` - Content of message, which triggered this command.
+- `$mention` - Mention of author of message, which triggered this command.
+
+Example command code:
+```
+// Any text which is not inside a command block is ignored, so you can use it for comments. It's more readable to use `//` for comments, but it's not required.
+// Please note that you can't comment a command block 
+{[ react $message ✅ ]} // React to author message with ✅ emoji
+// Reply to author message with "Hello, @Username!"
+{[ reply "Hello, %$mention%!" reply1 ]} // Save reply to `reply1` variable 
+{[ sleep 5000 ]} // Sleep for 5 seconds
+// Edit message with `reply1` handle with "Hello, @Username! I'm a bot!"
+{[ edit reply1 "Hello, %$mention%! I'm a bot!" ]}
+{[ delete ]} // Delete original message
+// You can use JSON to create embeds
+{[ send { 
+    "title": "Custom embed!", 
+    "description": "This is a custom embed, which was sent by custom command!",
+    "color": "#ff0000",
+    "footer": { "text": "This is a footer!" }
+} reply2 ]}
+{[ react reply2 ✅ ❌ ]} // Add reactions to latest message
+```
 
 ## Adding new commands
 Adding new commands is very easy. To do that, a simple framework was implemented, to wrap the creation of new commands. To create a new command, go into src/commands folder, choose a category folder or create one and create a new file inside with the name of your new command.
@@ -113,26 +262,24 @@ module.exports = class extends Command {
     }
 
     async runAsSlash(interaction, locale, args) {
+        // `args` is an object, not an array
         interaction.reply(args.text);
     }
 
     async run(message, locale, args) {
+        // `args` is an array
         message.reply(args.join(' '));
     }
 }
 ```
 
-Notice that `args` inside `runAsSlash` method is an object, not an array. If you only need to parse arguments, you can do that in `runAsSlash`, convert them to an array and call `run` method like this (code from `admin/prefix.js`):
+Notice that `args` inside `runAsSlash` method is an object, not an array. Usually, you won't need to override `runAsSlash` method, because it will automatically call `run` method with arguments converted to array like this:
 ```js
 async runAsSlash(interaction, locale, args) {
-    let arg = [];
-    if (args.prefix) {
-        arg.push(args.prefix);
-    }
-    await this.run(interaction, locale, arg);
+    await this.run(interaction, locale, Object.values(args));
 }
 ```
-This will emulate the same behavior as `run` method, but with getting arguments from slash command.
+This will emulate the same behavior as `run` method, but with arguments converted to array.
 
 For more examples, check existing commands.
 
@@ -175,7 +322,6 @@ const DatabaseContext = require("../types/db_context");
 
 Take a look at interface class to see what methods you need to override.
 (You can also take a look at existing backends for examples)
-> Note: bot is still in beta, so this context may change in the future.
 ```js
 class DatabaseContext {
     /**
@@ -198,62 +344,60 @@ class DatabaseContext {
      */
     close() { }
     
+    // `guild` table contains settings for each guild (prefix, language, etc.)
     async getGuilds() { notImplemented(); }
     async getGuild(guild_id) { notImplemented(); }
     async createGuild(guild) { notImplemented(); }
     async updateGuild(guild) { notImplemented(); }
     async deleteGuild(guild_id) { notImplemented(); }
 
-    async getUsers() { notImplemented(); }
+    // `users` table contains statistics for each user for each guild (xp, messages sent)
+    async getUsers(guild_id) { notImplemented(); }
     async getUser(user_id, guild_id) { notImplemented(); }
     async createUser(user) { notImplemented(); }
     async updateUser(user) { notImplemented(); }
     async deleteUser(user_id, guild_id) { notImplemented(); }
-    
+
+    // `profiles` table is used for profile cards settings
     async getProfiles() { notImplemented(); }
     async getProfile(user_id) { notImplemented(); }
     async createProfile(profile) { notImplemented(); }
     async updateProfile(profile) { notImplemented(); }
     async deleteProfile(user_id) { notImplemented(); }
+    
+    // `custom_commands` table is used for custom commands
+    async getCustomCommands(guild_id) { notImplemented(); }
+    async getCustomCommand(guild_id, command_name) { notImplemented(); }
+    async createCustomCommand(command) { notImplemented(); }
+    async updateCustomCommand(command) { notImplemented(); }
+    async deleteCustomCommand(guild_id, command_name) { notImplemented(); }
 }
 ```
 
-`init` and `close` methods are called when bot starts and stops, so you can use them to initialize and close database connection. Take a look at how it's done in `sqlite.js` backend.
+`init` and `close` methods are called when bot starts and stops, so you can use them to initialize and close database connection. Take a look at how it's done in `mongodb.js` backend.
 ```js
 init() {
-    this.logger.info('📅 Connecting to SQLite database...');
-    this.db = new sqlite3.Database(this.connection_string);
+    this.logger.info('Database', '🥭 Connecting to MongoDB database...');
+    this.client = new MongoClient(this.connection_string, { useUnifiedTopology: true });
+    this.db = this.client.db();
 
-    // Create tables
-    this.db.serialize(() => {
-        this.db.run(`CREATE TABLE IF NOT EXISTS guilds (
-            id TEXT PRIMARY KEY,
-            prefix TEXT NOT NULL,
-            language TEXT NOT NULL,
-            xp_enabled INTEGER NOT NULL
-        )`);
-
-        this.db.run(`CREATE TABLE IF NOT EXISTS users (
-            id TEXT,
-            guild_id TEXT NOT NULL,
-            xp INTEGER NOT NULL,
-            message_count INTEGER NOT NULL,
-            last_message INTEGER NOT NULL,
-            PRIMARY KEY (id, guild_id)
-        )`);
-
-        this.db.run(`CREATE TABLE IF NOT EXISTS profiles (
-            id TEXT PRIMARY KEY,
-            card_color TEXT NOT NULL,
-            card_background TEXT NOT NULL,
-            card_opacity INTEGER NOT NULL
-        )`);
-    });
+    // Create collections if they don't exist
+    const createCollection = async (name) => {
+        const collections = await this.db.listCollections().toArray();
+        if (!collections.some(c => c.name === name)) {
+            await this.db.createCollection(name);
+        }
+    };
+    
+    createCollection('guilds');
+    createCollection('users');
+    createCollection('profiles');
+    createCollection('custom_commands');
 }
 
 close() {
-    this.db.close();
+    this.client.close();
 }
 ```
 
-Other methods should be self-explanatory, but if you need help, you can take a look at `sqlite.js` backend. Note that they all should be asynchronous, so you'll need to use Promises or async/await.
+Other methods should be self-explanatory, but if you need help, you can take a look at any backend implementation. Note that they all should be asynchronous, so you'll need to use Promises or async/await.
