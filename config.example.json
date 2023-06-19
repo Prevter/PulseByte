@@ -25,7 +25,11 @@
                 "background_opacity": 100
             }
         },
-        "buttons_timeout": 60000
+        "buttons_timeout": 60000,
+        "about": {
+            "repo": "https://github.com/Prevter/SanyaBot",
+            "support": "https://discord.gg/FDyJVPFNT7"
+        }
     },
     "database": {
         "type": "mongodb",

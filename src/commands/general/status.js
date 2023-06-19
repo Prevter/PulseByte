@@ -5,7 +5,7 @@ module.exports = class extends Command {
     constructor(client, database) {
         super(client, database, {
             name: 'status',
-            aliases: ['stats', 'botinfo', 'stat', 'info', 'ping'],
+            aliases: ['stats', 'botinfo', 'stat', 'ping'],
             category: 'general'
         });
     }

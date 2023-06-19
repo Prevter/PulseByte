@@ -1,4 +1,7 @@
 {
+    "about": {
+        "_description": "Wyświetla informacje o bocie"
+    },
     "anime": {
         "_args_desc": {
             "query": "Jakie anime chcesz znaleźć"
