@@ -45,7 +45,7 @@ module.exports = class extends Command {
 
     parseFilter(filter) {
         const filterKey = Object.keys(filterModes)
-            .find(key => filterModes[key].toLowerCase() === filter.toLowerCase());
+            .find(key => key.startsWith(filter.toLowerCase()));
         if (filterKey === undefined) return null;
         return filterKey;
     }
