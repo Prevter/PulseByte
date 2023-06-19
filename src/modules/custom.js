@@ -25,6 +25,12 @@ class Action {
                 return new SendChannelAction(args, client, database);
             case 'sleep':
                 return new SleepAction(args, client, database);
+            case 'set':
+                return new SetAction(args, client, database);
+            case 'choose':
+                return new ChooseAction(args, client, database);
+            case 'random':
+                return new RandomAction(args, client, database);
             default:
                 return null;
         }
@@ -53,7 +59,7 @@ const parseSendMessage = (args, storage) => {
     else if (content.startsWith('"') && content.endsWith('"')) {
         return replaceArgs(content, storage).slice(1, -1);
     }
-    else if (content.startsWith('$')) {
+    else if (storage[content]) {
         return storage[content];
     }
 
@@ -147,6 +153,54 @@ class EditAction extends Action {
         if (!content) return;
 
         await msg.edit(content);
+    }
+}
+
+class SetAction extends Action {
+    async run(message, storage) {
+        const key = this.args[0];
+        const value = this.args[1];
+        if (!key || !value) return;
+
+        if (value.startsWith('{') && value.endsWith('}'))
+            storage[key] = JSON.parse(replaceArgs(value, storage));
+        else if (value.startsWith('"') && value.endsWith('"'))
+            storage[key] = replaceArgs(value, storage).slice(1, -1);
+        else if (storage[value])
+            storage[key] = storage[value];
+        else
+            storage[key] = value;
+    }
+}
+
+class ChooseAction extends Action {
+    async run(message, storage) {
+        const key = this.args[0];
+        const choices = this.args.slice(1);
+        if (!key || !choices) return;
+
+        const parsedChoices = [];
+        for (let i = 0; i < choices.length; i++) {
+            if (choices[i].startsWith('"') && choices[i].endsWith('"'))
+                parsedChoices.push(choices[i].slice(1, -1));
+            else if (storage[choices[i]])
+                parsedChoices.push(storage[choices[i]]);
+            else
+                parsedChoices.push(choices[i]);
+        }
+
+        storage[key] = parsedChoices[Math.floor(Math.random() * parsedChoices.length)];
+    }
+}
+
+class RandomAction extends Action {
+    async run(message, storage) {
+        const key = this.args[0];
+        const min = parseInt(this.args[1]);
+        const max = parseInt(this.args[2]);
+        if (!key || isNaN(min) || isNaN(max)) return;
+
+        storage[key] = Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }
 

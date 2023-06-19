@@ -189,6 +189,9 @@ Here is a list of all available commands:
 - `delete [handle]` - Delete message with given handle. If handle is not provided, delete the message, which triggered this command.
 - `react <handle> [emoji 1] [emoji 2] ...` - React to message with given handle with emoji. You can provide multiple emojis up to 20 (Discord limit).
 - `sleep <time in ms>` - Wait for given amount of time.
+- `set <variable name> <value>` - Set variable to given value.
+- `choose <variable name> <arg1> <arg2> ...` - Set variable to random value from given arguments.
+- `random <variable name> <min> <max>` - Set variable to random number between min and max.
 
 Built-in variables:
 - `$author` - User object of author of message, which triggered this command.
@@ -217,6 +220,26 @@ Example command code:
     "footer": { "text": "This is a footer!" }
 } reply2 ]}
 {[ react reply2 ✅ ❌ ]} // Add reactions to latest message
+```
+
+Example dice command:
+```
+{[ random dice 1 6 ]} // Store random number between 1 and 6 to `dice` variable
+{[ reply {
+    "title": "🎲 Dice",
+    "description": "You rolled **%dice%**!"
+} ]}
+```
+
+Example coin flip command:
+```
+{[ set heads "<:heads:1078314870925185135> Heads" ]} // Using custom emoji
+{[ set tails "<:tails:1078314873982824519> Tails" ]}
+{[ choose coin heads tails ]} // Choose random value from `heads` and `tails` variables and store it to `coin` variable
+{[ reply {
+    "title": "Coin flip",
+    "description": "**%coin%**"
+} ]}
 ```
 
 ## Adding new commands
