@@ -54,7 +54,7 @@ module.exports = class extends Command {
             }
         }
         catch (e) {
-            this.client.logger.error('[PLAYNOW]', e);
+            this.client.logger.error('playnow', e);
             await interaction.reply({ embeds: [Command.createErrorEmbed(locale('play.error', err.message))] });
         }
 

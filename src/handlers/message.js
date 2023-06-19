@@ -30,7 +30,8 @@ module.exports = async (client, message) => {
     const locale = localeBuilder(guild ? guild.language : config.default_language);
 
     for (const module of client.modules) {
-        module.onMessage(message, locale, guild, user);
+        module.onMessage(message, locale, guild, user)
+            .catch(err => client.logger.error('Module', `⚠️ ${module.name} failed to handle message event: ${err.stack}`));
     }
 
     const prefix = guild ? guild.prefix : config.bot.prefix;
@@ -43,7 +44,7 @@ module.exports = async (client, message) => {
     if (!cmd) return;
 
 
-    client.logger.log(`[MESSAGE] 📨 ${message.author.tag.stripTag(true)} called a command: ${message.content}`)
+    client.logger.log('Message', `📨 ${message.author.tag.stripTag(true)} called a command: ${message.content}`)
 
     if (cmd.slash_only)
         return message.reply({ embeds: [Command.createErrorEmbed(locale('global.slash_only'))] });

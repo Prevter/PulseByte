@@ -28,7 +28,7 @@ module.exports = async (client, interaction) => {
     interaction.user_data = user;
 
     const arg_string = interaction.options.data.map(o => o.value).join(' ');
-    client.logger.log(`[INTERACTION] 📨 ${interaction.user.tag.stripTag(true)} called a slash command: ${interaction.commandName} ${arg_string}`)
+    client.logger.log('Interaction', `📨 ${interaction.user.tag.stripTag(true)} called a slash command: ${interaction.commandName} ${arg_string}`)
 
     const locale = localeBuilder(guild ? guild.language : config.default_language);
 

@@ -20,6 +20,9 @@
         "total_episodes": "💿 Całkowita liczba odcinków",
         "type": "📺 Typ"
     },
+    "autoplay": {
+        "_description": "Przełączanie autoodtwarzania dla bieżącej kolejki"
+    },
     "ban": {
         "_args_desc": {
             "member": "Członek do zablokowania",
@@ -39,6 +42,12 @@
     "experience": {
         "_description": "Zmień system zdobywania XP na serwerze",
         "current": "XP jest teraz {0} na tym serwerze!"
+    },
+    "filter": {
+        "_args_desc": {
+            "filter": "Filtr do zastosowania (`off` wyłącza wszystkie filtry)"
+        },
+        "_description": "Zastosowanie filtra do bieżącej kolejki"
     },
     "global": {
         "admin_only": "To polecenie jest dostępne tylko dla administratorów serwerów!",
@@ -124,6 +133,9 @@
         "supported": "Obsługiwane języki",
         "updated": "Język został zmieniony na :flag_pl: polski"
     },
+    "leaderboard": {
+        "_description": "Pokazuje członków z największą liczbą XP"
+    },
     "leave": {
         "_description": "Wyjdź z kanału głosowego, w którym jesteś",
         "no_voice": "❌ Nie jestem na kanale głosowym!",
@@ -165,6 +177,9 @@
         "requested_by": "👤 Na życzenie",
         "views": "👀 Wyświetlenia"
     },
+    "pause": {
+        "_description": "Wstrzymanie/wznowienie odtwarzania bieżącego utworu"
+    },
     "permissions": {
         "BanMembers": "Zablokuj użytkowników"
     },
@@ -173,13 +188,27 @@
             "query": "Wyszukiwane zapytanie lub adres URL"
         },
         "_description": "Odtwarzanie muzyki w kanale głosowym",
-        "_usage": "<żądanie|adres URL>",
+        "_usage": "<żądanie|URL>",
         "added": "✅ Dodano **{0}** **{1}** *({2})* do kolejki!",
         "error": "❌ Wystąpił błąd: **{0}**",
         "no_query": "❌ Aby odtworzyć, musisz podać zapytanie lub adres URL!",
         "no_voice": "❌ Aby użyć tego polecenia, musisz być na kanale głosowym!",
         "not_found": "Nie znaleziono utworu!",
         "success": "✅ Zaczął grać muzykę"
+    },
+    "playnow": {
+        "_args_desc": {
+            "query": "Wyszukiwane zapytanie lub adres URL"
+        },
+        "_description": "Dodawanie muzyki na początku kolejki",
+        "_usage": "<żądanie|URL>"
+    },
+    "playskip": {
+        "_args_desc": {
+            "query": "Wyszukiwane zapytanie lub adres URL"
+        },
+        "_description": "Odtwarzanie muzyki i pomijanie bieżącego utworu",
+        "_usage": "<żądanie|URL>"
     },
     "prefix": {
         "_args_desc": {
@@ -191,6 +220,12 @@
         "too_long": "Prefiks musi zawierać co najmniej 5 znaków!",
         "updated": "Przedrostek został zmieniony na `{0}`"
     },
+    "previous": {
+        "_description": "Odtwarzanie poprzedniego utworu"
+    },
+    "queue": {
+        "_description": "Pobierz bieżącą kolejkę muzyki"
+    },
     "rank": {
         "_args_desc": {
             "member": "Użytkownik, którego rangę chcesz uzyskać"
@@ -201,6 +236,29 @@
         "rank": "RANGA",
         "user_not_found": "❌ Nie znaleziono użytkownika!",
         "xp_disabled": "❌ XP jest wyłączony na tym serwerze!"
+    },
+    "repeat": {
+        "_args_desc": {
+            "mode": "Tryb powtarzania do użycia. Prawidłowe tryby to: `off`, `song`, `queue`."
+        },
+        "_description": "Zmiana trybu powtarzania",
+        "_usage": "<tryb>"
+    },
+    "seek": {
+        "_args_desc": {
+            "time": "Czas na poszukiwania. Format: `24`, `1:30`, `1:23:45`"
+        },
+        "_description": "Wyszukiwanie określonego momentu w bieżącym utworze",
+        "_usage": "<czas>"
+    },
+    "shuffle": {
+        "_description": "Tasowanie bieżącej kolejki"
+    },
+    "skip": {
+        "_args_desc": {
+            "count": "Liczba utworów do pominięcia"
+        },
+        "_description": "Pomijanie bieżącego utworu (lub wielu utworów)"
     },
     "status": {
         "_description": "Uzyskaj status bota (czas działania, pamięć itp.)",
@@ -260,6 +318,13 @@
         "author": "{0} utworzone",
         "example": "Przykład",
         "title": "Definicja {0}"
+    },
+    "volume": {
+        "_args_desc": {
+            "volume": "Nowa głośność dla muzyki"
+        },
+        "_description": "Zmiana głośności muzyki",
+        "_usage": "<głośność>"
     },
     "warstats": {
         "_description": "Pobierz najnowsze rosyjskie statystyki ofiar",

@@ -3,7 +3,7 @@ const { MongoClient } = require("mongodb");
 
 module.exports = class SqliteContext extends DatabaseContext {
     init() {
-        this.logger.info('[DATABASE] 🥭 Connecting to MongoDB database...');
+        this.logger.info('Database', '🥭 Connecting to MongoDB database...');
         this.client = new MongoClient(this.connection_string, { useUnifiedTopology: true });
         this.db = this.client.db();
 

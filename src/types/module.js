@@ -1,8 +1,10 @@
 const { Message } = require("discord.js");
+require('../utils.js')
 
 module.exports = class Module {
     constructor(client, database, name) {
         this.client = client;
+        this.discord = client.client;
         this.database = database;
         this.name = name;
         this.logger = client.logger;
@@ -13,5 +15,5 @@ module.exports = class Module {
      * @param {Message} message 
      * @param {Function} locale 
      */
-    onMessage(message, locale) { }
+    async onMessage(message, locale) { }
 }

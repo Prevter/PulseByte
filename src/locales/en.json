@@ -57,6 +57,7 @@
         "flanger": "Flanging effect on the audio",
         "gate": "Clears audio noise",
         "haas": "Precedence effect",
+        "invalid_filter": "❌ Invalid filter!\nRun `filter` command without arguments to see a list of available filters.",
         "karaoke": "Removes the vocals from the audio",
         "mcompand": "Expand audio dynamic range",
         "nightcore": "Speeds up the audio",
@@ -156,7 +157,7 @@
         "updated": "Language has been updated to 🇺🇸 English"
     },
     "leaderboard": {
-        "_description": "Shows the top 10 members with the most XP",
+        "_description": "Shows top of members with the most XP",
         "description": "[View full leaderboard online]({0}leaderboard/{1})",
         "page": "Page {0} of {1} ({2} members)",
         "title": "🏆 Leaderboard",

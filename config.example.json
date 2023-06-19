@@ -41,11 +41,18 @@
         "url": "http://localhost/"
     },
     "logger": {
-        "level": "log",
-        "file": "./logs.log",
-        "options": {
-            "stdout": true,
-            "file": true
+        "level": "info",
+        "file": {
+            "enable": true,
+            "path": "./logs.log"
+        },
+        "stdout": {
+            "enable": true
+        },
+        "webhook": {
+            "enable": false,
+            "override_level": null,
+            "url": ""
         }
     },
     "imgur_client_id": "<Imgur Client ID>",

@@ -1,5 +1,5 @@
 const config = require('../config');
-const logger = new (require('./logger'))(config.logger.level, config.logger.file, config.logger.options);
+const logger = new (require('./logger'))(config.logger);
 process.logger = logger;
 logger.clearFile();
 
@@ -26,8 +26,6 @@ if (config.database.enable_backup) {
     const path = require('path');
 
     const doBackup = async () => {
-        logger.info('[BACKUP] 💾 Starting backup...');
-
         const db_export = await database.export();
         let files = {};
         for (const key in db_export) {
@@ -49,14 +47,14 @@ if (config.database.enable_backup) {
         for (const filename in files) {
             fs.writeFile(`${backup_dir}/${filename}`, files[filename], (err) => {
                 if (err) {
-                    logger.error(`[BACKUP] Failed to export ${filename} to ${backup_dir}`, err);
+                    logger.error('Backup', `Failed to export ${filename} to ${backup_dir}`, err);
                     return;
                 }
         
             });
         }
 
-        logger.info(`[BACKUP] 💾 Saved backup in '${date_str}'`);
+        logger.info('Backup', `💾 Saved backup in '${date_str}'`);
         
         fs.readdir(config.database.backup_path, (err, files) => {
             files.sort((a, b) => {
@@ -78,11 +76,9 @@ if (config.database.enable_backup) {
                 const file = files[i];
                 fs.rm(`${config.database.backup_path}/${file}`, { recursive: true }, (err) => {
                     if (err) {
-                        logger.error(`[BACKUP] Failed to delete ${file}`, err);
+                        logger.error('Backup', `Failed to delete ${file}`, err);
                         return;
                     }
-            
-                    logger.info(`[BACKUP] Deleted old backup '${file}'`);
                 });
             }
         });
@@ -97,11 +93,12 @@ const { Events, ActivityType } = require('discord.js');
 const { messageHandler, slashCommandHandler } = require('./handlers');
 const DiscordClient = require('./client');
 const client = new DiscordClient(config.bot.token, database, logger);
+process.client = client;
 client.init();
 
 // Handlers
 client.once(Events.ClientReady, c => {
-    logger.info(`[DISCORD] ✅ Ready! Logged in as ${c.user.id}`);
+    logger.info('Discord', `✅ Ready! Logged in as ${c.user.id}`);
 
     c.user.setActivity({
         name: config.bot.activity.name,
@@ -121,7 +118,7 @@ app.use('/', router);
 app.use(express.static('./src/website/public'));
 
 app.listen(port, () => {
-    logger.info(`[WEBSITE] 🚀 Server listening on port ${port}`);
+    logger.info('Website', `🚀 Server listening on port ${port}`);
 });
 
 // Exit handlers and error handlers
