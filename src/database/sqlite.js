@@ -30,6 +30,15 @@ module.exports = class SqliteContext extends DatabaseContext {
                 card_background TEXT NOT NULL,
                 card_opacity INTEGER NOT NULL
             )`);
+
+            this.db.run(`CREATE TABLE IF NOT EXISTS custom_commands (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                guild_id TEXT NOT NULL,
+                name TEXT NOT NULL,
+                mode TEXT NOT NULL,
+                use_prefix INTEGER NOT NULL,
+                code TEXT NOT NULL
+            )`);
         });
     }
 
@@ -208,6 +217,66 @@ module.exports = class SqliteContext extends DatabaseContext {
     deleteProfile(user_id) {
         return new Promise((resolve, reject) => {
             this.db.run('DELETE FROM profiles WHERE id = ?', [user_id], (err) => {
+                if (err) {
+                    this.logger.error('Database', err);
+                    reject(err);
+                }
+                resolve();
+            });
+        });
+    }
+
+    getCustomCommands(guild_id) {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT * FROM custom_commands WHERE guild_id = ?', [guild_id], (err, rows) => {
+                if (err) {
+                    this.logger.error('Database', err);
+                    reject(err);
+                }
+                resolve(rows);
+            });
+        });
+    }
+
+    getCustomCommand(guild_id, command_name) {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT * FROM custom_commands WHERE guild_id = ? AND command_name = ?', [guild_id, command_name], (err, row) => {
+                if (err) {
+                    this.logger.error('Database', err);
+                    reject(err);
+                }
+                resolve(row);
+            });
+        });
+    }
+
+    createCustomCommand(command) {
+        return new Promise((resolve, reject) => {
+            this.db.run('INSERT INTO custom_commands (guild_id, command_name, command_response) VALUES (?, ?, ?)', [command.guild_id, command.command_name, command.command_response], (err) => {
+                if (err) {
+                    this.logger.error('Database', err);
+                    reject(err);
+                }
+                resolve();
+            });
+        });
+    }
+
+    updateCustomCommand(command) {
+        return new Promise((resolve, reject) => {
+            this.db.run('UPDATE custom_commands SET command_response = ? WHERE guild_id = ? AND command_name = ?', [command.command_response, command.guild_id, command.command_name], (err) => {
+                if (err) {
+                    this.logger.error('Database', err);
+                    reject(err);
+                }
+                resolve();
+            });
+        });
+    }
+
+    deleteCustomCommand(guild_id, command_name) {
+        return new Promise((resolve, reject) => {
+            this.db.run('DELETE FROM custom_commands WHERE guild_id = ? AND command_name = ?', [guild_id, command_name], (err) => {
                 if (err) {
                     this.logger.error('Database', err);
                     reject(err);

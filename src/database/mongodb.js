@@ -18,6 +18,7 @@ module.exports = class SqliteContext extends DatabaseContext {
         createCollection('guilds');
         createCollection('users');
         createCollection('profiles');
+        createCollection('custom_commands');
     }
 
     close() {
@@ -76,5 +77,23 @@ module.exports = class SqliteContext extends DatabaseContext {
     }
     async deleteProfile(user_id) {
         await this.db.collection('profiles').deleteOne({ id: user_id });
+    }
+
+    async getCustomCommands(guild_id) {
+        const custom_commands = await this.db.collection('custom_commands').find({ guild_id: guild_id }).toArray();
+        return custom_commands;
+    }
+    async getCustomCommand(guild_id, command_name) {
+        const custom_command = await this.db.collection('custom_commands').findOne({ guild_id: guild_id, name: command_name });
+        return custom_command;
+    }
+    async createCustomCommand(custom_command) {
+        await this.db.collection('custom_commands').insertOne(custom_command);
+    }
+    async updateCustomCommand(custom_command) {
+        await this.db.collection('custom_commands').updateOne({ guild_id: custom_command.guild_id, name: custom_command.name }, { $set: custom_command });
+    }
+    async deleteCustomCommand(guild_id, command_name) {
+        await this.db.collection('custom_commands').deleteOne({ guild_id: guild_id, name: command_name });
     }
 }

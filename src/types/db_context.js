@@ -57,4 +57,10 @@ module.exports = class DatabaseContext {
     async createProfile(profile) { notImplemented(); }
     async updateProfile(profile) { notImplemented(); }
     async deleteProfile(user_id) { notImplemented(); }
+    
+    async getCustomCommands(guild_id) { notImplemented(); }
+    async getCustomCommand(guild_id, command_name) { notImplemented(); }
+    async createCustomCommand(command) { notImplemented(); }
+    async updateCustomCommand(command) { notImplemented(); }
+    async deleteCustomCommand(guild_id, command_name) { notImplemented(); }
 }
