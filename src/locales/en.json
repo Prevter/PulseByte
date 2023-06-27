@@ -49,6 +49,16 @@
         "self": "❌ You can't ban yourself!",
         "title": "{0} was banned!"
     },
+    "clean": {
+        "_args_desc": {
+            "count": "The amount of messages to clean"
+        },
+        "_description": "Clean messages in the current channel",
+        "_usage": "<count>",
+        "invalid_count": "⚠️ Invalid count! Must be between 1 and 100",
+        "failed": "❌ Failed to clean messages!",
+        "success": "✅ Cleaned {0} messages!"
+    },
     "experience": {
         "_description": "Toggle XP system in the current guild",
         "current": "XP System is now {0} for this guild!"

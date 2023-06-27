@@ -12,3 +12,12 @@ String.prototype.stripTag = function (add_at=false) {
     // Return the string as it is
     return this;
 }
+
+/**
+ * @description Sleeps for the specified amount of time
+ * @param {number} ms The amount of time to sleep in milliseconds
+ * @returns {Promise<void>} A promise that resolves after the specified amount of time
+ */
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
