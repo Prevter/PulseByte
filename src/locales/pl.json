@@ -42,6 +42,13 @@
         "self": "❌ Nie możesz się zablokować!",
         "title": "{0} został zablokowany!"
     },
+    "clean": {
+        "_args_desc": {
+            "count": "Liczba wiadomości do wyczyszczenia"
+        },
+        "_description": "Wyczyść wiadomości w bieżącym kanale",
+        "_usage": "<liczba>"
+    },
     "experience": {
         "_description": "Zmień system zdobywania XP na serwerze",
         "current": "XP jest teraz {0} na tym serwerze!"
@@ -50,7 +57,8 @@
         "_args_desc": {
             "filter": "Filtr do zastosowania (`off` wyłącza wszystkie filtry)"
         },
-        "_description": "Zastosowanie filtra do bieżącej kolejki"
+        "_description": "Zastosowanie filtra do bieżącej kolejki",
+        "_usage": "[filter|off]"
     },
     "global": {
         "admin_only": "To polecenie jest dostępne tylko dla administratorów serwerów!",
@@ -261,7 +269,8 @@
         "_args_desc": {
             "count": "Liczba utworów do pominięcia"
         },
-        "_description": "Pomijanie bieżącego utworu (lub wielu utworów)"
+        "_description": "Pomijanie bieżącego utworu (lub wielu utworów)",
+        "_usage": "[licz]"
     },
     "status": {
         "_description": "Uzyskaj status bota (czas działania, pamięć itp.)",
