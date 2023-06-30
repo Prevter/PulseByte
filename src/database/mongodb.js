@@ -14,18 +14,19 @@ module.exports = class SqliteContext extends DatabaseContext {
                 await this.db.createCollection(name);
             }
         };
-        
+
         createCollection('guilds');
         createCollection('users');
         createCollection('profiles');
         createCollection('custom_commands');
+        createCollection('stats');
     }
 
     close() {
         this.client.close();
     }
 
-    async getGuilds() { 
+    async getGuilds() {
         const guilds = await this.db.collection('guilds').find().toArray();
         return guilds;
     }
@@ -39,7 +40,7 @@ module.exports = class SqliteContext extends DatabaseContext {
     async updateGuild(guild) {
         await this.db.collection('guilds').updateOne({ id: guild.id }, { $set: guild });
     }
-    async deleteGuild(guild_id) { 
+    async deleteGuild(guild_id) {
         await this.db.collection('guilds').deleteOne({ id: guild_id });
     }
 
@@ -95,5 +96,31 @@ module.exports = class SqliteContext extends DatabaseContext {
     }
     async deleteCustomCommand(guild_id, command_name) {
         await this.db.collection('custom_commands').deleteOne({ guild_id: guild_id, name: command_name });
+    }
+
+    async getStats() {
+        const stats = await this.db.collection('stats').find().toArray();
+        // if there are no stats, create a new one
+        if (stats.length === 0) {
+            await this.db.collection('stats').insertOne({ commands_executed: 0, slash_commands: 0 });
+            return { commands_executed: 0, slash_commands: 0 };
+        }
+        return stats[0];
+    }
+
+    async updateStats(stats) {
+        await this.db.collection('stats').updateOne({}, { $set: stats });
+    }
+
+    async incrementCommandUsage() {
+        const stats = await this.getStats();
+        stats.commands_executed++;
+        await this.updateStats(stats);
+    }
+
+    async incrementSlashCommandUsage() {
+        const stats = await this.getStats();
+        stats.slash_commands++;
+        await this.updateStats(stats);
     }
 }

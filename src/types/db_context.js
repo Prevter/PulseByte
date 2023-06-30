@@ -35,12 +35,14 @@ module.exports = class DatabaseContext {
             custom_commands = custom_commands.concat(guild_commands);
         }
         const profiles = await this.getProfiles();
+        const stats = await this.getStats();
 
         return {
             guilds,
             users,
             profiles,
-            custom_commands
+            custom_commands,
+            stats,
         };
     }
 
@@ -71,4 +73,10 @@ module.exports = class DatabaseContext {
     async createCustomCommand(command) { notImplemented(); }
     async updateCustomCommand(command) { notImplemented(); }
     async deleteCustomCommand(guild_id, command_name) { notImplemented(); }
+
+    // 'stats' table is used for storing statistics about the bot
+    async getStats() { notImplemented(); }
+    async updateStats(stats) { notImplemented(); }
+    async incrementSlashCommandUsage() { notImplemented(); }
+    async incrementCommandUsage() { notImplemented(); }
 }

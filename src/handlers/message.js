@@ -45,8 +45,9 @@ module.exports = {
         const cmd = client.commands.find(c => c.name === command || c.aliases.includes(command));
         if (!cmd) return;
 
-
         client.logger.log('Message', `📨 ${message.author.tag.stripTag(true)} called a command: ${message.content}`)
+
+        await client.database.incrementCommandUsage();
 
         if (cmd.slash_only)
             return message.reply({ embeds: [Command.createErrorEmbed(locale('global.slash_only'))] });

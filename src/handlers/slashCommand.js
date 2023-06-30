@@ -32,6 +32,8 @@ module.exports = {
         const arg_string = interaction.options.data.map(o => o.value).join(' ');
         client.logger.log('Interaction', `📨 ${interaction.user.tag.stripTag(true)} called a slash command: ${interaction.commandName} ${arg_string}`)
 
+        await client.database.incrementSlashCommandUsage();
+
         const locale = localeBuilder(guild ? guild.language : config.default_language);
 
         const cmd = client.commands.find(c => c.name === interaction.commandName);

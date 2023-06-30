@@ -39,6 +39,15 @@ module.exports = class SqliteContext extends DatabaseContext {
                 use_prefix INTEGER NOT NULL,
                 code TEXT NOT NULL
             )`);
+
+            // This table has only one row, but it's easier to use a table than to store it in a file
+            // Stats:
+            // - commands_executed: total number of commands executed
+            // - slash_commands: number of slash commands executed
+            this.db.run(`CREATE TABLE IF NOT EXISTS stats (
+                commands_executed INTEGER NOT NULL,
+                slash_commands INTEGER NOT NULL
+            )`);
         });
     }
 
@@ -283,6 +292,55 @@ module.exports = class SqliteContext extends DatabaseContext {
                 }
                 resolve();
             });
+        });
+    }
+
+    getStats() {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT * FROM stats', (err, row) => {
+                if (err) {
+                    this.logger.error('Database', err);
+                    reject(err);
+                }
+                // if no stats exist, create them
+                if (row.length === 0) {
+                    this.db.run('INSERT INTO stats (commands_executed, slash_commands) VALUES (?, ?)', [0, 0], (err) => {
+                        if (err) {
+                            this.logger.error('Database', err);
+                            reject(err);
+                        }
+                    });
+                    row = [{
+                        commands_executed: 0,
+                        slash_commands: 0
+                    }];
+                }
+                resolve(row[0]);
+            });
+        });
+    }
+
+    updateStats(stats) {
+        this.db.run('UPDATE stats SET commands_executed = ?, slash_commands = ?', [stats.commands_executed, stats.slash_commands], (err) => {
+            if (err) {
+                this.logger.error('Database', err);
+            }
+        });
+    }
+
+    incrementCommandUsage() {
+        this.db.run('UPDATE stats SET commands_executed = commands_executed + 1', (err) => {
+            if (err) {
+                this.logger.error('Database', err);
+            }
+        });
+    }
+
+    incrementSlashCommandUsage() {
+        this.db.run('UPDATE stats SET slash_commands = slash_commands + 1', (err) => {
+            if (err) {
+                this.logger.error('Database', err);
+            }
         });
     }
 
