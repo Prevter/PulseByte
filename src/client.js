@@ -82,6 +82,7 @@ module.exports = class DiscordClient {
             console.warn(`[DISTUBE] No results found for query: ${query}`);
         });
 
+        this.loadHandlers();
         this.reloadCommands();
     }
 
@@ -118,6 +119,29 @@ module.exports = class DiscordClient {
             }
             const module = require(path);
             this.modules.push(new module(this, this.database));
+        });
+    }
+
+    loadHandlers() {
+        // Clear all the handlers
+        this.client.removeAllListeners();
+        
+        // Load all the handlers from 'src/handlers'
+        fs.readdirSync('./src/handlers', { withFileTypes: true }).forEach(file => {
+            // Clear the cache for the file if it's already loaded
+            const path = `./handlers/${file.name}`;
+            if (require.cache[require.resolve(path)]) {
+                delete require.cache[require.resolve(path)];
+            }
+
+            // Load the handler
+            const handler = require(path);
+            if (handler.once) {
+                this.client.once(handler.name, (...args) => handler.execute(this, ...args));
+            }
+            else {
+                this.client.on(handler.name, (...args) => handler.execute(this, ...args));
+            }
         });
     }
 

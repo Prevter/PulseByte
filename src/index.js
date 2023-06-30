@@ -89,27 +89,10 @@ if (config.database.enable_backup) {
 }
 
 // Discord
-const { Events, ActivityType } = require('discord.js');
-const { messageHandler, slashCommandHandler } = require('./handlers');
 const DiscordClient = require('./client');
 const client = new DiscordClient(config.bot.token, database, logger);
 process.client = client;
 client.init();
-
-// Handlers
-client.once(Events.ClientReady, c => {
-    logger.info('Discord', `✅ Ready! Logged in as ${c.user.id}`);
-
-    c.user.setActivity({
-        name: config.bot.activity.name,
-        type: ActivityType[config.bot.activity.type]
-    });
-
-    client.registerCommands();
-});
-
-client.on("messageCreate", (msg) => messageHandler(client, msg));
-client.on("interactionCreate", (int) => slashCommandHandler(client, int));
 client.login();
 
 // Express

@@ -135,7 +135,7 @@ npm run start
 - `volume <volume>` - Change volume.
 
 ### Owner-only
-- `reload` - Reload all commands and localization files without restarting (hot reload, useful when adding new commands).
+- `reload [category]` - Hot reload submodules. Available categories: `commands`, `locales`, `handlers`, `slash` and `all`. Useful for development.
 
 ### Search
 - `anime <query>` - Search for anime.
