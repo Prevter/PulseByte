@@ -109,6 +109,7 @@ npm run start
 
 ### Moderator
 - `ban <user> [reason]` - Ban user.
+- `clean <count>` - Delete messages.
 - `kick <user> [reason]` - Kick user.
 - `mute <user> <duration> [reason]` - Mute user.
 - `unban <user>` - Unban user.
@@ -134,7 +135,7 @@ npm run start
 - `volume <volume>` - Change volume.
 
 ### Owner-only
-- `reload` - Reload all commands and localization files without restarting (hot reload).
+- `reload` - Reload all commands and localization files without restarting (hot reload, useful when adding new commands).
 
 ### Search
 - `anime <query>` - Search for anime.
@@ -309,15 +310,16 @@ For more examples, check existing commands.
 After that, you should edit localization files by adding your command name as object to the root element and by setting `"_description"`, `"_usage"` and `"_args_desc"` keys. Only `"_description"` is required, other keys are optional. (Note that `"_usage"` is a string, containing only part after command name)
 
 Example:
-```json
+```jsonc
 {
     "echo": {
         "_args_desc": {
             "text": "Text to echo"
         },
-        "_description": "Echo command description",
+        "_description": "Echo command description", // Required
         "_usage": "<text>",
-        ... Other keys required for localization ...
+        // Other keys that you can use in localization
+        // "greet": "Hello, {0}!"
     }
 }
 ```
