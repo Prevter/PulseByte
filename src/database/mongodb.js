@@ -46,6 +46,7 @@ module.exports = class SqliteContext extends DatabaseContext {
 
     async getUsers(guild_id) {
         const users = await this.db.collection('users').find({ guild_id: guild_id }).toArray();
+        users.sort((a, b) => b.xp - a.xp);
         return users;
     }
     async getUser(user_id, guild_id) {

@@ -140,7 +140,7 @@
         },
         "_description": "Zmień język bota",
         "_usage": "<kod języka>",
-        "name": ":flag_pl: Polski (Polish)",
+        "name": "🇵🇱 Polski (Polish)",
         "supported": "Obsługiwane języki",
         "updated": "Język został zmieniony na :flag_pl: polski"
     },

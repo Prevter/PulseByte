@@ -20,6 +20,7 @@ module.exports = class extends Command {
         const locales = args.includes('locales') || all;
         const handlers = args.includes('handlers') || all;
         const slash = args.includes('slash') || all;
+        const web = args.includes('web') || all;
 
         if (locales) {
             // Clear locale cache
@@ -46,6 +47,12 @@ module.exports = class extends Command {
         if (slash) {
             // Register slash commands
             await this.client.registerCommands();
+        }
+
+        if (web) {
+            // Reload express routes
+            process.reloadExpress();
+            this.logger.info('Reload', '✅ Reloaded web routes');
         }
 
         message.react('✅');
