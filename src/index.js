@@ -44,12 +44,12 @@ if (config.database.enable_backup) {
                     logger.error('Backup', `Failed to export ${filename} to ${backup_dir}`, err);
                     return;
                 }
-        
+
             });
         }
 
         logger.info('Backup', `💾 Saved backup in '${date_str}'`);
-        
+
         fs.readdir(config.database.backup_path, (err, files) => {
             files.sort((a, b) => {
                 // get date from folder name
@@ -83,11 +83,26 @@ if (config.database.enable_backup) {
 }
 
 // Discord
-const DiscordClient = require('./client');
-const client = new DiscordClient(config.bot.token, database, logger);
-process.client = client;
-client.init();
-client.login();
+const { ClusterManager } = require('discord-hybrid-sharding');
+const manager = new ClusterManager(`${__dirname}/shard.js`, {
+    totalShards: 7, // or 'auto'
+    /// Check below for more options
+    shardsPerClusters: 2,
+    // totalClusters: 7,
+    mode: 'process', // you can also choose "worker"
+    token: config.bot.token,
+});
+
+manager.on('clusterCreate', cluster => {
+    logger.info('Cluster', `📦 Launched Cluster ${cluster.id}`)
+});
+manager.spawn({ timeout: -1 });
+
+
+// const client = new DiscordClient(config.bot.token, database, logger);
+// process.client = client;
+// client.init();
+// client.login();
 
 // Express
 
@@ -104,12 +119,12 @@ const reloadExpress = () => {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(cors());
-    
+
     if (require.cache[require.resolve('./website')]) {
         delete require.cache[require.resolve('./website')];
     }
 
-    const router = require('./website')(logger, client, database);
+    const router = require('./website')(logger, manager, database);
 
     app.use('/', router);
     app.use(express.static('./src/website/public'));

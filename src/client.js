@@ -3,6 +3,7 @@ const { DisTube } = require('distube');
 const { SpotifyPlugin } = require('@distube/spotify');
 const { SoundCloudPlugin } = require('@distube/soundcloud');
 const { YtDlpPlugin } = require('@distube/yt-dlp')
+const { ClusterClient, getInfo } = require('discord-hybrid-sharding');
 
 const config = require('../config');
 const localeBuilder = require('./locale');
@@ -44,7 +45,9 @@ module.exports = class DiscordClient {
                 discord.GatewayIntentBits.GuildMessageTyping,
                 discord.GatewayIntentBits.GuildMembers,
                 discord.GatewayIntentBits.GuildPresences,
-            ]
+            ],
+            shards: getInfo().SHARD_LIST,
+            shardCount: getInfo().TOTAL_SHARDS,
         });
 
         this.client.distube = new DisTube(this.client, {
@@ -81,6 +84,8 @@ module.exports = class DiscordClient {
         this.client.distube.on("searchNoResult", async (message, query) => {
             console.warn(`[DISTUBE] No results found for query: ${query}`);
         });
+
+        this.client.cluster = new ClusterClient(this.client);
 
         this.loadHandlers();
         this.reloadCommands();
@@ -182,10 +187,15 @@ module.exports = class DiscordClient {
         this.client.on(event, callback);
     }
 
+    async getGuildCount() {
+        return (await this.client.cluster.fetchClientValues(`guilds.cache.size`))
+            .reduce((prev, val) => prev + val, 0);
+    }
+
     /**
      * Logs the bot in using the token provided in the constructor.
      */
     login() {
-        this.client.login(this.token);
+        return this.client.login(this.token);
     }
 }

@@ -21,13 +21,16 @@ const nFormatter = (num, digits) => {
     return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
 }
 
-module.exports = (logger, client, database) => {
+module.exports = (logger, manager, database) => {
     const router = express.Router();
 
     router.get('/', async (req, res) => {
         const stats = await database.getStats();
-        stats.servers = client.client.guilds.cache.size;
-        stats.users = client.client.users.cache.size;
+        stats.servers = (await manager.fetchClientValues(`guilds.cache.size`))
+            .reduce((prev, val) => prev + val, 0);
+        stats.users = (await manager.fetchClientValues(`users.cache.size`))
+            .reduce((prev, val) => prev + val, 0);
+        const client = {client: { user: { username: "test" }}};
 
         ejs.renderFile("./src/website/pages/index.ejs", { client, config, stats }, {}, function (err, str) {
             if (err) {
@@ -40,7 +43,8 @@ module.exports = (logger, client, database) => {
     });
 
     router.get('/invite', (req, res) => {
-        res.redirect(`https://discord.com/oauth2/authorize?client_id=${client.client.user.id}&scope=bot&permissions=8`);
+        const client = manager.clusters.first().client;
+        res.redirect(`https://discord.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=8`);
     });
 
     router.get('/leaderboard/:server_id', async (req, res) => {
@@ -81,7 +85,7 @@ module.exports = (logger, client, database) => {
             });
         }
 
-        ejs.renderFile("./src/website/pages/leaderboard.ejs", { client, config, data, guild, guild_icon, nFormatter }, {}, function (err, str) {
+        ejs.renderFile("./src/website/pages/leaderboard.ejs", { cluster: manager, config, data, guild, guild_icon, nFormatter }, {}, function (err, str) {
             if (err) {
                 logger.error('Website', err);
                 return res.send("An error occurred while rendering the page.");
@@ -90,6 +94,9 @@ module.exports = (logger, client, database) => {
             res.send(str);
         });
     });
+
+    // Database API
+    router.use('/api', require('./api')(logger, manager, database));
 
     return router;
 }

@@ -38,7 +38,7 @@ module.exports = class extends Command {
     }
 
     async run(message, locale, args) {
-        const serverCount = this.discord.guilds.cache.size;
+        const serverCount = await this.client.getGuildCount();
         const ping = this.discord.ws.ping;
         const uptime = this.discord.uptime;
         const memoryUsage = process.memoryUsage().heapUsed / 1024 / 1024;
@@ -88,6 +88,11 @@ module.exports = class extends Command {
                     {
                         name: locale('status.os'),
                         value: locale('status.os_format', osName, osVersion),
+                        inline: true
+                    },
+                    {
+                        name: '📦 Cluster',
+                        value: `Cluster ${this.discord.cluster.id + 1} / ${this.discord.cluster.count} (Shard #${message.guild.shardId + 1})`,
                         inline: true
                     },
                 ],
