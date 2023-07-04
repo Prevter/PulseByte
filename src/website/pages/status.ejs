@@ -1,0 +1,52 @@
+<div class="py-5">
+    <div class="container-xxl">
+        <div class="col-md-8 mx-auto">
+            <h1 class="display-1 text-center">
+                <i class="fa fa-exclamation-triangle"></i>
+            </h1>
+            <h1 class="lh-1 text-center mb-5">
+                Bot Status
+            </h1>
+            <div class="container text-center" style="font-size: 1.2em">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <i class="fa-solid fa-user-group me-1"></i> <b>Servers</b>
+                        <br/> <%= status.serverCount %>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <i class="fa-solid fa-wifi me-1"></i> <b>Discord Ping</b>
+                        <br/> <%= status.ping %>ms
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <i class="fa-solid fa-clock me-1"></i> <b>Bot Uptime</b>
+                        <br/> <%= status.uptime %>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <i class="fa-solid fa-memory me-1"></i> <b>Bot Memory Usage</b>
+                        <br/> <%= status.memoryUsage %> MB
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <i class="fa-solid fa-memory me-1"></i> <b>Total Memory</b>
+                        <br/> <%= status.usedMemory %> / <%= status.totalMemory %> GB
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <i class="fa-solid fa-microphone me-1"></i> <b>Voice Connections</b>
+                        <br/> <%= status.voiceConnections %>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <i class="fab fa-node me-1"></i> <b>Node.js Version</b>
+                        <br/> <%= status.nodeVersion %>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <i class="fa-solid fa-server me-1"></i> <b>Operating System</b>
+                        <br/> <%= status.osName %> <%= status.osVersion %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

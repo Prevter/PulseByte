@@ -57,6 +57,38 @@ body {
     text-align: left;
 }
 
+.leaderboard-row {
+    background-color: #0E1320;
+    border-radius: 10px;
+}
+
+.leaderboard-grid {
+    display: grid;
+    grid-auto-flow:column;  
+    grid-template-columns: 36px auto repeat(3, 72px);
+    gap: 0px 2px;
+}
+
+.leaderboard-stat {
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.gold {
+    background-color: #FFD041 !important;
+    color: #000 !important;
+}
+
+.silver {
+    background-color: #99CFEB !important;
+    color: #000 !important;
+}
+
+.bronze {
+    background-color: #BC8F6A !important;
+    color: #000 !important;
+}
+
 @media screen and (max-width: 768px) {
     .inline-md {
         display: block;
@@ -81,6 +113,12 @@ body {
     .nav-link {
         padding: 4px !important;
         margin-top: 0;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .leaderboard-grid {
+        grid-template-columns: 36px auto 72px;
     }
 }
 

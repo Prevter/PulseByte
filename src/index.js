@@ -112,8 +112,8 @@ const reloadExpress = () => {
 
     const router = require('./website')(logger, client, database);
 
-    app.use('/', router);
     app.use(express.static('./src/website/public'));
+    app.use('/', router);
 
     expressApp = app.listen(port, () => {
         logger.info('Website', `🚀 Server listening on port ${port}`);

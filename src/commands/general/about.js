@@ -26,10 +26,11 @@ module.exports = class extends Command {
         });
 
 
-        message.reply({ embeds: [Command.createEmbed({ 
+        message.reply({ embeds: [Command.createEmbed({
             title: locale('about.title'),
             description: locale('about.description', invite),
             fields,
+            url: this.config.web.url,
             thumbnail: this.discord.user.avatarURL()
         })]});
     }

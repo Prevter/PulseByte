@@ -1,147 +1,304 @@
-<html data-bs-theme="dark">
+<div class="py-5">
+    <div class="container-xxl">
+        <div class="col-md-8 mx-auto">
+            <img src="<%= guild_icon %>" class="rounded-circle mx-auto d-block mb-3" width="128" height="128"
+                style="border: 2px solid white;">
+            <h3 class="mb-5 lh-1 text-center">
+                <b><%= guild.name %></b> Leaderboard
+            </h3>
 
-<head>
-    <title>
-        <%= client.client.user.username %>
-    </title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="/avatar.png">
-    <script src="https://kit.fontawesome.com/863a3327e4.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="/style.css">
-</head>
+            <% 
+            function getOrder(i, total) {
+                if (total <= 2) return i == 0 ? 'first' : '2';
+                if (i == 0) return '2';
+                if (i == 1) return '1';
+                return '3';
+            } 
+            function placeTag(place) { 
+                if (place == 1) return ' gold';
+                if (place == 2) return ' silver';
+                if (place == 3) return ' bronze';
+                return '';
+            }
+            %>
 
-<body>
-    <header>
-        <nav class="navbar navbar-expand-md px-2">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">
-                    <%= client.client.user.username %>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
-                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarText">
-                    <ul class="navbar-nav me-auto mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#stats">Stats</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#features">Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#docs">Docs</a>
-                        </li>
-                    </ul>
-                    <div class="navbar-text">
-                        <div class="inline-md">
-                            <% if (config.bot.about.repo) { %>
-                                <a href="<%= config.bot.about.repo %>" class="social-icon"><i
-                                        class="fa fa-github fa-lg"></i></a>
-                                <% } if (config.bot.about.support) { %>
-                                    <a href="<%= config.bot.about.support %>" class="social-icon"><i
-                                            class="fa-brands fa-discord fa-lg"></i></a>
-                                    <% } %>
+            <style>
+                :root {
+                    --circle-size: 36px;
+                    --inner-circle-size: 32px;
+
+                    --circle-radius: calc(var(--circle-size) / 2);
+                    --inner-circle-radius: calc(var(--inner-circle-size) / 2);
+                    --inner-circle-offset: calc(var(--circle-radius) - var(--inner-circle-radius));
+                }
+
+                .indicator{
+                    width: var(--circle-size);
+                    height: var(--circle-size);
+                    text-align: center;
+                    position: relative;
+                    z-index:2;
+                }
+
+                .indicator span {
+                    position: absolute;
+                    line-height: var(--circle-size);
+                    width: var(--circle-size);
+                    text-align: center;
+                    display: block;
+                    z-index: 4;
+                }
+
+                .value-bar{
+                    background-color:#1FC758;
+                    position:absolute;
+                    width: var(--circle-size);
+                    height: var(--circle-size);
+                    border-radius:50%;
+                    clip: rect(0px var(--circle-radius) var(--circle-size) 0px);
+                    transform: rotate(189deg);
+                    z-index:3;
+                }
+                .left-half{
+                    background-color:#46506A;
+                    position:absolute;
+                    width: var(--circle-size);
+                    height: var(--circle-size);
+                    border-radius:50%;
+                    clip: rect(0px var(--circle-radius) var(--circle-size) 0px);
+                    z-index:3;
+                }
+                .right-half{
+                    background-color:#46506A;
+                    position:absolute;
+                    width: var(--circle-size);
+                    height: var(--circle-size);
+                    border-radius:50%;
+                    clip: rect(0px var(--circle-size) var(--circle-size) var(--circle-radius));
+                    z-index:3;
+                }
+                .centr{
+                    background-color: #46506A;
+                    width: var(--circle-size);
+                    height: var(--circle-size);
+                    border-radius:100%;
+                    position: absolute;
+                    z-index:2;
+                }
+                .centr.over50 .left-half{
+                    position: absolute;
+                    clip: rect(0, var(--circle-size), var(--circle-size), var(--circle-radius));
+                    background-color: #1FC758;
+                    border-radius: 50%;
+                    width: var(--circle-size);
+                    height: var(--circle-size);
+                }
+                .centrV{
+                    background-color: #0e1320;
+                    width: var(--inner-circle-size);
+                    position: absolute;
+                    height: var(--inner-circle-size);
+                    border-radius:50%;
+                    margin: var(--inner-circle-offset);
+                    z-index:3;
+                }
+
+                .p0 .value-bar { display: none; }
+                .p1 .value-bar { transform: rotate(4deg); }
+                .p2 .value-bar { transform: rotate(7deg); }
+                .p3 .value-bar { transform: rotate(11deg); }
+                .p4 .value-bar { transform: rotate(14deg); }
+                .p5 .value-bar { transform: rotate(18deg); }
+                .p6 .value-bar { transform: rotate(22deg); }
+                .p7 .value-bar { transform: rotate(25deg); }
+                .p8 .value-bar { transform: rotate(29deg); }
+                .p9 .value-bar { transform: rotate(32deg); }
+                .p10 .value-bar { transform: rotate(36deg); }
+                .p11 .value-bar { transform: rotate(40deg); }
+                .p12 .value-bar { transform: rotate(43deg); }
+                .p13 .value-bar { transform: rotate(47deg); }
+                .p14 .value-bar { transform: rotate(50deg); }
+                .p15 .value-bar { transform: rotate(54deg); }
+                .p16 .value-bar { transform: rotate(58deg); }
+                .p17 .value-bar { transform: rotate(61deg); }
+                .p18 .value-bar { transform: rotate(65deg); }
+                .p19 .value-bar { transform: rotate(68deg); }
+                .p20 .value-bar { transform: rotate(72deg); }
+                .p21 .value-bar { transform: rotate(76deg); }
+                .p22 .value-bar { transform: rotate(79deg); }
+                .p23 .value-bar { transform: rotate(83deg); }
+                .p24 .value-bar { transform: rotate(86deg); }
+                .p25 .value-bar { transform: rotate(90deg); }
+                .p26 .value-bar { transform: rotate(94deg); }
+                .p27 .value-bar { transform: rotate(97deg); }
+                .p28 .value-bar { transform: rotate(101deg); }
+                .p29 .value-bar { transform: rotate(104deg); }
+                .p30 .value-bar { transform: rotate(108deg); }
+                .p31 .value-bar { transform: rotate(112deg); }
+                .p32 .value-bar { transform: rotate(115deg); }
+                .p33 .value-bar { transform: rotate(119deg); }
+                .p34 .value-bar { transform: rotate(122deg); }
+                .p35 .value-bar { transform: rotate(126deg); }
+                .p36 .value-bar { transform: rotate(130deg); }
+                .p37 .value-bar { transform: rotate(133deg); }
+                .p38 .value-bar { transform: rotate(137deg); }
+                .p39 .value-bar { transform: rotate(140deg); }
+                .p40 .value-bar { transform: rotate(144deg); }
+                .p41 .value-bar { transform: rotate(148deg); }
+                .p42 .value-bar { transform: rotate(151deg); }
+                .p43 .value-bar { transform: rotate(155deg); }
+                .p44 .value-bar { transform: rotate(158deg); }
+                .p45 .value-bar { transform: rotate(162deg); }
+                .p46 .value-bar { transform: rotate(166deg); }
+                .p47 .value-bar { transform: rotate(169deg); }
+                .p48 .value-bar { transform: rotate(173deg); }
+                .p49 .value-bar { transform: rotate(176deg); }
+                .p50 .value-bar { transform: rotate(180deg); }
+                .p51 .value-bar { transform: rotate(184deg); }
+                .p52 .value-bar { transform: rotate(187deg); }
+                .p53 .value-bar { transform: rotate(191deg); }
+                .p54 .value-bar { transform: rotate(194deg); }
+                .p55 .value-bar { transform: rotate(198deg); }
+                .p56 .value-bar { transform: rotate(202deg); }
+                .p57 .value-bar { transform: rotate(205deg); }
+                .p58 .value-bar { transform: rotate(209deg); }
+                .p59 .value-bar { transform: rotate(212deg); }
+                .p60 .value-bar { transform: rotate(216deg); }
+                .p61 .value-bar { transform: rotate(220deg); }
+                .p62 .value-bar { transform: rotate(223deg); }
+                .p63 .value-bar { transform: rotate(227deg); }
+                .p64 .value-bar { transform: rotate(230deg); }
+                .p65 .value-bar { transform: rotate(234deg); }
+                .p66 .value-bar { transform: rotate(238deg); }
+                .p67 .value-bar { transform: rotate(241deg); }
+                .p68 .value-bar { transform: rotate(245deg); }
+                .p69 .value-bar { transform: rotate(248deg); }
+                .p70 .value-bar { transform: rotate(252deg); }
+                .p71 .value-bar { transform: rotate(256deg); }
+                .p72 .value-bar { transform: rotate(259deg); }
+                .p73 .value-bar { transform: rotate(263deg); }
+                .p74 .value-bar { transform: rotate(266deg); }
+                .p75 .value-bar { transform: rotate(270deg); }
+                .p76 .value-bar { transform: rotate(274deg); }
+                .p77 .value-bar { transform: rotate(277deg); }
+                .p78 .value-bar { transform: rotate(281deg); }
+                .p79 .value-bar { transform: rotate(284deg); }
+                .p80 .value-bar { transform: rotate(288deg); }
+                .p81 .value-bar { transform: rotate(292deg); }
+                .p82 .value-bar { transform: rotate(295deg); }
+                .p83 .value-bar { transform: rotate(299deg); }
+                .p84 .value-bar { transform: rotate(302deg); }
+                .p85 .value-bar { transform: rotate(306deg); }
+                .p86 .value-bar { transform: rotate(310deg); }
+                .p87 .value-bar { transform: rotate(313deg); }
+                .p88 .value-bar { transform: rotate(317deg); }
+                .p89 .value-bar { transform: rotate(320deg); }
+                .p90 .value-bar { transform: rotate(324deg); }
+                .p91 .value-bar { transform: rotate(328deg); }
+                .p92 .value-bar { transform: rotate(331deg); }
+                .p93 .value-bar { transform: rotate(335deg); }
+                .p94 .value-bar { transform: rotate(338deg); }
+                .p95 .value-bar { transform: rotate(342deg); }
+                .p96 .value-bar { transform: rotate(346deg); }
+                .p97 .value-bar { transform: rotate(349deg); }
+                .p98 .value-bar { transform: rotate(353deg); }
+                .p99 .value-bar { transform: rotate(356deg); }
+                .p100 .value-bar { transform: rotate(360deg); }
+            </style>
+
+            <div class="container-xxl mb-3">
+                <div class="row text-center" style="gap: 0 10px">
+                    <% for (let i = 0; i < Math.min(3, data.length); i++) { %>
+                        <div class="col-sm order-sm-<%= getOrder(i, data.length) %> my-2 px-2 pt-3 pb-2 " 
+                            style="background-color: #0E1320; border-radius: 10px;">
+                            <img src="<%= data[i].avatar %>" class="rounded-circle mx-auto d-block mb-2" width="64"
+                                height="64">
+                            <h5 class="mb-1 d-flex justify-content-center">
+                                <div class="rounded-circle text-white d-flex<%= placeTag(data[i].place) %>" 
+                                    style="width: 32px; height: 32px; background-color: rgba(217, 217, 217, 0.25);">
+                                    <span class="m-auto"><%= data[i].place %></span>
+                                </div>
+                                <span class="my-auto ms-2">
+                                    <%= data[i].tag %>
+                                </span>
+                            </h5>
+                            <p class="mb-0 lead">
+                                <%= data[i].messages %> messages
+                            </p>
+                            <p class="mb-0 lead">
+                                <%= nFormatter(data[i].xp, 2) %> XP
+                            </p>
+                            <p class="mb-0 lead">
+                                <div class="indicator mx-auto mt-2">
+                                    <div>
+                                        <span style="font-size: 14px"><%= data[i].level %></span>
+                                        <div class="centr<%= data[i].progress > 50 ? ' over50' : '' %> p<%= data[i].progress %>">
+                                            <div class="value-bar"></div>
+                                            <div class="left-half"></div>
+                                        </div>
+                                        <div class="centrV"></div>
+                                    </div>
+                                </div>
+                            </p>
                         </div>
-                        <a href="/dashboard" class="text-decoration-none">
-                            <button class="btn btn-primary m-0" type="button">Dashboard</button>
-                        </a>
-                    </div>
-                </div>
-        </nav>
-    </header>
-    <main>
-        <div class="py-5" id="features">
-            <div class="container-xxl">
-                <div class="col-md-8 mx-auto">
-                    <img src="<%= guild_icon %>" class="rounded-circle mx-auto d-block mb-3" width="128" height="128"
-                        style="border: 2px solid white;">
-                    <h3 class="mb-5 lh-1 text-center">
-                        <b>
-                            <%= guild.name %>
-                        </b> Leaderboard
-                    </h3>
-
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">User</th>
-                                <th scope="col">Messages</th>
-                                <th scope="col">XP</th>
-                                <th scope="col">Level</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% data.forEach(member=> { %>
-
-                                <tr>
-                                    <th scope="row">
-                                        <%= member.place %>
-                                    </th>
-                                    <td>
-                                        <div class="container-fluid d-inline">
-                                            <img src="<%= member.avatar %>"
-                                                class="rounded-circle mx-auto d-inline-block" width="36" height="36">
-                                            <%= member.tag %>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <%= member.messages %>
-                                    </td>
-                                    <td>
-                                        <%= nFormatter(member.xp, 2) %>
-                                    </td>
-                                    <td>
-                                        <div class="progress-bar">
-                                            <progress value="<%= member.progress %>" min="0" max="100"
-                                                style="visibility:hidden;height:0;width:0;"></progress>
-                                            <%= member.level %>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <% }) %>
-                        </tbody>
-                    </table>
-
-
+                    <% } %>
                 </div>
             </div>
+
+            <% if (data.length > 3) { %>
+
+            <div class="leaderboard-grid my-2 p-2 pt-0" style="font-size: 14px">
+                <div class="text-center">
+                    #
+                </div>
+                <div class="container-fluid">
+                    User
+                </div>
+                <div class="text-center d-none d-sm-block">
+                    Messages
+                </div>
+                <div class="text-center d-none d-sm-block">
+                    XP
+                </div>
+                <div class="text-center">
+                    Level
+                </div>
+            </div>
+
+            <% data.slice(3).forEach(member=> { %>
+                <div class="leaderboard-grid leaderboard-row mb-1 p-2">
+                    <div class="rounded-circle text-white d-flex" style="width: 36px; height: 36px; background-color: rgba(217, 217, 217, 0.25);">
+                        <span class="m-auto"><%= member.place %></span>
+                    </div>
+                    <div class="">
+                        <div class="container-fluid d-inline">
+                            <img src="<%= member.avatar %>" class="rounded-circle mx-auto d-inline-block" width="36"
+                                height="36">
+                            <span class="ms-1">
+                                <%= member.tag %>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-none d-sm-flex">
+                        <span class="m-auto text-white leaderboard-stat"><%= member.messages %></span>
+                    </div>
+                    <div class="d-none d-sm-flex">
+                        <span class="m-auto text-white leaderboard-stat"><%= nFormatter(member.xp, 2) %></span>
+                    </div>
+                    <div class="d-flex">
+                        <div class="indicator mx-auto">
+                            <div>
+                                <span style="font-size: 14px"><%= member.level %></span>
+                                <div class="centr<%= member.progress > 50 ? ' over50' : '' %> p<%= member.progress %>">
+                                    <div class="value-bar"></div>
+                                    <div class="left-half"></div>
+                                </div>
+                                <div class="centrV"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% })} %>
         </div>
-    </main>
-    <footer class="py-3">
-        <ul class="nav justify-content-center my-2">
-            <% if (config.bot.about.repo) { %>
-                <li class="nav-item">
-                    <a href="<%= config.bot.about.repo %>" class="social-icon">
-                        <i class="fa fa-github fa-lg"></i>
-                    </a>
-                </li>
-                <% } if (config.bot.about.support) { %>
-                    <li class="nav-item">
-                        <a href="<%= config.bot.about.support %>" class="social-icon">
-                            <i class="fa-brands fa-discord fa-lg"></i>
-                        </a>
-                    </li>
-                    <% } %>
-        </ul>
-        <p class="text-center text-muted">
-            © <%= new Date().getFullYear() %>
-                Copyright
-                <b>
-                    <%= client.client.user.username %>
-                </b>.
-                All Rights Reserved.
-        </p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
-</body>
-
-</html>
+    </div>
+</div>
