@@ -30,10 +30,11 @@ if (config.database.enable_backup) {
         if (!fs.existsSync(config.database.backup_path))
             fs.mkdirSync(config.database.backup_path);
 
-        const date_str = new Date().toLocaleString()
-            .replace(/\./g, '-')
-            .replace(/\, /g, '_')
-            .replace(/\:/g, '-');
+        const date_str = new Date().toISOString()
+            .replace(/\//g, '-')
+            .replace(/T/g, '_')
+            .replace(/\:/g, '-')
+            .split('.')[0];
         const backup_dir = path.join(config.database.backup_path, date_str);
         fs.mkdirSync(backup_dir);
 
@@ -44,12 +45,12 @@ if (config.database.enable_backup) {
                     logger.error('Backup', `Failed to export ${filename} to ${backup_dir}`, err);
                     return;
                 }
-        
+
             });
         }
 
         logger.info('Backup', `💾 Saved backup in '${date_str}'`);
-        
+
         fs.readdir(config.database.backup_path, (err, files) => {
             files.sort((a, b) => {
                 // get date from folder name
@@ -104,7 +105,7 @@ const reloadExpress = () => {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(cors());
-    
+
     if (require.cache[require.resolve('./website')]) {
         delete require.cache[require.resolve('./website')];
     }
