@@ -181,6 +181,7 @@ module.exports = (logger, client, database) => {
                 user_id: rating.id,
                 place: place,
                 tag: member.user.tag.stripTag(),
+                nickname: member.nickname,
                 avatar: member.user.displayAvatarURL({ dynamic: true, size: 256 }),
                 xp: rating.xp,
                 level: XPModule.getLevel(rating.xp),

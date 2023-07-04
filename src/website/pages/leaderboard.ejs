@@ -7,6 +7,15 @@
                 <b><%= guild.name %></b> Leaderboard
             </h3>
 
+            <div class="container" style="font-size: small;">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="showNicknames" checked>
+                    <label class="form-check-label" for="showNicknames">
+                        Display nicknames instead of usernames
+                    </label>
+                </div>
+            </div>
+
             <% 
             function getOrder(i, total) {
                 if (total <= 2) return i == 0 ? 'first' : '2';
@@ -218,8 +227,8 @@
                                     style="width: 32px; height: 32px; background-color: rgba(217, 217, 217, 0.25);">
                                     <span class="m-auto"><%= data[i].place %></span>
                                 </div>
-                                <span class="my-auto ms-2">
-                                    <%= data[i].tag %>
+                                <span class="my-auto ms-2 username-field" data-nickname="<%= data[i].nickname %>" data-username="<%= data[i].tag %>">
+                                    <%= data[i].nickname || data[i].tag %>
                                 </span>
                             </h5>
                             <p class="mb-0 lead">
@@ -274,8 +283,8 @@
                         <div class="container-fluid d-inline">
                             <img src="<%= member.avatar %>" class="rounded-circle mx-auto d-inline-block" width="36"
                                 height="36">
-                            <span class="ms-1">
-                                <%= member.tag %>
+                            <span class="ms-1 username-field" data-nickname="<%= member.nickname %>" data-username="<%= member.tag %>">
+                                <%= member.nickname || member.tag %>
                             </span>
                         </div>
                     </div>
@@ -299,6 +308,15 @@
                     </div>
                 </div>
             <% })} %>
+
+            <script>
+                document.getElementById("showNicknames").addEventListener("change", function() {
+                    document.querySelectorAll(".username-field").forEach((element) => {
+                        if (!element.dataset.nickname) return;
+                        element.innerHTML = this.checked ? element.dataset.nickname : element.dataset.username;
+                    });
+                });
+            </script>
         </div>
     </div>
 </div>
