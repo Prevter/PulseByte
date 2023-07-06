@@ -49,6 +49,11 @@
         "self": "❌ You can't ban yourself!",
         "title": "{0} was banned!"
     },
+    "coin": {
+        "_description": "Flip a coin",
+        "heads": "{0} Heads!",
+        "tails": "{0} Tails!"
+    },
     "clean": {
         "_args_desc": {
             "count": "The amount of messages to clean"
@@ -58,6 +63,16 @@
         "invalid_count": "⚠️ Invalid count! Must be between 1 and 100",
         "failed": "❌ Failed to clean messages!",
         "success": "✅ Cleaned {0} messages!"
+    },
+    "dice": {
+        "_args_desc": {
+            "min": "The minimum number to roll (default: 1)",
+            "max": "The maximum number to roll (default: 6)"
+        },
+        "_description": "Roll a dice",
+        "_usage": "[max] | [min] [max]",
+        "invalid_range": "⚠️ Invalid range! Please check your arguments.",
+        "result": "🎲 You rolled **{0}**!"
     },
     "experience": {
         "_description": "Toggle XP system in the current guild",
@@ -121,6 +136,8 @@
         "command": "`{0}` command",
         "general": "General",
         "general_desc": "General commands that everyone can use",
+        "fun": "Fun",
+        "fun_desc": "Commands for entertainment purposes",
         "levels": "Levels",
         "levels_desc": "Give your members XP when they send messages and rank them in a leaderboard",
         "moderator": "Moderator",
