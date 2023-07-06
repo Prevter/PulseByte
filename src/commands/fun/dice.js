@@ -11,11 +11,11 @@ module.exports = class extends Command {
             category: 'fun',
             args: [{
                 name: 'max',
-                type: 'number'
+                type: 'integer'
             },
             {
                 name: 'min',
-                type: 'number'
+                type: 'integer'
             }]
         });
     }
