@@ -11,42 +11,75 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <i class="fa-solid fa-user-group me-1"></i> <b>Servers</b>
-                        <br/> <%= status.serverCount %>
+                        <br/> <span id="serverCount"><%= status.serverCount %></span>
                     </div>
                     <div class="col-md-4 mb-3">
                         <i class="fa-solid fa-wifi me-1"></i> <b>Discord Ping</b>
-                        <br/> <%= status.ping %>ms
+                        <br/> <span id="discordPing"><%= status.ping %></span>ms
                     </div>
                     <div class="col-md-4 mb-3">
                         <i class="fa-solid fa-clock me-1"></i> <b>Bot Uptime</b>
-                        <br/> <%= status.uptime %>
+                        <br/> <span id="botUptime"><%= status.uptime %></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <i class="fa-solid fa-memory me-1"></i> <b>Bot Memory Usage</b>
-                        <br/> <%= status.memoryUsage %> MB
+                        <br/> <span id="memoryUsage"><%= status.memoryUsage %></span> MB
                     </div>
                     <div class="col-md-4 mb-3">
                         <i class="fa-solid fa-memory me-1"></i> <b>Total Memory</b>
-                        <br/> <%= status.usedMemory %> / <%= status.totalMemory %> GB
+                        <br/> <span id="usedMemory"><%= status.usedMemory %></span> / <span id="totalMemory"><%= status.totalMemory %></span> GB
                     </div>
                     <div class="col-md-4 mb-3">
                         <i class="fa-solid fa-microphone me-1"></i> <b>Voice Connections</b>
-                        <br/> <%= status.voiceConnections %>
+                        <br/> <span id="voiceConnections"><%= status.voiceConnections %></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <i class="fab fa-node me-1"></i> <b>Node.js Version</b>
-                        <br/> <%= status.nodeVersion %>
+                        <br/> <span id="nodeVersion"><%= status.nodeVersion %></span>
                     </div>
                     <div class="col-md-6 mb-3">
                         <i class="fa-solid fa-server me-1"></i> <b>Operating System</b>
-                        <br/> <%= status.osName %> <%= status.osVersion %>
+                        <br/> <span id="osName"><%= status.osName %></span> <span id="osVersion"><%= status.osVersion %></span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    const serverCount = document.querySelector("#serverCount");
+    const discordPing = document.querySelector("#discordPing");
+    const botUptime = document.querySelector("#botUptime");
+    const memoryUsage = document.querySelector("#memoryUsage");
+    const usedMemory = document.querySelector("#usedMemory");
+    const totalMemory = document.querySelector("#totalMemory");
+    const voiceConnections = document.querySelector("#voiceConnections");
+    const nodeVersion = document.querySelector("#nodeVersion");
+    const osName = document.querySelector("#osName");
+    const osVersion = document.querySelector("#osVersion");
+
+    function setValues(status) {
+        serverCount.innerText = status.serverCount;
+        discordPing.innerText = status.ping;
+        botUptime.innerText = status.uptime;
+        memoryUsage.innerText = status.memoryUsage;
+        usedMemory.innerText = status.usedMemory;
+        totalMemory.innerText = status.totalMemory;
+        voiceConnections.innerText = status.voiceConnections;
+        nodeVersion.innerText = status.nodeVersion;
+        osName.innerText = status.osName;
+        osVersion.innerText = status.osVersion;
+    }
+
+    setInterval(()=>{
+        fetch("/status/json")
+            .then(res => res.json())
+            .then(status => setValues(status))
+            .catch(err => console.error(err));
+    }, 5000);
+</script>

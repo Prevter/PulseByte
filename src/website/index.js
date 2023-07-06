@@ -22,6 +22,69 @@ const nFormatter = (num, digits) => {
     return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
 }
 
+const getStatus = (client) => {
+    daysParser = (days, locale) => {
+        if (days % 10 === 1 && days % 100 !== 11)
+            return locale('!status.day.one');
+        else if (days % 10 >= 2 && days % 10 <= 4 && (days % 100 < 10 || days % 100 >= 20))
+            return locale('!status.day.few') ?? locale('!status.day.other');
+        else
+            return locale('!status.day.other');
+    }
+
+    timeString = (timePassed, locale) => {
+        let seconds = Math.floor(timePassed % 60);
+        let minutes = Math.floor(timePassed / 60) % 60;
+        let hours = Math.floor(timePassed / 3600) % 24;
+        let days = Math.floor(timePassed / 86400);
+        let result = '';
+        if (days > 0)
+            result += `${days} ${this.daysParser(days, locale)} `;
+        if (hours > 0 || result.length > 0)
+            result += `${hours}:`;
+        if (minutes > 0 || result.length > 0)
+            result += `${minutes < 10 ? '0' : ''}${minutes}:`;
+        else
+            result += `${minutes}:`;
+        result += `${seconds < 10 ? '0' : ''}${seconds}`;
+        return result;
+    }
+
+    const serverCount = client.client.guilds.cache.size;
+    const ping = client.client.ws.ping;
+    const uptime = client.client.uptime;
+    const memoryUsage = process.memoryUsage().heapUsed / 1024 / 1024;
+    const nodeVersion = process.version;
+    const osName = (() => {
+        switch (os.platform()) {
+            case 'aix': return 'AIX';
+            case 'darwin': return 'macOS';
+            case 'freebsd': return 'FreeBSD';
+            case 'linux': return 'Linux';
+            case 'openbsd': return 'OpenBSD';
+            case 'sunos': return 'SunOS';
+            case 'win32': return 'Windows';
+            case 'android': return 'Android';
+            default: return os.platform();
+        }
+    })();
+    const osVersion = os.release();
+    const totalMemory = os.totalmem() / 1024 / 1024 / 1024;
+    const freeMemory = os.freemem() / 1024 / 1024 / 1024;
+    return {
+        serverCount,
+        ping,
+        uptime: timeString(uptime / 1000, client.locale),
+        memoryUsage: memoryUsage.toFixed(2),
+        nodeVersion,
+        osName,
+        osVersion,
+        totalMemory: totalMemory.toFixed(2),
+        usedMemory: (totalMemory - freeMemory).toFixed(2),
+        voiceConnections: client.client.distube.voices.size
+    }
+}
+
 module.exports = (logger, client, database) => {
     const router = express.Router();
 
@@ -66,67 +129,19 @@ module.exports = (logger, client, database) => {
         res.redirect(`https://discord.com/oauth2/authorize?client_id=${client.client.user.id}&scope=bot&permissions=8`);
     });
 
-    router.get('/status', async (req, res, next) => {
-        daysParser = (days, locale) => {
-            if (days % 10 === 1 && days % 100 !== 11)
-                return locale('!status.day.one');
-            else if (days % 10 >= 2 && days % 10 <= 4 && (days % 100 < 10 || days % 100 >= 20))
-                return locale('!status.day.few') ?? locale('!status.day.other');
-            else
-                return locale('!status.day.other');
-        }
-    
-        timeString = (timePassed, locale) => {
-            let seconds = Math.floor(timePassed % 60);
-            let minutes = Math.floor(timePassed / 60) % 60;
-            let hours = Math.floor(timePassed / 3600) % 24;
-            let days = Math.floor(timePassed / 86400);
-            let result = '';
-            if (days > 0)
-                result += `${days} ${this.daysParser(days, locale)} `;
-            if (hours > 0 || result.length > 0)
-                result += `${hours}:`;
-            if (minutes > 0 || result.length > 0)
-                result += `${minutes < 10 ? '0' : ''}${minutes}:`;
-            else
-                result += `${minutes}:`;
-            result += `${seconds < 10 ? '0' : ''}${seconds}`;
-            return result;
-        }
+    router.get('/status/json', async (req, res, next) => {
+        const status = getStatus(client);
 
-        const serverCount = client.client.guilds.cache.size;
-        const ping = client.client.ws.ping;
-        const uptime = client.client.uptime;
-        const memoryUsage = process.memoryUsage().heapUsed / 1024 / 1024;
-        const nodeVersion = process.version;
-        const osName = (()=>{
-            switch (os.platform()) {
-                case 'aix': return 'AIX';
-                case 'darwin': return 'macOS';
-                case 'freebsd': return 'FreeBSD';
-                case 'linux': return 'Linux';
-                case 'openbsd': return 'OpenBSD';
-                case 'sunos': return 'SunOS';
-                case 'win32': return 'Windows';
-                case 'android': return 'Android';
-                default: return os.platform();
-            }
-        })();
-        const osVersion = os.release();
-        const totalMemory = os.totalmem() / 1024 / 1024 / 1024;
-        const freeMemory = os.freemem() / 1024 / 1024 / 1024;
-        const status = {
-            serverCount,
-            ping,
-            uptime: timeString(uptime / 1000, client.locale),
-            memoryUsage: memoryUsage.toFixed(2),
-            nodeVersion,
-            osName,
-            osVersion,
-            totalMemory: totalMemory.toFixed(2),
-            usedMemory: (totalMemory - freeMemory).toFixed(2),
-            voiceConnections: client.client.distube.voices.size
+        try {
+            res.json(status);
         }
+        catch (err) {
+            next({ status: 500, message: err });
+        }
+    });
+
+    router.get('/status', async (req, res, next) => {
+        const status = getStatus(client);
 
         try {
             const page = await renderPage(main_page, "status", { status });
@@ -157,7 +172,7 @@ module.exports = (logger, client, database) => {
             try {
                 member = await guild.members.fetch(rating.id);
             }
-            catch (err) {}
+            catch (err) { }
             if (!member) {
                 // try to fetch from cache
                 const user = client.client.users.cache.get(rating.id);
