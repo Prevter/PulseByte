@@ -88,10 +88,14 @@ const DiscordClient = require('./client');
 const client = new DiscordClient(config.bot.token, database, logger);
 process.client = client;
 client.init();
+
+client.once('ready', () => {
+    reloadExpress();
+});
+
 client.login();
 
 // Express
-
 let expressApp = null;
 
 const reloadExpress = () => {
@@ -121,7 +125,6 @@ const reloadExpress = () => {
 }
 
 process.reloadExpress = reloadExpress;
-reloadExpress();
 
 // Exit handlers and error handlers
 process.on('exit', () => database.close());
