@@ -67,8 +67,12 @@ module.exports = (locale) => {
             return null;
         }
 
-        return value.replace(/{(\d+)}/g, (match, number) => {
-            return typeof args[number] != 'undefined' ? args[number] : match;
-        });
+        if (typeof value === 'string' && args.length > 0) {
+            return value.replace(/{(\d+)}/g, (match, number) => {
+                return typeof args[number] != 'undefined' ? args[number] : match;
+            });
+        }
+
+        return value;
     };
 }
