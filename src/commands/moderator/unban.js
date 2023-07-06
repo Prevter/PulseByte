@@ -11,7 +11,8 @@ module.exports = class extends Command {
                 name: 'member',
                 type: 'user',
                 required: true
-            }]
+            }],
+            guild_only: true
         });
     }
 

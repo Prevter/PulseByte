@@ -20,7 +20,8 @@ module.exports = class extends Command {
             {
                 name: 'reason',
                 type: 'string'
-            }]
+            }],
+            guild_only: true
         });
     }
 

@@ -331,6 +331,16 @@
         "error": "❌ Failed to skip current song!",
         "success": "✅ Skipped current song!"
     },
+    "slowmode": {
+        "_args_desc": {
+            "duration": "Seconds to set the slowmode to (0 to disable)"
+        },
+        "_description": "Set the slowmode for the current channel",
+        "_usage": "<duration>",
+        "success": "✅ Set the slowmode to **{0}** seconds!",
+        "disabled": "✅ Disabled the slowmode!",
+        "failed": "❌ Failed to set the slowmode!"
+    },
     "status": {
         "_description": "Get bot's status (uptime, memory, etc.)",
         "connecting": "Starting up...",

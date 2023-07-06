@@ -11,7 +11,8 @@ module.exports = class extends Command {
                 name: 'count',
                 type: 'integer',
                 required: true
-            }]
+            }],
+            guild_only: true
         });
     }
 
@@ -33,7 +34,7 @@ module.exports = class extends Command {
             return await interaction.editReply({ embeds: [Command.createErrorEmbed(locale('clean.failed'))], ephemeral: true });
         }
 
-        await interaction.editReply({ embeds: [Command.createEmbed({ description: locale('clean.success', count ) })], ephemeral: true });
+        await interaction.editReply({ embeds: [Command.createEmbed({ description: locale('clean.success', count) })], ephemeral: true });
         await sleep(5000);
         await interaction.deleteReply();
     }
