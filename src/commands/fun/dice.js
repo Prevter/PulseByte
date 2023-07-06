@@ -20,6 +20,18 @@ module.exports = class extends Command {
         });
     }
 
+    async runAsSlash(interaction, locale, args) {
+        if (args.min && args.max) {
+            return await this.run(interaction, locale, [args.min, args.max]);
+        }
+        else if (args.max) {
+            return await this.run(interaction, locale, [args.max]);
+        }
+        else {
+            return await this.run(interaction, locale, []);
+        }
+    }
+
     async run(message, locale, args) {
         let max = 6;
         let min = 1;
@@ -32,7 +44,7 @@ module.exports = class extends Command {
             max = parseInt(args[1]);
         }
 
-        if (isNaN(max) || isNaN(min) || max < min || max < 1 || min < 1) {
+        if (isNaN(max) || isNaN(min) || max < min) {
             return await message.reply({ embeds: [Command.createErrorEmbed(locale('dice.invalid_range'))] });
         }
 
