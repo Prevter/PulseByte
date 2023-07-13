@@ -4,16 +4,21 @@
     "bot": {
         "token": "<Discord Bot Token>",
         "prefix": "-",
-        "owners": [
-            "400199033915965441"
-        ],
-        "embed_color": "#0099FF",
-        "error_embed_color": "#F04848",
+        "about": {
+            "repo": "https://github.com/Prevter/SanyaBot",
+            "support": "https://discord.gg/FDyJVPFNT7"
+        },
         "activity": {
             "status": "online",
             "type": "PLAYING",
             "name": "-help"
         },
+        "buttons_timeout": 60000,
+        "embed_color": "#0099FF",
+        "error_embed_color": "#F04848",
+        "owners": [
+            "400199033915965441"
+        ],
         "xp": {
             "enabled": true,
             "cooldown": 60,
@@ -24,11 +29,6 @@
                 "background": "#090a0b",
                 "background_opacity": 100
             }
-        },
-        "buttons_timeout": 60000,
-        "about": {
-            "repo": "https://github.com/Prevter/SanyaBot",
-            "support": "https://discord.gg/FDyJVPFNT7"
         }
     },
     "database": {

@@ -49,19 +49,21 @@ module.exports = {
 
         await client.database.incrementCommandUsage();
 
+        const is_owner = config.bot.owners.includes(message.author.id);
+
         if (cmd.slash_only)
             return message.reply({ embeds: [Command.createErrorEmbed(locale('global.slash_only'))] });
 
-        if (cmd.owner_only && !config.bot.owners.includes(message.author.id))
+        if (cmd.owner_only && !is_owner)
             return message.reply({ embeds: [Command.createErrorEmbed(locale('global.owner_only'))] });
 
         if (cmd.guild_only && !message.guild)
             return message.reply({ embeds: [Command.createErrorEmbed(locale('global.guild_only'))] });
 
-        if (cmd.admin_only && !message.member.permissions.has(PermissionsBitField.Flags.Administrator))
+        if (cmd.admin_only && !message.member.permissions.has(PermissionsBitField.Flags.Administrator) && !is_owner)
             return message.reply({ embeds: [Command.createErrorEmbed(locale('global.admin_only'))] });
 
-        if (cmd.permissions.length > 0) {
+        if (cmd.permissions.length > 0 && !is_owner) {
             const missing = message.member.permissions
                 .missing(cmd.permissions)
                 .map(p => locale(`permissions.${p}`) ?? p);

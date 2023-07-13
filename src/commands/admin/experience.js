@@ -10,14 +10,6 @@ module.exports = class extends Command {
         });
     }
 
-    async runAsSlash(interaction, locale, args) {
-        let arg = [];
-        if (args.enable) {
-            arg.push(args.enable);
-        }
-        await this.run(interaction, locale, arg);
-    }
-
     async run(message, locale, args) {
         message.guild_data.xp_enabled = !message.guild_data.xp_enabled;
         await this.database.updateGuild(message.guild_data);

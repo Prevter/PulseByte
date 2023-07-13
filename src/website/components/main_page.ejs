@@ -2,7 +2,7 @@
 
 <head>
     <title>
-        <%= client.client.user.username %>
+        <%= config.name %> - Discord Bot
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +18,7 @@
         <nav class="navbar navbar-expand-md px-2">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
-                    <%= client.client.user.username %>
+                    <%= config.name %>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,7 @@
         <p class="text-center text-muted">
             © <%= new Date().getFullYear() %>
             Copyright
-            <b><%= client.client.user.username %></b>.
+            <b><%= config.name %></b>.
             All Rights Reserved.
         </p>
     </footer>
