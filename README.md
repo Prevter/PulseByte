@@ -349,6 +349,7 @@ It has several features for easy localization:
 - `locale('key.subkey.nested_key')` - Get value of key. If key is not found, it will return `null`. You can use dot to access nested keys.
 - `locale('command.formatted', value1, value2)` - Use this to format strings. It will replace `{0}`, `{1}`, etc. with values passed as arguments.
 - `locale('!key')` - Use exclamation mark to forbid fallback to default language. It's not used as much as other features, but it can be useful in some cases, for example if you want to check if key exists in localization file.
+- `locale('~key')` - Same as above, but it won't log an error if key is not found. It's useful for optional keys.
 - `locale('_locale')` - Use this to get current locale code.
 
 ## Adding new database backends

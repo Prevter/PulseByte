@@ -42,7 +42,16 @@ module.exports = {
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
 
-        const cmd = client.commands.find(c => c.name === command || c.aliases.includes(command));
+        const cmd = client.commands.find(c => {
+            if (c.name === command) return true;
+            if (c.aliases.includes(command)) return true;
+
+            // Get translated aliases for current locale
+            const aliases = locale(`~${c.name}._aliases`);
+            if (aliases && aliases.includes(command)) return true;
+
+            return false;
+        });
         if (!cmd) return;
 
         client.logger.log('Message', `📨 ${message.author.tag.stripTag(true)} called a command: ${message.content}`)

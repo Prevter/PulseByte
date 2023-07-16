@@ -42,7 +42,9 @@ module.exports = (locale) => {
         if (key === '_locale') return locale;
 
         let defaultNull = key.startsWith('!');
-        if (defaultNull) key = key.substring(1);
+        let defaultNullIgnore = key.startsWith('~');
+        if (defaultNull || defaultNullIgnore) key = key.substring(1);
+        if (defaultNullIgnore) defaultNull = true;
 
         let value = null;
         try {
@@ -63,6 +65,8 @@ module.exports = (locale) => {
         }
 
         if (!value) {
+            if (defaultNullIgnore) return null;
+            
             process.logger.warn('Locale', `Locale key '${key}' not found in '${locale}'${!defaultNull ? ` and '${config.default_language}'` : ''}!`)
             return null;
         }
