@@ -1,6 +1,12 @@
-# SashkoBot
-Multipurpose Discord bot. Supports multiple languages, has a lot of commands and features. Can work with prefix commands and slash commands. Has an XP system, economy, music, moderation, and much more. *(MEE6 replacement)*  
-This is a third iteration of this project, written in JavaScript. 
+<div align="center">
+   <a href="https://github.com/Prevter/PulseByte">
+      <img src="src/website/public/icons/android-chrome-192x192.png" alt="Logo" width="80" height="80">
+   </a>
+   <h3 align="center">PulseByte</h3>
+   <p align="center">
+      Multipurpose Discord bot. Supports multiple languages, has a lot of commands and features. Can work with prefix commands and slash commands. Has an XP system, economy, music, moderation, and much more. *(MEE6 replacement)* 
+   </p>
+</div>
 
 ## Running
 Install all requirements using npm:
@@ -97,6 +103,11 @@ npm run start
 - `language <language code>` - Change bot language for this server.
 - `prefix <prefix>` - Change bot prefix for this server.
 
+### Fun
+- `8ball` - Ask 8ball a question.
+- `coin` - Flip a coin.
+- `dice [min] [max]` - Roll a dice. (default: 1-6)
+
 ### General
 - `about` - Show information about bot.
 - `help [category|command]` - Show help message.
@@ -112,6 +123,7 @@ npm run start
 - `clean <count>` - Delete messages.
 - `kick <user> [reason]` - Kick user.
 - `mute <user> <duration> [reason]` - Mute user.
+- `slowmode <duration>` - Set slowmode for channel.
 - `unban <user>` - Unban user.
 - `unmute <user>` - Unmute user.
 
@@ -135,7 +147,7 @@ npm run start
 - `volume <volume>` - Change volume.
 
 ### Owner-only
-- `reload [category]` - Hot reload submodules. Available categories: `commands`, `locales`, `handlers`, `slash` and `all`. Useful for development.
+- `reload [category]` - Hot reload submodules. Available categories: `commands`, `locales`, `handlers`, `slash`, `web`, `config` and `all`. Useful for development.
 
 ### Search
 - `anime <query>` - Search for anime.
