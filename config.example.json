@@ -1,11 +1,13 @@
 {
     "name": "My Bot",
+    "description": "Yet another discord bot with music, economy, levels, fun and more :)",
+    "keywords": "discord,bot,music,moderation,levels,fun",
     "default_language": "en",
     "bot": {
         "token": "<Discord Bot Token>",
         "prefix": "-",
         "about": {
-            "repo": "https://github.com/Prevter/SanyaBot",
+            "repo": "https://github.com/Prevter/PulseByte",
             "support": "https://discord.gg/FDyJVPFNT7"
         },
         "activity": {
@@ -13,8 +15,11 @@
             "type": "PLAYING",
             "name": "-help"
         },
+        "automod": {
+            "enabled": true
+        },
         "buttons_timeout": 60000,
-        "embed_color": "#0099FF",
+        "embed_color": "#14B207",
         "error_embed_color": "#F04848",
         "owners": [
             "400199033915965441"
