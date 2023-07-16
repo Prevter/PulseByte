@@ -15,23 +15,25 @@ module.exports = class extends Command {
 
         if (this.config.bot.about.repo) fields.push({
             name: locale('about.repo'),
-            value: locale('about.repo_value', this.config.bot.about.repo),
+            value: locale('about.repo_value', this.config.name, this.config.bot.about.repo),
             inline: true
         });
 
         if (this.config.bot.about.support) fields.push({
             name: locale('about.support'),
-            value: locale('about.support_value', this.config.bot.about.support),
+            value: locale('about.support_value', this.config.name, this.config.bot.about.support),
             inline: true
         });
 
 
-        message.reply({ embeds: [Command.createEmbed({
-            title: locale('about.title'),
-            description: locale('about.description', invite),
-            fields,
-            url: this.config.web.url,
-            thumbnail: this.discord.user.avatarURL()
-        })]});
+        message.reply({
+            embeds: [Command.createEmbed({
+                title: this.config.name,
+                description: locale('about.description', invite),
+                fields,
+                url: this.config.web.url,
+                thumbnail: this.discord.user.avatarURL()
+            })]
+        });
     }
 }

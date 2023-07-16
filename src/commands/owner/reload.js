@@ -21,6 +21,13 @@ module.exports = class extends Command {
         const handlers = args.includes('handlers') || all;
         const slash = args.includes('slash') || all;
         const web = args.includes('web') || all;
+        const config = args.includes('config') || all;
+
+        if (config) {
+            delete require.cache[require.resolve('../../../config.json')];
+            this.client.config = require('../../../config.json');
+            this.logger.info('Reload', '✅ Reloaded config');
+        }
 
         if (locales) {
             // Clear locale cache

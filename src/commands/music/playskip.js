@@ -31,16 +31,17 @@ module.exports = class extends Command {
         };
 
         try {
+            await interaction.deferReply();
             await this.discord.distube.play(voiceChannel, args.query, options);
 
             const songs = await this.discord.distube.getQueue(interaction)?.songs;
             if (!songs) throw new Error(locale('play.not_found'));
 
-            await interaction.reply({ embeds: [Command.createEmbed({ description: locale('play.success') })] });
+            await interaction.editReply({ embeds: [Command.createEmbed({ description: locale('play.success') })] });
         }
         catch (e) {
             this.client.logger.error('playskip', e);
-            await interaction.reply({ embeds: [Command.createErrorEmbed(locale('play.error', err.message))] });
+            await interaction.editReply({ embeds: [Command.createErrorEmbed(locale('play.error', err.message))] });
         }
 
     }

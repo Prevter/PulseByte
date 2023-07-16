@@ -31,6 +31,7 @@ module.exports = class extends Command {
         };
 
         try {
+            await interaction.deferReply();
             await this.discord.distube.play(voiceChannel, args.query, options);
 
             const songs = await this.discord.distube.getQueue(interaction).songs;
@@ -42,7 +43,7 @@ module.exports = class extends Command {
                 const author = track.uploader.name ?? 'Unknown';
                 const duration = track.formattedDuration ?? 'Unknown';
                 const thumbnail = track.thumbnail ?? '';
-                await interaction.reply({
+                await interaction.editReply({
                     embeds: [Command.createEmbed({
                         description: locale('play.added', name, author, duration),
                         thumbnail: thumbnail
@@ -50,12 +51,12 @@ module.exports = class extends Command {
                 });
             }
             else {
-                await interaction.reply({ embeds: [Command.createEmbed({ description: locale('play.success') })] });
+                await interaction.editReply({ embeds: [Command.createEmbed({ description: locale('play.success') })] });
             }
         }
         catch (e) {
             this.client.logger.error('playnow', e);
-            await interaction.reply({ embeds: [Command.createErrorEmbed(locale('play.error', err.message))] });
+            await interaction.editReply({ embeds: [Command.createErrorEmbed(locale('play.error', err.message))] });
         }
 
     }

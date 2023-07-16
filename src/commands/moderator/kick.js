@@ -1,4 +1,5 @@
 const Command = require("../../types/command");
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = class extends Command {
     constructor(client, database) {
@@ -26,7 +27,10 @@ module.exports = class extends Command {
         if (member.id === author.id)
             return Command.createErrorEmbed(locale('kick.self'));
 
-        if (member.roles.highest.position >= author.roles.highest.position)
+        const isOwner = member.id === member.guild.ownerId;
+        const isBotOwner = this.config.bot.owners.includes(author.id);
+
+        if (!isOwner && !isAdmin && !isBotOwner && member.roles.highest.position >= author.roles.highest.position)
             return Command.createErrorEmbed(locale('kick.higher_role'));
 
         if (!member.kickable)

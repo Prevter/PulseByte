@@ -26,12 +26,11 @@
     },
     "about": {
         "_description": "Shows information about bot",
-        "title": "DJ Sashko",
         "description": "Another multi-purpose Discord bot with music, moderation, fun, and more!\n[Click here]({0}) to invite me to your server!",
         "repo": "⌨️ GitHub repository",
-        "repo_value": "[DJ Sashko on GitHub]({0})",
+        "repo_value": "[{0} on GitHub]({1})",
         "support": "👥 Support server",
-        "support_value": "[DJ Sashko Support Server]({0})"
+        "support_value": "[{0} Support Server]({1})"
     },
     "anime": {
         "_args_desc": {
