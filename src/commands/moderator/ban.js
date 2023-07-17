@@ -22,20 +22,20 @@ module.exports = class extends Command {
 
     async banUser(author, member, reason, locale) {
         if (!member)
-            return Command.createErrorEmbed(locale('ban.no_member'));
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.no_member')) };
 
         if (member.id === author.id)
-            return Command.createErrorEmbed(locale('ban.self'));
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.self')) };
 
         const isOwner = member.id === member.guild.ownerId;
         const isAdmin = member.permissions.has(PermissionsBitField.Flags.Administrator);
         const isBotOwner = this.config.bot.owners.includes(author.id);
 
         if (!isOwner && !isAdmin && !isBotOwner && member.roles.highest.position >= author.roles.highest.position)
-            return Command.createErrorEmbed(locale('ban.higher_role'));
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.higher_role')) };
 
         if (!member.bannable)
-            return Command.createErrorEmbed(locale('ban.not_bannable'));
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.not_bannable')) };
 
         if (reason && reason.length === 0)
             reason = null;
@@ -43,20 +43,23 @@ module.exports = class extends Command {
         try {
             await member.ban({ reason: reason ?? locale('ban.no_reason') });
         } catch (e) {
-            return Command.createErrorEmbed(locale('ban.failed'));
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.failed')) };
         }
 
-        return Command.createEmbed({
-            title: locale('ban.title', member.user.tag.stripTag(true)),
-            description: locale('ban.description', reason ?? locale('ban.no_reason')),
-            author: {
-                name: author.user.username,
-                iconURL: author.user.avatarURL()
-            },
-            timestamp: true,
-            footer: { text: `ID: ${member.id}` },
-            thumbnail: member.user.avatarURL()
-        })
+        return {
+            result: true,
+            embed: Command.createEmbed({
+                title: locale('ban.title', member.user.tag.stripTag(true)),
+                description: locale('ban.description', reason ?? locale('ban.no_reason')),
+                author: {
+                    name: author.user.username,
+                    iconURL: author.user.avatarURL()
+                },
+                timestamp: true,
+                footer: { text: `ID: ${member.id}` },
+                thumbnail: member.user.avatarURL()
+            })
+        };
     }
 
     async runAsSlash(interaction, locale, args) {
@@ -71,7 +74,19 @@ module.exports = class extends Command {
             return interaction.reply({ embeds: [Command.createErrorEmbed(locale('ban.no_member'))] });
         }
 
-        interaction.reply({ embeds: [await this.banUser(interaction.member, member, args.reason, locale)] });
+        const { result, embed } = await this.banUser(interaction.member, member, args.reason, locale);
+        if (!result)
+            return interaction.reply({ embeds: [embed], ephemeral: true });
+
+        if (interaction.guild_data.log_channel) {
+            const channel = interaction.guild.channels.cache.get(interaction.guild_data.log_channel);
+            if (channel) {
+                await interaction.reply({ embeds: [embed], ephemeral: true });
+                return await channel.send({ embeds: [embed] });
+            }
+        }
+
+        await interaction.reply({ embeds: [embed] });
     }
 
     async run(message, locale, args) {
@@ -86,6 +101,18 @@ module.exports = class extends Command {
             return message.channel.send({ embeds: [Command.createErrorEmbed(locale('ban.no_member'))] });
         }
 
-        message.reply({ embeds: [await this.banUser(message.member, member, args.slice(1).join(' '), locale)] });
+        const { result, embed } = await this.banUser(message.member, member, args.slice(1).join(' '), locale);
+        if (!result)
+            return message.reply({ embeds: [embed], ephemeral: true });
+
+        if (message.guild_data.log_channel) {
+            const channel = message.guild.channels.cache.get(message.guild_data.log_channel);
+            if (channel) {
+                await message.react('✅');
+                return await channel.send({ embeds: [embed] });
+            }
+        }
+
+        await message.reply({ embeds: [embed] });
     }
 }

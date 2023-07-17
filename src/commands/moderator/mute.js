@@ -64,24 +64,24 @@ module.exports = class extends Command {
 
     async muteUser(author, member, time, reason, locale) {
         if (!member)
-            return Command.createErrorEmbed(locale('mute.no_member'));
+            return { result: false, embed: Command.createErrorEmbed(locale('mute.no_member')) };
 
         const parsedTime = this.parseTimeStr(time);
         if (parsedTime <= 0)
-            return Command.createErrorEmbed(locale('mute.invalid_time'));
+            return { result: false, embed: Command.createErrorEmbed(locale('mute.invalid_time')) };
 
         if (member.id === author.id)
-            return Command.createErrorEmbed(locale('mute.self'));
+            return { result: false, embed: Command.createErrorEmbed(locale('mute.self')) };
 
         const isOwner = member.id === member.guild.ownerId;
         const isAdmin = member.permissions.has(PermissionsBitField.Flags.Administrator);
         const isBotOwner = this.config.bot.owners.includes(author.id);
 
         if (!isOwner && !isAdmin && !isBotOwner && member.roles.highest.position >= author.roles.highest.position)
-            return Command.createErrorEmbed(locale('mute.higher_role'));
+            return { result: false, embed: Command.createErrorEmbed(locale('mute.higher_role')) };
 
         if (!member.moderatable)
-            return Command.createErrorEmbed(locale('mute.not_muteable'));
+            return { result: false, embed: Command.createErrorEmbed(locale('mute.not_muteable')) };
 
         if (reason && reason.length === 0)
             reason = null;
@@ -89,20 +89,23 @@ module.exports = class extends Command {
         try {
             await member.timeout(parsedTime, reason ?? locale('mute.no_reason'));
         } catch (e) {
-            return Command.createErrorEmbed(locale('mute.failed'));
+            return { result: false, embed: Command.createErrorEmbed(locale('mute.failed')) };
         }
 
-        return Command.createEmbed({
-            title: locale('mute.title', member.user.tag.stripTag(true)),
-            description: locale('mute.description', reason ?? locale('mute.no_reason'), time),
-            author: {
-                name: author.user.username,
-                iconURL: author.user.avatarURL()
-            },
-            timestamp: true,
-            footer: { text: `ID: ${member.id}` },
-            thumbnail: member.user.avatarURL()
-        })
+        return {
+            result: true,
+            embed: Command.createEmbed({
+                title: locale('mute.title', member.user.tag.stripTag(true)),
+                description: locale('mute.description', reason ?? locale('mute.no_reason'), time),
+                author: {
+                    name: author.user.username,
+                    iconURL: author.user.avatarURL()
+                },
+                timestamp: true,
+                footer: { text: `ID: ${member.id}` },
+                thumbnail: member.user.avatarURL()
+            })
+        }
     }
 
     async runAsSlash(interaction, locale, args) {
@@ -120,7 +123,19 @@ module.exports = class extends Command {
             return interaction.reply({ embeds: [Command.createErrorEmbed(locale('mute.no_member'))] });
         }
 
-        interaction.reply({ embeds: [await this.muteUser(interaction.member, member, args.time, args.reason, locale)] });
+        const { result, embed } = await this.muteUser(interaction.member, member, args.time, args.reason, locale);
+        if (!result)
+            return interaction.reply({ embeds: [embed], ephemeral: true });
+
+        if (interaction.guild_data.log_channel) {
+            const channel = interaction.guild.channels.cache.get(interaction.guild_data.log_channel);
+            if (channel) {
+                await interaction.reply({ embeds: [embed], ephemeral: true });
+                return await channel.send({ embeds: [embed] });
+            }
+        }
+
+        await interaction.reply({ embeds: [embed] });
     }
 
     async run(message, locale, args) {
@@ -138,6 +153,18 @@ module.exports = class extends Command {
             return message.channel.send({ embeds: [Command.createErrorEmbed(locale('mute.no_member'))] });
         }
 
-        message.reply({ embeds: [await this.muteUser(message.member, member, args[1], args.slice(2).join(' '), locale)] });
+        const { result, embed } = await this.muteUser(message.member, member, args[1], args.slice(2).join(' '), locale);
+        if (!result)
+            return message.reply({ embeds: [embed], ephemeral: true });
+
+        if (message.guild_data.log_channel) {
+            const channel = message.guild.channels.cache.get(message.guild_data.log_channel);
+            if (channel) {
+                await message.react('✅');
+                return await channel.send({ embeds: [embed] });
+            }
+        }
+
+        await message.reply({ embeds: [embed] });
     }
 }
