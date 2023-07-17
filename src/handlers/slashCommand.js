@@ -14,13 +14,7 @@ module.exports = {
         if (interaction.guild) {
             guild = await client.database.getGuild(interaction.guild.id);
             if (!guild) {
-                guild = {
-                    id: interaction.guild.id,
-                    prefix: config.bot.prefix,
-                    language: config.default_language,
-                    xp_enabled: config.bot.xp.enabled
-                };
-                await client.database.createGuild(guild);
+                guild = await client.database.createGuild(interaction.guild.id);
             }
 
             user = await client.database.getUser(interaction.user.id, interaction.guild.id);

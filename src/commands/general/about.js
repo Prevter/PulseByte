@@ -31,7 +31,7 @@ module.exports = class extends Command {
                 title: this.config.name,
                 description: locale('about.description', invite),
                 fields,
-                url: this.config.web.url,
+                url: this.config.web.enabled ? this.config.web.url : undefined,
                 thumbnail: this.discord.user.avatarURL()
             })]
         });

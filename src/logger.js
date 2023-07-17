@@ -181,7 +181,7 @@ module.exports = class Logger {
                 color: hex,
                 timestamp: true
             });
-    
+
             this.webhook_client.send({ embeds: [embed] });
         } catch (err) {
             this.outputToConsole('fatal', 'Logger', err);

@@ -29,6 +29,8 @@
             "cooldown": 60,
             "min": 15,
             "max": 25,
+            "level_up_msg": true,
+            "level_up_msg_delete": 10000,
             "card": {
                 "accent_color": "#ffbb5c",
                 "background": "#090a0b",
@@ -46,6 +48,7 @@
         "backup_on_start": false
     },
     "web": {
+        "enabled": true,
         "port": 80,
         "url": "http://localhost/"
     },

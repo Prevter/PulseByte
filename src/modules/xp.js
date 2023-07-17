@@ -36,12 +36,17 @@ module.exports = class XPModule extends Module {
             if (current_time - user_data.last_message > config.bot.xp.cooldown * 1000) {
                 const level = XPModule.getLevel(user_data.xp);
                 const new_level = XPModule.getLevel(user_data.xp + experience);
-    
+
                 user_data.xp += experience;
                 user_data.last_message = current_time;
-    
+
                 if (new_level > level) {
-                    message.reply(locale('xp.level_up', new_level));
+                    if (config.bot.xp.level_up_msg) {
+                        const msg = await message.reply(locale('xp.level_up', new_level));
+                        if (config.bot.xp.level_up_msg_delete > 0) {
+                            setTimeout(() => msg.delete(), config.bot.xp.level_up_msg_delete);
+                        }
+                    }
                     this.logger.log('XP', `⬆️ User ${user_data.id} leveled up to level ${new_level} in guild ${user_data.guild_id}`)
                 }
             }

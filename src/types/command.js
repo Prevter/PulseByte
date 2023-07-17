@@ -173,6 +173,7 @@ module.exports = class Command {
      * @param {string} options.description
      * @param {string} options.author
      * @param {string} options.footer
+     * @param {boolean} options.timestamp
      * @param {string} options.thumbnail
      * @param {string} options.image
      * @param {Object[]} options.fields

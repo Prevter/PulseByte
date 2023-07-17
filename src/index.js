@@ -96,35 +96,40 @@ client.once('ready', () => {
 client.login();
 
 // Express
-let expressApp = null;
+if (config.web.enable) {
+    let expressApp = null;
 
-const reloadExpress = () => {
-    if (expressApp) {
-        logger.info('Website', '🚀 Reloading website');
-        expressApp.close();
-        expressApp = null;
+    const reloadExpress = () => {
+        if (expressApp) {
+            logger.info('Website', '🚀 Reloading website');
+            expressApp.close();
+            expressApp = null;
+        }
+
+        const app = express();
+        app.use(bodyParser.urlencoded({ extended: true }));
+        app.use(bodyParser.json());
+        app.use(cors());
+
+        if (require.cache[require.resolve('./website')]) {
+            delete require.cache[require.resolve('./website')];
+        }
+
+        const router = require('./website')(logger, client, database);
+
+        app.use(express.static('./src/website/public'));
+        app.use('/', router);
+
+        expressApp = app.listen(port, () => {
+            logger.info('Website', `🚀 Server listening on port ${port}`);
+        });
     }
 
-    const app = express();
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
-    app.use(cors());
-
-    if (require.cache[require.resolve('./website')]) {
-        delete require.cache[require.resolve('./website')];
-    }
-
-    const router = require('./website')(logger, client, database);
-
-    app.use(express.static('./src/website/public'));
-    app.use('/', router);
-
-    expressApp = app.listen(port, () => {
-        logger.info('Website', `🚀 Server listening on port ${port}`);
-    });
+    process.reloadExpress = reloadExpress;
 }
-
-process.reloadExpress = reloadExpress;
+else {
+    process.reloadExpress = () => { };
+}
 
 // Exit handlers and error handlers
 process.on('exit', () => database.close());

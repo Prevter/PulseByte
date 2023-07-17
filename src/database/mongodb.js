@@ -34,8 +34,19 @@ module.exports = class SqliteContext extends DatabaseContext {
         const guild = await this.db.collection('guilds').findOne({ id: guild_id });
         return guild;
     }
-    async createGuild(guild) {
+    async createGuild(guild_id) {
+        const guild = {
+            id: guild_id,
+            prefix: config.default_prefix,
+            language: config.default_language,
+            xp_enabled: config.bot.xp.enabled ? 1 : 0,
+            automod_enabled: config.bot.automod.enabled ? 1 : 0,
+            welcome_channel: null,
+            welcome_msg: null,
+            log_channel: null,
+        };
         await this.db.collection('guilds').insertOne(guild);
+        return guild;
     }
     async updateGuild(guild) {
         await this.db.collection('guilds').updateOne({ id: guild.id }, { $set: guild });

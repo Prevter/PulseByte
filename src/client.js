@@ -91,13 +91,18 @@ module.exports = class DiscordClient {
         this.modules = [];
 
         const loadCommand = (filePath) => {
-            const path = filePath.replace('.js', '');
-            if (require.cache[require.resolve(path)]) {
-                delete require.cache[require.resolve(path)];
+            try {
+                const path = filePath.replace('.js', '');
+                if (require.cache[require.resolve(path)]) {
+                    delete require.cache[require.resolve(path)];
+                }
+                const command = require(path);
+                const instance = new command(this, this.database);
+                this.commands.push(instance);
             }
-            const command = require(path);
-            const instance = new command(this, this.database);
-            this.commands.push(instance);
+            catch (err) {
+                this.logger.error('Commands', `⚠️ Failed to load command '${filePath}': ${err.stack}`);
+            }
         }
 
         fs.readdirSync('./src/commands', { withFileTypes: true }).forEach(file => {
@@ -125,7 +130,7 @@ module.exports = class DiscordClient {
     loadHandlers() {
         // Clear all the handlers
         this.client.removeAllListeners();
-        
+
         // Load all the handlers from 'src/handlers'
         fs.readdirSync('./src/handlers', { withFileTypes: true }).forEach(file => {
             // Clear the cache for the file if it's already loaded

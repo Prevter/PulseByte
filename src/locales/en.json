@@ -143,7 +143,8 @@
         "not_found": "❌ No results found!",
         "not_implemented": "⚠️ This command is not implemented yet",
         "owner_only": "This command is only available to the bot owner!",
-        "slash_only": "This command is only available as a slash command!"
+        "slash_only": "This command is only available as a slash command!",
+        "welcome_msg": "👋 Welcome <@{0}> to our server! Have a nice stay!"
     },
     "help": {
         "_args_desc": {

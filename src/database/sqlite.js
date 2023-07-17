@@ -12,7 +12,11 @@ module.exports = class SqliteContext extends DatabaseContext {
                 id TEXT PRIMARY KEY,
                 prefix TEXT NOT NULL,
                 language TEXT NOT NULL,
-                xp_enabled INTEGER NOT NULL
+                xp_enabled INTEGER NOT NULL,
+                automod_enabled INTEGER NOT NULL,
+                welcome_channel TEXT,
+                welcome_msg TEXT,
+                log_channel TEXT
             )`);
 
             this.db.run(`CREATE TABLE IF NOT EXISTS users (
@@ -79,21 +83,35 @@ module.exports = class SqliteContext extends DatabaseContext {
         });
     }
 
-    createGuild(guild) {
+    createGuild(guild_id) {
+        const guild = {
+            id: guild_id,
+            prefix: config.default_prefix,
+            language: config.default_language,
+            xp_enabled: config.bot.xp.enabled ? 1 : 0,
+            automod_enabled: config.bot.automod.enabled ? 1 : 0,
+            welcome_channel: null,
+            welcome_msg: null,
+            log_channel: null,
+        };
         return new Promise((resolve, reject) => {
-            this.db.run('INSERT INTO guilds (id, prefix, language, xp_enabled) VALUES (?, ?, ?, ?)', [guild.id, guild.prefix, guild.language, guild.xp_enabled], (err) => {
-                if (err) {
-                    this.logger.error('Database', err);
-                    reject(err);
-                }
-                resolve();
-            });
+            this.db.run(`INSERT INTO guilds 
+                (id, prefix, language, xp_enabled, automod_enabled, welcome_channel, welcome_msg, log_channel) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [guild.id, guild.prefix, guild.language, guild.xp_enabled, guild.automod_enabled, guild.welcome_channel, guild.welcome_msg, guild.log_channel],
+                (err) => {
+                    if (err) {
+                        this.logger.error('Database', err);
+                        reject(err);
+                    }
+                    resolve(guild);
+                });
         });
     }
 
     updateGuild(guild) {
         return new Promise((resolve, reject) => {
-            this.db.run('UPDATE guilds SET prefix = ?, language = ?, xp_enabled = ? WHERE id = ?', [guild.prefix, guild.language, guild.xp_enabled, guild.id], (err) => {
+            this.db.run('UPDATE guilds SET prefix = ?, language = ?, xp_enabled = ?, automod_enabled = ? WHERE id = ?', [guild.prefix, guild.language, guild.xp_enabled, guild.automod_enabled, guild.id], (err) => {
                 if (err) {
                     this.logger.error('Database', err);
                     reject(err);
