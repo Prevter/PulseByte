@@ -93,12 +93,10 @@ client.once('ready', () => {
     reloadExpress();
 });
 
-client.login();
-
 // Express
 var reloadExpress = () => { };
 
-if (config.web.enable) {
+if (config.web.enabled) {
     let expressApp = null;
 
     reloadExpress = () => {
@@ -127,8 +125,11 @@ if (config.web.enable) {
         });
     }
 
-    process.reloadExpress = reloadExpress;
 }
+
+process.reloadExpress = reloadExpress;
+
+client.login();
 
 // Exit handlers and error handlers
 process.on('exit', () => database.close());
