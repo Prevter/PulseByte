@@ -53,6 +53,28 @@
         "total_episodes": "💿 Total episodes",
         "type": "📺 Type"
     },
+    "automod": {
+        "_description": "Toggle automoderation in the current guild",
+        "current": "Automoderation is now {0} for this guild!",
+        "warn": {
+            "title": "⚠️ Warn!",
+            "description": {
+                "spam": "Please do not spam!",
+                "duplicates": "Please do not send duplicate messages!"
+            }
+        },
+        "mute": {
+            "title": "🔇 Mute!",
+            "description": {
+                "spam": "You have been muted for spamming!",
+                "duplicates": "You have been muted for sending duplicate messages!"
+            }
+        },
+        "reason": {
+            "spam": "Spamming",
+            "duplicates": "Sending duplicate messages"
+        }
+    },
     "autoplay": {
         "_description": "Toggle autoplay for the current queue",
         "success": "{0} Autoplay is now {1} for this queue!"
