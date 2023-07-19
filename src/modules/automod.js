@@ -111,7 +111,7 @@ module.exports = class Automod extends Module {
         const is_owner = config.bot.owners.includes(message.author.id);
         const is_admin = message.member.permissions.has(PermissionsBitField.Flags.Administrator);
 
-        // if (is_owner || is_admin) return;
+        if (is_owner || is_admin) return;
 
         // TODO: add automod settings to database
         // const automod_settiigs = this.database.getAutomodSettings(message.guild.id);

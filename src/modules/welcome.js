@@ -9,8 +9,9 @@ module.exports = class extends Module {
         if (!guild || !guild.welcome_channel) return;
 
         const channel_id = guild.welcome_channel;
-        var message = guild.welcome_msg.replace('%user%', `<@${member.id}>`);
+        var message = guild.welcome_msg;
         if (!message) message = locale('global.welcome_msg', member.id);
+        else message = message.replace('%user%', `<@${member.id}>`)
 
         const channel = member.guild.channels.cache.get(channel_id);
         if (!channel) return;

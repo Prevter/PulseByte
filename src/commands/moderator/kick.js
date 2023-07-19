@@ -28,6 +28,7 @@ module.exports = class extends Command {
             return { result: false, embed: Command.createErrorEmbed(locale('kick.self')) };
 
         const isOwner = member.id === member.guild.ownerId;
+        const isAdmin = member.permissions.has(PermissionsBitField.Flags.Administrator);
         const isBotOwner = this.config.bot.owners.includes(author.id);
 
         if (!isOwner && !isAdmin && !isBotOwner && member.roles.highest.position >= author.roles.highest.position)
