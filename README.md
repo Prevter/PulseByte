@@ -1,10 +1,12 @@
+[![ESLint](https://github.com/Prevter/PulseByte/actions/workflows/lint.yml/badge.svg)](https://github.com/Prevter/PulseByte/actions/workflows/lint.yml)
+
 <div align="center">
    <a href="https://github.com/Prevter/PulseByte">
       <img src="src/website/public/icons/android-chrome-192x192.png" alt="Logo" width="80" height="80">
    </a>
    <h3 align="center">PulseByte</h3>
    <p align="center">
-      Multipurpose Discord bot. Supports multiple languages, has a lot of commands and features. Can work with prefix commands and slash commands. Has an XP system, economy, music, moderation, and much more. *(MEE6 replacement)* 
+      Multipurpose Discord bot. Supports multiple languages, has a lot of commands and features. Can work with prefix commands and slash commands. Has an XP system, economy, music, moderation, and much more.
    </p>
 </div>
 
@@ -99,6 +101,7 @@ npm run start
 
 ## Commands
 ### Admin
+- `automod` - Toggle automoderation for this server. (Anti-spam)
 - `experience` - Toggle XP system for this server.
 - `language <language code>` - Change bot language for this server.
 - `prefix <prefix>` - Change bot prefix for this server.
@@ -381,11 +384,11 @@ class DatabaseContext {
      * Closes the database context
      */
     close() { }
-    
+
     // `guild` table contains settings for each guild (prefix, language, etc.)
     async getGuilds() { notImplemented(); }
     async getGuild(guild_id) { notImplemented(); }
-    async createGuild(guild) { notImplemented(); }
+    async createGuild(guild_id) { notImplemented(); }
     async updateGuild(guild) { notImplemented(); }
     async deleteGuild(guild_id) { notImplemented(); }
 
@@ -402,13 +405,19 @@ class DatabaseContext {
     async createProfile(profile) { notImplemented(); }
     async updateProfile(profile) { notImplemented(); }
     async deleteProfile(user_id) { notImplemented(); }
-    
+
     // `custom_commands` table is used for custom commands
     async getCustomCommands(guild_id) { notImplemented(); }
     async getCustomCommand(guild_id, command_name) { notImplemented(); }
     async createCustomCommand(command) { notImplemented(); }
     async updateCustomCommand(command) { notImplemented(); }
     async deleteCustomCommand(guild_id, command_name) { notImplemented(); }
+
+    // 'stats' table is used for storing statistics about the bot
+    async getStats() { notImplemented(); }
+    async updateStats(stats) { notImplemented(); }
+    async incrementSlashCommandUsage() { notImplemented(); }
+    async incrementCommandUsage() { notImplemented(); }
 }
 ```
 
@@ -431,6 +440,7 @@ init() {
     createCollection('users');
     createCollection('profiles');
     createCollection('custom_commands');
+    createCollection('stats');
 }
 
 close() {
