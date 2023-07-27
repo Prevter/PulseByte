@@ -1,5 +1,6 @@
 const DatabaseContext = require('../types/db_context');
 const sqlite3 = require('sqlite3').verbose();
+const config = require('../../config.json');
 
 module.exports = class SqliteContext extends DatabaseContext {
     init() {
