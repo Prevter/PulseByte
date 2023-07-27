@@ -1,4 +1,3 @@
-const { Message } = require("discord.js");
 require('../utils.js')
 
 module.exports = class Module {

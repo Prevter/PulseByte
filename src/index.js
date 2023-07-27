@@ -33,7 +33,7 @@ if (config.database.enable_backup) {
         const date_str = new Date().toISOString()
             .replace(/\//g, '-')
             .replace(/T/g, '_')
-            .replace(/\:/g, '-')
+            .replace(/:/g, '-')
             .split('.')[0];
         const backup_dir = path.join(config.database.backup_path, date_str);
         fs.mkdirSync(backup_dir);

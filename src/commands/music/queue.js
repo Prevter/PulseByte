@@ -13,14 +13,14 @@ module.exports = class extends Command {
         });
     }
 
-    secondsToHms(s) {
-        var h = Math.floor(s / 3600);
-        var m = Math.floor(s % 3600 / 60);
-        var s = Math.floor(s % 3600 % 60);
+    secondsToHms(seconds) {
+        let h = Math.floor(seconds / 3600);
+        let m = Math.floor(seconds % 3600 / 60);
+        let s = Math.floor(seconds % 3600 % 60);
 
-        var hDisplay = h > 0 ? h + ":" : "";
-        var mDisplay = m < 10 ? "0" + m + ":" : m + ":";
-        var sDisplay = s < 10 ? "0" + s : s;
+        let hDisplay = h > 0 ? h + ":" : "";
+        let mDisplay = m < 10 ? "0" + m + ":" : m + ":";
+        let sDisplay = s < 10 ? "0" + s : s;
 
         return hDisplay + mDisplay + sDisplay;
     }
@@ -31,7 +31,7 @@ module.exports = class extends Command {
 
     buildQueueEmbed(queue, page, locale) {
         let total_duration = 0;
-        for (var i = 0; i < queue.songs.length; i++) {
+        for (let i = 0; i < queue.songs.length; i++) {
             total_duration += queue.songs[i].duration;
         }
         total_duration = this.secondsToHms(total_duration);
@@ -47,7 +47,7 @@ module.exports = class extends Command {
             `\n\`${currentSong.formattedDuration}\` - **[${currentSong.name}](${currentSong.url})** - <@${currentSong.user.id}>\n\n`;
         description += locale('queue.queue') + '\n';
 
-        for (var i = start; i <= end; i++) {
+        for (let i = start; i <= end; i++) {
             if (i >= songCount) break;
             const song = queue.songs[i];
             description += `${i}. \`${song.formattedDuration}\` - **[${song.name}](${song.url})** - <@${song.user.id}>\n`;

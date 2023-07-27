@@ -29,7 +29,7 @@ module.exports = class extends Command {
         let member = { user: { tag: member_id, avatarURL: () => '' } };
         try {
             member = await guild.members.fetch(member_id);
-        } catch (e) { }
+        } catch (e) { /* empty */ }
 
         return Command.createEmbed({
             title: locale('unban.title', member.user.tag.stripTag(true)),

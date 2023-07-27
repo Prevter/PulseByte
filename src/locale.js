@@ -50,7 +50,7 @@ module.exports = (locale) => {
         try {
             value = getNestedKey(localeFile, key);
         }
-        catch (e) { }
+        catch (e) { /* empty */ }
 
         if (!value && !defaultNull) {
             const defaultLocale = require(`./locales/${config.default_language}.json`);

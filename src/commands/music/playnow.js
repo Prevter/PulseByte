@@ -56,7 +56,7 @@ module.exports = class extends Command {
         }
         catch (e) {
             this.client.logger.error('playnow', e);
-            await interaction.editReply({ embeds: [Command.createErrorEmbed(locale('play.error', err.message))] });
+            await interaction.editReply({ embeds: [Command.createErrorEmbed(locale('play.error', e.message))] });
         }
 
     }

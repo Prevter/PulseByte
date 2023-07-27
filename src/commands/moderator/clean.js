@@ -1,4 +1,5 @@
 const Command = require("../../types/command");
+const { sleep } = require("../../utils");
 
 module.exports = class extends Command {
     constructor(client, database) {

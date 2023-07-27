@@ -23,7 +23,7 @@ const nFormatter = (num, digits) => {
 }
 
 const getStatus = (client) => {
-    daysParser = (days, locale) => {
+    const daysParser = (days, locale) => {
         if (days % 10 === 1 && days % 100 !== 11)
             return locale('!status.day.one');
         else if (days % 10 >= 2 && days % 10 <= 4 && (days % 100 < 10 || days % 100 >= 20))
@@ -32,14 +32,14 @@ const getStatus = (client) => {
             return locale('!status.day.other');
     }
 
-    timeString = (timePassed, locale) => {
+    const timeString = (timePassed, locale) => {
         let seconds = Math.floor(timePassed % 60);
         let minutes = Math.floor(timePassed / 60) % 60;
         let hours = Math.floor(timePassed / 3600) % 24;
         let days = Math.floor(timePassed / 86400);
         let result = '';
         if (days > 0)
-            result += `${days} ${this.daysParser(days, locale)} `;
+            result += `${days} ${daysParser(days, locale)} `;
         if (hours > 0 || result.length > 0)
             result += `${hours}:`;
         if (minutes > 0 || result.length > 0)
@@ -111,7 +111,7 @@ module.exports = (logger, client, database) => {
         });
     }
 
-    router.get('/', async (req, res) => {
+    router.get('/', async (req, res, next) => {
         const stats = await database.getStats();
         stats.servers = client.client.guilds.cache.size;
         stats.users = client.client.users.cache.size;
@@ -172,7 +172,7 @@ module.exports = (logger, client, database) => {
             try {
                 member = await guild.members.fetch(rating.id);
             }
-            catch (err) { }
+            catch (err) { /* empty */ }
             if (!member) {
                 // try to fetch from cache
                 const user = client.client.users.cache.get(rating.id);
@@ -220,7 +220,7 @@ module.exports = (logger, client, database) => {
     });
 
     // Error handler
-    router.use(async (err, req, res, next) => {
+    router.use(async (err, req, res) => {
         try {
             const page = await renderPage(main_page, "error", { client, config, err });
             res.status(err.status || 500);
