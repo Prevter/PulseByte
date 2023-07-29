@@ -54,7 +54,6 @@ module.exports = class extends Command {
         if (!args[0])
             return await message.reply({ embeds: [Command.createErrorEmbed(locale('repeat.no_mode'))] });
 
-        console.log(args[0]);
         const repeatMode = this.parseMode(args[0]);
         if (repeatMode === null)
             return await message.reply({ embeds: [Command.createErrorEmbed(locale('repeat.invalid_mode'))] });
