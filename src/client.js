@@ -62,18 +62,29 @@ module.exports = class DiscordClient {
         });
 
         this.client.distube.on("playSong", async (queue, song) => {
+            if (song.metadata) {
+                song.metadata.radio_player.start();
+            }
             const guildId = queue.textChannel.guild.id;
             const guild = await this.database.getGuild(guildId);
             const language = guild ? guild.language : config.default_language;
             const locale = localeBuilder(language);
             const embed = require('./commands/music/nowplaying')
                 .createEmbed(locale, song, queue, false);
+            if (!embed) return;
+
+            if (queue.message) {
+                const message = await queue.textChannel.messages.fetch(queue.message.id).catch(() => null);
+                if (message) await message.delete();
+            }
+
             queue.message = await queue.textChannel.send({ embeds: [embed] });
         });
 
         this.client.distube.on("finishSong", async (queue, song) => {
             if (queue.message) {
-                await queue.message.delete();
+                const message = await queue.textChannel.messages.fetch(queue.message.id).catch(() => null);
+                if (message) await message.delete();
                 queue.message = null;
             }
         });

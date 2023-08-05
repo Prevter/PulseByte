@@ -143,7 +143,8 @@ module.exports = class Logger {
     outputToConsole(level, tag, ...args) {
         const { color, emoji } = levels_map[level];
         if (level === 'fatal') level = 'error'; // fatal is not a valid console level
-        console[level](color(`${emoji} [${tag}]`), ...args);
+        const time_str = chalk.gray(`[${new Date().toLocaleString()}]`);
+        console[level](color(`${time_str} ${emoji} [${tag}]`), ...args);
     }
 
     /**

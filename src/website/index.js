@@ -220,7 +220,7 @@ module.exports = (logger, client, database) => {
     });
 
     // Error handler
-    router.use(async (err, req, res) => {
+    router.use(async (err, req, res, next) => {
         try {
             const page = await renderPage(main_page, "error", { client, config, err });
             res.status(err.status || 500);
