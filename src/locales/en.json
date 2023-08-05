@@ -348,6 +348,21 @@
         "title": "🎶 Current queue",
         "total_duration": "**Total playtime**: `{0}`"
     },
+    "radio": {
+        "_args_desc": {
+            "station": "The radio station to play"
+        },
+        "_description": "Play a radio station",
+        "_usage": "<station>",
+        "no_station": "❌ You must specify a radio station to play!",
+        "not_found": "❌ Radio station not found!",
+        "success": "✅ Started playing **{0}**",
+        "started": "⌚ Time started",
+        "error": "❌ Failed to play radio station **{0}**",
+        "dj": "🎧 DJ",
+        "description": "Playing radio station **{0}**",
+        "stations": "📻 Radio stations"
+    },
     "rank": {
         "_args_desc": {
             "member": "The member to get the rank of"
@@ -372,6 +387,13 @@
             "1": "🔂 Repeat mode has been enabled for the current song!",
             "2": "🔁 Repeat mode has been enabled for the queue!"
         }
+    },
+    "reload": {
+        "_args_desc": {
+            "module": "The module to reload"
+        },
+        "_description": "Hot reload bot modules",
+        "_usage": "[module]"
     },
     "seek": {
         "_args_desc": {

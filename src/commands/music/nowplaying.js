@@ -1,4 +1,5 @@
 const Command = require("../../types/command");
+const { RadioPlayerURL } = require("@prevter/tavr-media-radio");
 
 module.exports = class extends Command {
     constructor(client, database) {
@@ -8,6 +9,14 @@ module.exports = class extends Command {
             category: 'music',
             guild_only: true
         });
+    }
+
+    static autoEmbed(locale, song, queue, showProgress) {
+        if (song.radio_player) {
+            return module.exports.createRadioEmbed(locale, song.radio_player, song);
+        }
+
+        return module.exports.createEmbed(locale, song, queue, showProgress);
     }
 
     static createEmbed(locale, song, queue, showProgress) {
@@ -47,6 +56,10 @@ module.exports = class extends Command {
                     break;
                 case 'generic':
                     embed.footer = { text: 'External' };
+                    // check if it's a radio and if it is, do not send the embed
+                    if (Object.values(RadioPlayerURL).includes(song.streamURL.replace('_HD', ''))) {
+                        return null;
+                    }
                     break;
                 default:
                     embed.footer = { text: song.source };
@@ -74,10 +87,10 @@ module.exports = class extends Command {
             });
 
         if (song.views)
-            fields.push({ 
-                name: locale('nowplaying.views'), 
-                value: `${song.views}`, 
-                inline: true 
+            fields.push({
+                name: locale('nowplaying.views'),
+                value: `${song.views}`,
+                inline: true
             });
 
         if (song.user)
@@ -85,8 +98,44 @@ module.exports = class extends Command {
                 name: locale('nowplaying.requested_by'),
                 value: `${song.user.username}`
             });
-        
+
         embed.fields = fields;
+        return Command.createEmbed(embed);
+    }
+
+    static createRadioEmbed(locale, player, song) {
+        if (!player.currentSong)
+            return;
+
+        const fields = [{
+            name: locale('radio.started'),
+            value: player.currentSong.start_time_full,
+            inline: true
+        }];
+
+        if (player.currentDJ) {
+            fields.push({
+                name: locale('radio.dj'),
+                value: player.currentDJ.title,
+                inline: true
+            });
+        }
+
+        fields.push({
+            name: locale('nowplaying.requested_by'),
+            value: `${song.user.username}`
+        });
+
+        const embed = {
+            author: { name: player.currentSong.singer },
+            title: player.currentSong.song,
+            description: locale('radio.description', player.station_name),
+            fields,
+            thumbnail: player.currentSong.image,
+            url: player.currentSong.url ?? undefined,
+            footer: { text: player.station_name }
+        };
+
         return Command.createEmbed(embed);
     }
 
@@ -96,6 +145,16 @@ module.exports = class extends Command {
             return await message.reply({ embeds: [Command.createErrorEmbed(locale('music.no_queue'))] });
 
         const song = queue.songs[0];
+
+        if (song.metadata?.radio_player) {
+            // return if radio hasn't initialized yet
+            if (!song.metadata.radio_player.currentSong) return null;
+
+            const embed = module.exports.createRadioEmbed(locale, song.metadata.radio_player, song);
+            await message.reply({ embeds: [embed] });
+            return;
+        }
+
         const embed = module.exports.createEmbed(locale, song, queue, true);
         await message.reply({ embeds: [embed] });
     }
