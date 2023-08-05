@@ -191,6 +191,8 @@
         "moderator_desc": "Commands for moderating your server",
         "music": "Music",
         "music_desc": "Commands for playing music in voice channels",
+        "owner": "Owner",
+        "owner_desc": "Commands for the bot owner",
         "not_found": "Command `{0}` not found!",
         "search": "Search",
         "search_desc": "Commands that search for things",

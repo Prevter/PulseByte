@@ -152,6 +152,26 @@ module.exports = (logger, client, database) => {
         }
     });
 
+    router.get('/docs', async (req, res, next) => {
+        const commands = client.commands;
+        const categories = {};
+        for (const command of commands) {
+            if (!categories[command.category]) {
+                categories[command.category] = [];
+            }
+
+            categories[command.category].push(command);
+        }
+
+        try {
+            const page = await renderPage(main_page, "docs", { client, config, categories });
+            res.send(page);
+        }
+        catch (err) {
+            next({ status: 500, message: err });
+        }
+    });
+
     router.get('/leaderboard/:server_id', async (req, res, next) => {
         const server_id = req.params.server_id;
         const ratings = await database.getUsers(server_id);

@@ -1,0 +1,45 @@
+<div class="container py-5">
+    <div class="d-flex align-items-start">
+        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <%  let first = true;
+                for( const category of Object.keys(categories) ) { %>
+                    <button class="nav-link<%= first ? ' active' : '' %>" id="v-pills-<%= category %>-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-<%= category %>" type="button" role="tab" aria-controls="v-pills-<%= category %>"
+                        aria-selected="false">
+                        <%= client.locale(`help.${category}`) %>
+                    </button>
+            <% first = false; } %>
+        </div>
+        <div class="tab-content w-100" id="v-pills-tabContent">
+            <%  first = true;
+                for( const category of Object.keys(categories) ) { %>
+                    <div class="tab-pane<%= first ? ' show active' : '' %>" id="v-pills-<%= category %>" role="tabpanel" aria-labelledby="v-pills-<%= category %>-tab">
+                        <h3><%= client.locale(`help.${category}`) %></h3>
+                        <h5><%= client.locale(`help.${category}_desc`) %></h5>
+                        <ul class="list-group list-group-flush">
+                            <% for( const command of categories[category] ) { %>
+                                <li class="list-group-item bg-transparent">
+                                    <code class="fs-5"><%= command.name %> <%= client.locale(`${command.name}._usage`) %></code>
+                                    <p class="fs-6"><%= client.locale(`${command.name}._description`) %></p>
+                                    <p>
+                                        <% if (command.args.length > 0) { %>
+                                            <p>
+                                                <% for (const arg of command.args) { %>
+                                                    <code class="fs-6"><%= arg.name %></code> - <%= client.locale(`${command.name}._args_desc.${arg.name}`) %><br>
+                                                <% } %>
+                                            </p>
+                                        <% } %>
+                                        <% if (command.aliases.length > 0) { %>
+                                            <p>
+                                                Aliases: <code class="fs-6"><%= command.aliases.join(', ') %></code>
+                                            </p>
+                                        <% } %>
+                                    </p>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </div>
+            <% first = false; } %>
+        </div>
+    </div>
+</div>
