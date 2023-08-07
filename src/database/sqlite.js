@@ -87,7 +87,7 @@ module.exports = class SqliteContext extends DatabaseContext {
     createGuild(guild_id) {
         const guild = {
             id: guild_id,
-            prefix: config.default_prefix,
+            prefix: config.bot.prefix,
             language: config.default_language,
             xp_enabled: config.bot.xp.enabled ? 1 : 0,
             automod_enabled: config.bot.automod.enabled ? 1 : 0,
