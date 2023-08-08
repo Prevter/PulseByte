@@ -31,8 +31,20 @@ module.exports = class extends Command {
             if (number > 1) {
                 await queue.jump(number);
             } else {
-                if (queue.songs.length > 1 || queue.autoplay)
+                if (queue.songs.length > 1) {
                     await queue.skip();
+                }
+                else if (queue.autoplay) {
+                    try { 
+                        await queue.skip();
+                    } 
+                    catch (e) {
+                        if (e.errorCode === 'NO_RELATED') {
+                            await queue.stop();
+                        }
+                        else throw e;
+                    }
+                }
                 else {
                     await queue.stop();
                 }
@@ -61,8 +73,20 @@ module.exports = class extends Command {
             if (number > 1) {
                 await queue.jump(number);
             } else {
-                if (queue.songs.length > 1 || queue.autoplay)
+                if (queue.songs.length > 1) {
                     await queue.skip();
+                }
+                else if (queue.autoplay) {
+                    try { 
+                        await queue.skip();
+                    } 
+                    catch (e) {
+                        if (e.errorCode === 'NO_RELATED') {
+                            await queue.stop();
+                        }
+                        else throw e;
+                    }
+                }
                 else {
                     await queue.stop();
                 }
