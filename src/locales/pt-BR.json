@@ -1,0 +1,544 @@
+{
+    "8ball": {
+        "_description": "Faça uma pergunta para a bola mágica 8",
+        "lines": [
+            "Sem dúvidas",
+            "É certo",
+            "Sim",
+            "Pelo que vejo, sim",
+            "Perspectiva não muito boa",
+            "Os sinais apontam que sim",
+            "Minhas fontes dizem não",
+            "Você pode confiar nisso",
+            "Muito duvidoso",
+            "Melhor não te dizer agora",
+            "Não pode prever agora",
+            "É decididamente assim",
+            "Resposta nebulosa, tente novamente",
+            "Minha resposta é não",
+            "Muito provavelmente",
+            "Pergunte novamente mais tarde",
+            "Concentre-se e pergunte novamente",
+            "Sim - definitivamente",
+            "Não conte com isso",
+            "Perspectiva boa"
+        ]
+    },
+    "about": {
+        "_description": "Mostra informações sobre o bot",
+        "description": "Outro bot para Discord multiuso com música, moderação, diversão e mais!\n[Clique aqui]({0}) para me convidar para o seu servidor!",
+        "repo": "⌨️ Repositório GitHub",
+        "repo_value": "[{0} no GitHub]({1})",
+        "support": "👥 Servidor de suporte",
+        "support_value": "[{0} Servidor de Suporte]({1})"
+    },
+    "anime": {
+        "_args_desc": {
+            "query": "O anime para pesquisar"
+        },
+        "_description": "Pesquise por um anime no Kitsu.io",
+        "_usage": "<consulta>",
+        "age_rating": "🔞 Classificação etária",
+        "aired": "📅 Exibido",
+        "aired_format": "de **{0}** a **{1}**",
+        "average_rating": "⭐ Avaliação média",
+        "duration": "⏱️ Duração",
+        "genres": "📚 Gêneros",
+        "rank": "🏆 Classificação",
+        "status": "⏳ Status",
+        "statuses": {
+            "current": "Atual",
+            "finished": "Finalizado"
+        },
+        "total_episodes": "💿 Total de episódios",
+        "type": "📺 Tipo"
+    },
+    "automod": {
+        "_description": "Ativa/desativa a moderação automática no servidor atual",
+        "current": "A moderação automática agora está {0} para este servidor!",
+        "warn": {
+            "title": "⚠️ Aviso!",
+            "description": {
+                "spam": "Por favor, não faça spam!",
+                "duplicates": "Por favor, não envie mensagens duplicadas!"
+            }
+        },
+        "mute": {
+            "title": "🔇 Silenciado!",
+            "description": {
+                "spam": "Você foi silenciado por fazer spam!",
+                "duplicates": "Você foi silenciado por enviar mensagens duplicadas!"
+            }
+        },
+        "reason": {
+            "spam": "Fazendo spam",
+            "duplicates": "Enviando mensagens duplicadas"
+        }
+    },
+    "autoplay": {
+        "_description": "Ativa/desativa a reprodução automática para a fila atual",
+        "success": "{0} Reprodução automática agora está {1} para esta fila!"
+    },
+    "ban": {
+        "_args_desc": {
+            "member": "O membro para banir",
+            "reason": "O motivo do banimento"
+        },
+        "_description": "Banir um membro do servidor atual",
+        "_usage": "<membro> [motivo]",
+        "description": "Motivo: {0}",
+        "failed": "❌ Falha ao banir o membro!",
+        "higher_role": "❌ Você não pode banir um membro com cargo superior ao seu!",
+        "no_member": "❌ Membro não encontrado!",
+        "no_reason": "Nenhum motivo fornecido",
+        "not_bannable": "❌ Não posso banir este membro!",
+        "self": "❌ Você não pode se auto banir!",
+        "title": "{0} foi banido!"
+    },
+    "coin": {
+        "_description": "Jogue uma moeda",
+        "heads": "{0} Cara!",
+        "tails": "{0} Coroa!"
+    },
+    "clean": {
+        "_args_desc": {
+            "count": "A quantidade de mensagens para apagar"
+        },
+        "_description": "Limpar mensagens no canal atual",
+        "_usage": "<quantidade>",
+        "invalid_count": "⚠️ Quantidade inválida! Deve estar entre 1 e 100",
+        "failed": "❌ Falha ao limpar mensagens!",
+        "success": "✅ {0} mensagens limpas!"
+    },
+    "dice": {
+        "_args_desc": {
+            "min": "O número mínimo para rolar (padrão: 1)",
+            "max": "O número máximo para rolar (padrão: 6)"
+        },
+        "_description": "Rolar um dado",
+        "_usage": "[máximo] | [mínimo] [máximo]",
+        "invalid_range": "⚠️ Intervalo inválido! Por favor, verifique os argumentos.",
+        "result": "🎲 Você tirou **{0}**!"
+    },
+    "experience": {
+        "_description": "Ativa/desativa o sistema de XP no servidor atual",
+        "current": "O sistema de XP agora está {0} para este servidor!"
+    },
+    "filter": {
+        "3d": "O áudio gira em torno do ouvinte em um círculo",
+        "_args_desc": {
+            "filter": "O filtro a ser aplicado (`off` para desativar todos)"
+        },
+        "_description": "Aplicar um filtro na fila atual",
+        "_usage": "[filtro|off]",
+        "bassboost": "Aumenta os graves do áudio",
+        "earwax": "Torna o áudio \"mais fácil\" de ouvir",
+        "echo": "Adiciona um efeito de eco ao áudio",
+        "flanger": "Efeito flanger no áudio",
+        "gate": "Limpa o ruído do áudio",
+        "haas": "Efeito de precedência",
+        "invalid_filter": "❌ Filtro inválido!\nExecute o comando `filter` sem argumentos para ver uma lista de filtros disponíveis.",
+        "karaoke": "Remove os vocais do áudio",
+        "mcompand": "Expandir faixa dinâmica do áudio",
+        "nightcore": "Acelera o áudio",
+        "phaser": "Cria série de picos e vales no áudio",
+        "reverse": "Reverte o áudio",
+        "success": {
+            "disable": "🔴 Filtro `{0}` desativado!",
+            "enable": "🟢 Filtro `{0}` ativado!",
+            "off": "✅ Todos os filtros desativados!"
+        },
+        "surround": "Filtro de ampliação surround",
+        "title": "🔊 Filtros",
+        "tremolo": "Modulação do volume",
+        "vaporwave": "Desacelera o áudio e adiciona um efeito de eco"
+    },
+    "global": {
+        "admin_only": "Este comando está disponível apenas para administradores do servidor!",
+        "disabled": "desativado",
+        "enabled": "ativado",
+        "guild_only": "Este comando está disponível apenas em servidores!",
+        "missing_permissions": "Você está sem as seguintes permissões: {0}",
+        "no_description": "Nenhuma descrição fornecida",
+        "no_query": "⚠️ Você deve especificar uma consulta de pesquisa!",
+        "none": "Nenhum",
+        "not_found": "❌ Nenhum resultado encontrado!",
+        "not_implemented": "⚠️ Esse comando ainda não foi implementado",
+        "owner_only": "Este comando está disponível apenas para o dono do bot!",
+        "slash_only": "Este comando está disponível apenas como comando de barra!",
+        "welcome_msg": "👋 Bem-vindo <@{0}> ao nosso servidor! Aproveite sua estadia!"
+    },
+    "help": {
+        "_args_desc": {
+            "category": "A categoria para mostrar informações",
+            "command": "O comando para mostrar informações"
+        },
+        "_description": "Mostra uma lista de categorias ou informações sobre um comando específico",
+        "_usage": "[comando|categoria]",
+        "admin": "Admin",
+        "admin_desc": "Comandos que requerem permissão de administrador",
+        "aliases": "Apelidos",
+        "categories": "Categorias",
+        "category": "Categoria",
+        "command": "Comando `{0}`",
+        "general": "Geral",
+        "general_desc": "Comandos gerais que todos podem usar",
+        "fun": "Diversão",
+        "fun_desc": "Comandos para fins de entretenimento",
+        "levels": "Níveis",
+        "levels_desc": "Dê XP aos membros quando enviarem mensagens e ranqueie-os em um leaderboard",
+        "moderator": "Moderador",
+        "moderator_desc": "Comandos para moderar seu servidor",
+        "music": "Música",
+        "music_desc": "Comandos para tocar música em canais de voz",
+        "owner": "Dono",
+        "owner_desc": "Comandos para o dono do bot",
+        "not_found": "Comando `{0}` não encontrado!",
+        "search": "Pesquisa",
+        "search_desc": "Comandos que pesquisam coisas",
+        "usage": "Uso",
+        "utils": "Utilitários",
+        "utils_desc": "Comandos utilitários"
+    },
+    "imgur": {
+        "_args_desc": {
+            "query": "A imagem para pesquisar"
+        },
+        "_description": "Pesquise por uma imagem no Imgur",
+        "_usage": "<consulta>"
+    },
+    "invite": {
+        "_description": "Obtenha o link de convite do bot",
+        "message": "Me convide para o seu servidor com este link: {0}"
+    },
+    "join": {
+        "_description": "Entre no canal de voz em que você está",
+        "success": "✅ Entrou no canal de voz com sucesso!"
+    },
+    "kick": {
+        "_args_desc": {
+            "member": "O membro para expulsar",
+            "reason": "O motivo da expulsão"
+        },
+        "_description": "Expulsar um membro do servidor atual",
+        "_usage": "<membro> [motivo]",
+        "description": "Motivo: {0}",
+        "failed": "❌ Falha ao expulsar o membro!",
+        "higher_role": "❌ Você não pode expulsar um membro com cargo superior ao seu!",
+        "no_member": "❌ Membro não encontrado!",
+        "no_reason": "Nenhum motivo fornecido",
+        "not_kickable": "❌ Não posso expulsar este membro!",
+        "self": "❌ Você não pode se auto-expulsar!",
+        "title": "{0} foi expulso!"
+    },
+    "language": {
+        "_args_desc": {
+            "language": "O código do idioma a ser usado"
+        },
+        "_description": "Altera o idioma do bot",
+        "_usage": "<código do idioma>",
+        "name": "🇧🇷 Português",
+        "supported": "Idiomas suportados",
+        "updated": "O idioma foi atualizado para 🇧🇷 Português"
+    },
+    "leaderboard": {
+        "_description": "Mostra o top dos membros com mais XP",
+        "description": "[Ver leaderboard completo online]({0}leaderboard/{1})",
+        "page": "Página {0} de {1} ({2} membros)",
+        "title": "🏆 Leaderboard",
+        "xp_level_messages": "XP: **{0}** | Nível: **{1}** | Mensagens: **{2}**"
+    },
+    "leave": {
+        "_description": "Sair do canal de voz atual",
+        "no_voice": "❌ Não estou em um canal de voz!",
+        "success": "✅ Saiu do canal de voz com sucesso!"
+    },
+    "manga": {
+        "_args_desc": {
+            "query": "O manga para pesquisar"
+        },
+        "_description": "Pesquise por um manga no Kitsu.io",
+        "_usage": "<consulta>",
+        "chapters": "📖 Capítulos",
+        "published": "📅 Publicado",
+        "volumes": "📕 Volumes"
+    },
+    "music": {
+        "no_queue": "❌ Não há músicas tocando agora",
+        "no_voice": "❌ Você deve estar em um canal de voz para usar este comando!"
+    },
+    "mute": {
+        "_args_desc": {
+            "member": "O membro para mutar",
+            "reason": "O motivo do mute",
+            "time": "Duração do mute"
+        },
+        "_description": "Mutar um membro do servidor atual",
+        "_usage": "<membro> <tempo> [motivo]",
+        "description": "Motivo: {0}\nDuração: {1}",
+        "failed": "❌ Falha ao mutar o membro!",
+        "higher_role": "❌ Você não pode mutar um membro com cargo superior ao seu!",
+        "invalid_time": "❌ Formato de tempo inválido! Formatos válidos: `1h`, `1h30m`, `1d2h30m`",
+        "no_member": "❌ Membro não encontrado!",
+        "no_reason": "Nenhum motivo fornecido",
+        "no_time": "❌ Você deve especificar uma duração para mutar o membro!",
+        "not_muteable": "❌ Não posso mutar este membro!",
+        "self": "❌ Você não pode se auto-mutar!",
+        "title": "{0} foi mutado!"
+    },
+    "nowplaying": {
+        "_description": "Mostra a música reproduzindo no momento",
+        "duration": "⏱️ Duração",
+        "requested_by": "👤 Requisitada por",
+        "views": "👀 Visualizações"
+    },
+    "pause": {
+        "_description": "Pausar/despausar a música atual",
+        "paused": "⏸️ Música pausada!",
+        "resumed": "▶️ Música despausada!"
+    },
+    "permissions": {
+        "BanMembers": "Banir membros"
+    },
+    "play": {
+        "_args_desc": {
+            "query": "Consulta para pesquisar ou URL"
+        },
+        "_description": "Tocar música em um canal de voz",
+        "_usage": "<consulta|URL>",
+        "added": "✅ **{0}** por **{1}** *({2})* adicionado(a) na fila!",
+        "error": "❌ **{0}**",
+        "no_query": "❌ Você deve especificar uma consulta ou URL para tocar!",
+        "not_found": "Música não encontrada!",
+        "success": "✅ Começou a tocar"
+    },
+    "playnow": {
+        "_args_desc": {
+            "query": "Consulta para pesquisar ou URL"
+        },
+        "_description": "Adiciona música ao início da fila",
+        "_usage": "<consulta|URL>"
+    },
+    "playskip": {
+        "_args_desc": {
+            "query": "Consulta para pesquisar ou URL"
+        },
+        "_description": "Tocar música e pular a atual",
+        "_usage": "<consulta|URL>"
+    },
+    "prefix": {
+        "_args_desc": {
+            "prefix": "O novo prefixo a ser usado"
+        },
+        "_description": "Muda o prefixo do bot",
+        "_usage": "<novo prefixo>",
+        "current": "O prefixo atual é `{0}`",
+        "too_long": "O prefixo deve ter no máximo 5 caracteres!",
+        "updated": "O prefixo foi atualizado para `{0}`"
+    },
+    "previous": {
+        "_description": "Tocar a música anterior",
+        "success": "↩️ Tocando a música anterior!"
+    },
+    "queue": {
+        "_description": "Obtém a fila de músicas atual",
+        "now_playing": "**Tocando agora**",
+        "page": "Página {0} de {1} ({2} músicas)",
+        "queue": "**Fila**",
+        "title": "🎶 Fila atual",
+        "total_duration": "**Tempo total de reprodução**: `{0}`"
+    },
+    "radio": {
+        "_args_desc": {
+            "station": "A estação de rádio para tocar"
+        },
+        "_description": "Tocar uma estação de rádio",
+        "_usage": "<estação>",
+        "no_station": "❌ Você deve especificar uma estação de rádio para tocar!",
+        "not_found": "❌ Estação de rádio não encontrada!",
+        "success": "✅ Começou a tocar **{0}**",
+        "started": "⌚ Hora de início",
+        "error": "❌ Falha ao tocar estação de rádio **{0}**",
+        "dj": "🎧 DJ",
+        "description": "Tocando estação de rádio **{0}**",
+        "stations": "📻 Estações de rádio"
+    },
+    "rank": {
+        "_args_desc": {
+            "member": "O membro para obter o rank"
+        },
+        "_description": "Obtenha seu rank ou o rank de outro membro",
+        "_usage": "[membro]",
+        "level": "NÍVEL",
+        "rank": "RANK",
+        "user_not_found": "❌ Usuário não encontrado ou não tem nenhum XP!",
+        "xp_disabled": "❌ XP está desativado neste servidor!"
+    },
+    "repeat": {
+        "_args_desc": {
+            "mode": "O modo de repetição a usar. Modos válidos: `off`, `song`, `queue`"
+        },
+        "_description": "Muda o modo de repetição",
+        "_usage": "<modo>",
+        "invalid_mode": "❌ Modo de repetição inválido! Modos válidos: `off`, `song`, `queue`",
+        "no_mode": "❌ Você deve especificar um modo de repetição para usar!",
+        "success": {
+            "0": "➡️ Modo de repetição desativado!",
+            "1": "🔂 Modo de repetição ativado para a música atual!",
+            "2": "🔁 Modo de repetição ativado para a fila!"
+        }
+    },
+    "reload": {
+        "_args_desc": {
+            "module": "O módulo para recarregar"
+        },
+        "_description": "Recarrega módulos do bot em tempo real",
+        "_usage": "[módulo]"
+    },
+    "seek": {
+        "_args_desc": {
+            "time": "O tempo para buscar. Formato: `24`, `1:30`, `1:23:45`"
+        },
+        "_description": "Pular para um tempo específico na música atual",
+        "_usage": "<tempo>",
+        "error": "❌ Falha ao pular para **{0}**!",
+        "invalid_time": "❌ Formato de tempo inválido! Formatos válidos: `24`, `1:30`, `1:23:45`",
+        "no_time": "❌ Você deve especificar o tempo para pular!",
+        "success": "✅ Pulou para **{0}**!"
+    },
+    "shuffle": {
+        "_description": "Embaralha a fila atual",
+        "success": "🔀 Fila embaralhada!"
+    },
+    "skip": {
+        "_args_desc": {
+            "count": "O número de músicas para pular"
+        },
+        "_description": "Pular a música atual (ou múltiplas músicas)",
+        "_usage": "[quantidade]",
+        "error": "❌ Falha ao pular a música atual!",
+        "success": "✅ Música atual pulada!"
+    },
+    "slowmode": {
+        "_args_desc": {
+            "duration": "Segundos para definir o modo lento (0 para desativar)"
+        },
+        "_description": "Define o modo lento para o canal atual",
+        "_usage": "<duração>",
+        "success": "✅ Modo lento definido para **{0}** segundos!",
+        "disabled": "✅ Modo lento desativado!",
+        "failed": "❌ Falha ao definir o modo lento!"
+    },
+    "status": {
+        "_description": "Obtém o status do bot (uptime, memória, etc)",
+        "connecting": "Iniciando...",
+        "day": {
+            "one": "dia",
+            "other": "dias"
+        },
+        "description": "Estou ativo em {0} servidores",
+        "memory": "📈 Uso de memória",
+        "memory_format": "{0} MB",
+        "node_version": "Versão do Node.js: {0}",
+        "os": "🖥️ Sistema operacional",
+        "os_format": "{0} {1}",
+        "ping": "🏓 Latência",
+        "ping_format": "{0} ms",
+        "title": "Status do bot",
+        "total_memory": "💾 Memória total",
+        "total_memory_format": "{0} / {1} GB",
+        "uptime": "⏱️ Tempo ativo"
+    },
+    "stop": {
+        "_description": "Para a música e limpa a fila",
+        "success": "✅ Musica parada com sucesso!"
+    },
+    "unban": {
+        "_args_desc": {
+            "member": "ID do membro para desbanir"
+        },
+        "_description": "Desbanir um membro do servidor atual",
+        "_usage": "<membro>",
+        "failed": "❌ Falha ao desbanir o membro!",
+        "no_member": "❌ Membro não encontrado!",
+        "title": "{0} foi desbanido!"
+    },
+    "unmute": {
+        "_args_desc": {
+            "member": "O membro para desmutar"
+        },
+        "_description": "Desmutar um membro do servidor atual",
+        "_usage": "<membro>",
+        "failed": "❌ Falha ao desmutar o membro!",
+        "no_member": "❌ Membro não encontrado!",
+        "not_unmuteable": "❌ Não posso desmutar este membro!",
+        "title": "{0} foi desmutado!"
+    },
+    "urban": {
+        "_args_desc": {
+            "query": "O termo para pesquisar"
+        },
+        "_description": "Pesquise por um termo no Urban Dictionary",
+        "_usage": "<consulta>",
+        "author": "Enviado por {0}",
+        "example": "Exemplo",
+        "title": "Definição de {0}"
+    },
+    "volume": {
+        "_args_desc": {
+            "volume": "O novo volume a ser usado"
+        },
+        "_description": "Altera o volume da música",
+        "_usage": "<volume>",
+        "current_volume": "🔊 Volume atual é **{0}%**",
+        "invalid_volume": "❌ Volume deve estar entre 0 e {0}!",
+        "success": "✅ Volume atualizado para **{0}%**"
+    },
+    "warstats": {
+        "_description": "Obtém as últimas estatísticas de perdas russas",
+        "aa_warfare_systems": "Antiaéreo",
+        "armoured_fighting_vehicles": "Veículos Blindados",
+        "artillery_systems": "Artilharia",
+        "atgm_srbm_systems": "ATGM/SRBM",
+        "cruise_missiles": "Mísseis",
+        "data_verifying": "Os dados estão sendo verificados. O cálculo é complicado pela alta intensidade das hostilidades",
+        "description": "De acordo com o Estado Maior das Forças Armadas da Ucrânia",
+        "helicopters": "Helicópteros",
+        "mlrs": "MLRS",
+        "personnel_units": "Efetivo militar",
+        "planes": "Aviões",
+        "special_military_equip": "Equip. militar especial",
+        "tanks": "Tanques",
+        "th_day": "-o dia",
+        "title": "Perdas inimigas",
+        "uav_systems": "UAV",
+        "vehicles_fuel_tanks": "Carros",
+        "warships_cutters": "Navios"
+    },
+    "weather": {
+        "_args_desc": {
+            "city": "A localização para obter a previsão do tempo"
+        },
+        "_description": "Obtém a previsão do tempo de uma localização",
+        "_usage": "<cidade>",
+        "clouds": "☁️ Nuvens",
+        "description": "**{0}°C** {1}",
+        "feels_like": "🌡️ Sensação térmica",
+        "humidity": "💧 Umidade",
+        "local_time": "🕒 Hora local",
+        "no_city": "❌ Você deve especificar uma cidade para obter a previsão do tempo!",
+        "not_found": "❌ Cidade não encontrada!",
+        "pressure": "📊 Pressão",
+        "pressure_format": "**{0}** hPa",
+        "sunrise": "🌅 Nascer do sol",
+        "sunset": "🌇 Pôr do sol",
+        "title": "Previsão do tempo em **{0}**",
+        "visibility": "👀 Visibilidade",
+        "visibility_format": "**{0}** m",
+        "wind": "💨 Vento",
+        "wind_format": "**{0}** m/s *({1}°)*"
+    },
+    "xp": {
+        "level_up": "⬆️ Você agora está no nível {0}!"
+    }
+}
