@@ -80,8 +80,8 @@ module.exports = class extends Command {
             }
 
             // simulate playSong event
-            this.discord.distube.emit('playSong', queue, { 
-                radio_player: player, 
+            this.discord.distube.emit('playSong', queue, {
+                radio_player: player,
                 user: context.member.user,
             });
         });
