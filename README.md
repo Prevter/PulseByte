@@ -93,6 +93,8 @@ You should also change settings for database connection. Supported database back
 Example: `"./storage.db"`
 - `mongodb` - MongoDB database. Connection string should be a valid MongoDB connection string.  
 Example: `"mongodb://127.0.0.1:27017/dbname"`
+- `postgres` - PostgreSQL database. Database must be created manually (tables will be created automatically). Connection string should be a valid PostgreSQL connection string.
+Example: `"postgres://user:password@localhost:5432/dbname"`
 
 Run the bot:
 ```

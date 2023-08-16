@@ -29,6 +29,7 @@
     "mongodb": "^5.7.0",
     "nodemon": "^3.0.1",
     "opusscript": "^0.1.0",
+    "pg": "^8.11.2",
     "sqlite3": "^5.1.6"
   },
   "devDependencies": {
