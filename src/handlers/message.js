@@ -54,6 +54,16 @@ module.exports = {
 
         const is_owner = config.bot.owners.includes(message.author.id);
 
+        // check if bot has permission to read chat history
+        try {
+            if (!message.channel.permissionsFor(message.guild.members.me).has(PermissionsBitField.Flags.ReadMessageHistory)) {
+                message.channel.send({ embeds: [Command.createErrorEmbed(locale('global.requires_history'))] });
+            }
+        } catch (err) {
+            client.logger.error('Message', `⚠️ Failed to check if bot has permission to read chat history: ${err.stack}`);
+        }
+        
+
         if (cmd.slash_only)
             return message.reply({ embeds: [Command.createErrorEmbed(locale('global.slash_only'))] });
 
