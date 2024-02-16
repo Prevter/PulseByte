@@ -79,6 +79,14 @@
         "_description": "Toggle autoplay for the current queue",
         "success": "{0} Autoplay is now {1} for this queue!"
     },
+    "bam": {
+        "_args_desc": {
+            "member": "The member to ban",
+            "reason": "The reason for the ban"
+        },
+        "_description": "Fake ban a member (for fun)",
+        "_usage": "<member> [reason]"
+    },
     "ban": {
         "_args_desc": {
             "member": "The member to ban",
