@@ -1,5 +1,6 @@
 const Module = require("../types/module");
 const Command = require("../types/command");
+const config = require('../../config');
 
 class Action {
     constructor(args, client, database) {
@@ -31,6 +32,12 @@ class Action {
                 return new ChooseAction(args, client, database);
             case 'random':
                 return new RandomAction(args, client, database);
+            case 'regex':
+                return new RegexAction(args, client, database);
+            case 'isset':
+                return new IsSetAction(args, client, database);
+            case 'ban':
+                return new BanAction(args, client, database);
             default:
                 return null;
         }
@@ -47,6 +54,18 @@ const replaceArgs = (string, storage) => {
         string = string.replace(`%${key}%`, storage[key]);
     }
     return string;
+}
+
+const parseArgument = (arg, storage) => {
+    if (arg.startsWith('{') && arg.endsWith('}')) {
+        return JSON.parse(replaceArgs(arg, storage));
+    }
+    else if (arg.startsWith('"') && arg.endsWith('"')) {
+        return replaceArgs(arg, storage).slice(1, -1);
+    }
+    else if (storage[arg]) {
+        return storage[arg];
+    }
 }
 
 const parseSendMessage = (args, storage) => {
@@ -66,6 +85,7 @@ const parseSendMessage = (args, storage) => {
     return content;
 }
 
+// Replies to a message with a message
 class ReplyAction extends Action {
     async run(message, storage) {
         const content = parseSendMessage(this.args, storage);
@@ -80,6 +100,7 @@ class ReplyAction extends Action {
     }
 }
 
+// Deletes a message or a message from storage
 class DeleteAction extends Action {
     async run(message, storage) {
         if (!this.args[0]) {
@@ -90,6 +111,7 @@ class DeleteAction extends Action {
     }
 }
 
+// Reacts to a message with emojis
 class ReactAction extends Action {
     async run(message, storage) {
         // First argument is message handle in storage
@@ -103,6 +125,7 @@ class ReactAction extends Action {
     }
 }
 
+// Sends a message to the current channel
 class SendAction extends Action {
     async run(message, storage) {
         const content = parseSendMessage(this.args, storage);
@@ -116,6 +139,7 @@ class SendAction extends Action {
     }
 }
 
+// Sends a message to a specific channel
 class SendChannelAction extends Action {
     async run(message, storage) {
         const channel = this.args[0];
@@ -134,6 +158,7 @@ class SendChannelAction extends Action {
     }
 }
 
+// Sleeps for a given amount of time
 class SleepAction extends Action {
     async run(message) {
         const time = parseInt(this.args[0]);
@@ -142,6 +167,7 @@ class SleepAction extends Action {
     }
 }
 
+// Edits a message with new content
 class EditAction extends Action {
     async run(message, storage) {
         // First argument is message handle in storage
@@ -156,6 +182,7 @@ class EditAction extends Action {
     }
 }
 
+// Sets a storage value to a string or object
 class SetAction extends Action {
     async run(message, storage) {
         const key = this.args[0];
@@ -173,6 +200,7 @@ class SetAction extends Action {
     }
 }
 
+// Sets a storage value to a random choice from a list
 class ChooseAction extends Action {
     async run(message, storage) {
         const key = this.args[0];
@@ -193,6 +221,7 @@ class ChooseAction extends Action {
     }
 }
 
+// Sets a storage value to a random number between min and max
 class RandomAction extends Action {
     async run(message, storage) {
         const key = this.args[0];
@@ -201,6 +230,98 @@ class RandomAction extends Action {
         if (!key || isNaN(min) || isNaN(max)) return;
 
         storage[key] = Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+}
+
+// Sets a storage value to the first match of a regex
+class RegexAction extends Action {
+    async run(message, storage) {
+        const key = this.args[0];
+        const text = parseArgument(this.args[1], storage);
+        const regex = parseArgument(this.args[2], storage);
+        if (!key || !text || !regex) return;
+
+        const match = text.match(new RegExp(regex));
+        if (!match) return;
+
+        storage[key] = match[1];
+    }
+}
+
+// Quits the program if a storage value is not set
+class IsSetAction extends Action {
+    async run(message, storage) {
+        const key = this.args[0];
+        if (!key || !storage[key])
+            return 'quit';
+    }
+}
+
+// {[ ban <user> [result embed] ]}
+// Runs "ban" command and stores the result in storage if needed
+class BanAction extends Action {
+    async run(message, storage) {
+        const user = this.args[0];
+        let member = user;
+        if (storage[user]) {
+            member = storage[user];
+        }
+        try {
+            member = await Command.loadMember(message.guild, member);
+        }
+        catch (e) {
+            member = null;
+        }
+        const result = await this.banUser(
+            message.member, member,
+            `pacman: removed package ${member?.user?.tag}`,
+            message.locale);
+        if (this.args[1]) {
+            storage[this.args[1]] = { embeds: [result.embed] };
+        }
+    }
+    async banUser(author, member, reason, locale) {
+
+        if (!member)
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.no_member')) };
+
+        if (member.id === author.id)
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.self')) };
+
+        const isOwner = member.id === member.guild.ownerId;
+        const { PermissionsBitField } = require('discord.js');
+        const isAdmin = member.permissions.has(PermissionsBitField.Flags.Administrator);
+        const isBotOwner = config.bot.owners.includes(author.id);
+
+        if (!isOwner && !isAdmin && !isBotOwner && member.roles.highest.position >= author.roles.highest.position)
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.higher_role')) };
+
+        if (!member.bannable)
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.not_bannable')) };
+
+        if (reason && reason.length === 0)
+            reason = null;
+
+        try {
+            await member.ban({ reason: reason ?? locale('ban.no_reason') });
+        } catch (e) {
+            return { result: false, embed: Command.createErrorEmbed(locale('ban.failed')) };
+        }
+
+        return {
+            result: true,
+            embed: Command.createEmbed({
+                title: locale('ban.title', member.user.tag.stripTag(true)),
+                description: locale('ban.description', reason ?? locale('ban.no_reason')),
+                author: {
+                    name: author.user.username,
+                    iconURL: author.user.avatarURL()
+                },
+                timestamp: true,
+                footer: { text: `ID: ${member.id}` },
+                thumbnail: member.user.avatarURL()
+            })
+        };
     }
 }
 
@@ -214,32 +335,32 @@ module.exports = class CustomCommands extends Module {
         let currentArg = '';
         let withinQuotes = false;
         let withinObject = 0;
-      
+
         for (let i = 0; i < block.length; i++) {
-          const char = block[i];
-      
-          if (char === '"') {
-            withinQuotes = !withinQuotes;
-          } else if (char === '{') {
-            withinObject++;
-          } else if (char === '}') {
-            withinObject--;
-          }
-      
-          if (char === ' ' && !withinQuotes && withinObject === 0) {
-            if (currentArg !== '') {
-              args.push(currentArg);
-              currentArg = '';
+            const char = block[i];
+
+            if (char === '"') {
+                withinQuotes = !withinQuotes;
+            } else if (char === '{') {
+                withinObject++;
+            } else if (char === '}') {
+                withinObject--;
             }
-          } else {
-            currentArg += char;
-          }
+
+            if (char === ' ' && !withinQuotes && withinObject === 0) {
+                if (currentArg !== '') {
+                    args.push(currentArg);
+                    currentArg = '';
+                }
+            } else {
+                currentArg += char;
+            }
         }
-      
+
         if (currentArg !== '') {
-          args.push(currentArg);
+            args.push(currentArg);
         }
-      
+
         return args;
     }
 
@@ -293,26 +414,29 @@ module.exports = class CustomCommands extends Module {
                     match = content.includes(`${command.name}`);
                     break;
             }
-    
+
             if (!match) continue;
-    
+
             this.logger.log('Custom Commands', `⚙️ ${message.author.tag.stripTag(true)} called a custom command: ${message.content} in '${message.guild.id}'`);
-    
+
             // Parse command
             const cmd = this.parseCommand(command.code);
             if (!cmd) return;
 
             // Run actions
-            let storage = { 
-                "$message": message, 
-                "$guild": message.guild, 
-                "$channel": message.channel, 
-                "$user": message.author, 
+            let storage = {
+                "$message": message,
+                "$guild": message.guild,
+                "$channel": message.channel,
+                "$user": message.author,
                 "$content": message.content,
                 "$mention": `<@${message.author.id}>`,
             };
+            message.locale = locale;
             for (const action of cmd) {
-                await action.run(message, storage);
+                console.log(`Running action: ${action}`);
+                const result = await action.run(message, storage);
+                if (result === 'quit') return;
             }
         }
     }

@@ -75,7 +75,9 @@ module.exports = class DiscordClient {
 
             if (queue.message) {
                 const message = await queue.textChannel.messages.fetch(queue.message.id).catch(() => null);
-                if (message) await message.delete();
+                if (message) try {
+                    await message.delete();
+                } catch (err) { /* Ignore */ }
             }
 
             queue.message = await queue.textChannel.send({ embeds: [embed] });
